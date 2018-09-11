@@ -118,7 +118,7 @@
 				</div>
 				<footer class="pwdmodal-footer">
 					<button id="cancel"  onclick="modalcancel()">取消</button>
-					<button id="sure" onclick="modalsure(${task.id!})">确定</button>
+					<button id="sure" onclick="modalsure(${task.id!,${task.uavId!})">确定</button>
 				</footer>
 			</div>
 		</div>
@@ -159,7 +159,7 @@
         modal.style.display = "none";
     }
     
-    function modalsure(taskid){  
+    function modalsure(taskId,uavId){  
     	  //输入密码确认之后
     	 modal.style.display = "none";              
     	 var planeOption =$("#option").val(); 
@@ -168,7 +168,9 @@
  	        type: "post",
  	        url: "${s.base}/"+ planeOption,
  	        data: {
- 	            'id': taskid,
+ 	            'taskid': taskId,
+ 	            'uavid':uavId,
+ 	            'pwd': boxInput.getBoxInputValue(),
  	        },
  	        success: function (result) {
  	            if (result.errcode == '1') {

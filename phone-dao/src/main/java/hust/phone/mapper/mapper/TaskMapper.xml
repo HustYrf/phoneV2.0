@@ -405,6 +405,8 @@
 		WHERE 
 		id = #{id,jdbcType=INTEGER}
 	</select>
+	
+	
 	<select id="getTasklistByUserCreator" parameterType="hust.phone.mapper.pojo.Task" resultMap="BaseResultMap">
 		SELECT
 		<include refid="Base_Column_List" />	
@@ -447,4 +449,10 @@
 		id = #{id,jdbcType=INTEGER}
 	</select>
   
+	<update id="setStatusByTask" parameterType="hust.phone.mapper.pojo.Task" >
+		update K_Task
+		set
+		Status = #{status,jdbcType=INTEGER},
+		where id = #{id,jdbcType=INTEGER}
+	</update>
 </mapper>

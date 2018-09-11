@@ -5,8 +5,6 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
-
 import hust.phone.mapper.mapper.TaskMapper;
 import hust.phone.mapper.pojo.Task;
 import hust.phone.mapper.pojo.TaskExample;
@@ -57,15 +55,9 @@ public class TaskServiceImpl implements TaskService {
 	@Override
 	public boolean setStatusTaskByTask(Task task, int status) {
 
-		Task task2 = getTaskByTask(task);
-
-		task2.setStatus(status); // 改变状态
-
-		TaskExample example = new TaskExample();
-		Criteria createCriteria = example.createCriteria();
-		createCriteria.andIdEqualTo(task2.getId());
-
-		if (taskMapper.updateByExample(task2, example) == 1)
+		task.setStatus(status);
+		
+		if (taskMapper.setStatusByTask(task) == 1)
 			return true;
 		else
 			return false;
@@ -83,8 +75,6 @@ public class TaskServiceImpl implements TaskService {
 
 	@Override
 	public int getTaskStatus(Task task) {
-		// TODO Auto-generated method stub
-
 		return taskMapper.getTaskStatus(task);
 	}
 

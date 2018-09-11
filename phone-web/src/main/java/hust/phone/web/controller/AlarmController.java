@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import hust.phone.mapper.pojo.Alarm;
-import hust.phone.mapper.pojo.User;
 import hust.phone.service.interFace.AlarmService;
 import hust.phone.utils.pojo.JsonView;
-import hust.phone.utils.pojo.PhoneUtils;
 
 @Controller
 public class AlarmController {

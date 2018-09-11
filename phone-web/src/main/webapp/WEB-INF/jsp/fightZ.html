@@ -114,7 +114,7 @@
 				</div>
 				<footer class="pwdmodal-footer">
 					<button id="cancel" onclick="modalcancel()">取消</button>
-					<button id="sure" onclick="modalsure(${task.id!})">确定</button>
+					<button id="sure" onclick="modalsure(${task.id!,${task.uavId!})">确定</button>
 				</footer>
 			</div>
 		</div>
@@ -128,6 +128,9 @@
 	            <p class="buttons-row">
 	                <a onclick="reportFinish()" class="button">任务完成</a>
 	                <a onclick="reportNotconnet()" class="button">飞机失联</a>
+	            </p>
+	            <p class="buttons-row">
+	                <a onclick="emergencyback()" class="button">紧急返航</a>
 	            </p>
 	            <input id="option" type="hidden" value="" />          
 			</div>
@@ -152,7 +155,7 @@
 	    modal.style.display = "none";
 	}
 	
-	function modalsure(taskid){ 
+	function modalsure(taskId,uavId){ 
 		
 		 modal.style.display = "none";              
 		 var planeOption =$("#option").val(); 
@@ -161,7 +164,9 @@
 		        type: "post",
 		        url: "${s.base}/"+ planeOption,
 		        data: {
-		            'id': taskid,
+		        	'taskid': taskId,
+	 	            'uavid':uavId,
+	 	            'pwd': boxInput.getBoxInputValue(),
 		        },
 		        success: function (result) {
 		            if (result.errcode == '1') {
@@ -182,9 +187,17 @@
 	    	$("#option").attr("value","reportNotconnet.action"); 
 	        modal.style.display = "block";         
 		});
-	} 
-	
+	}
     
+	 //确认飞机紧急返航
+    function emergencyback(taskid) {
+        $.confirm('是否紧急返航？', function () {
+        	$("#option").attr("value","emergencyback.action"); 
+	        modal.style.display = "block"; 
+        });
+	}
+	 
+	 
 	//飞行任务完成确认
 	function reportFinish(taskid) {
 		

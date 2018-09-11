@@ -31,11 +31,13 @@ public interface TaskMapper {
     
     //以下为自定义查询方法
     
-	String getStatusByTask(Task task);
-
 	List<Task> getTasklistByUserCreator(int userCreator);
 
 	List<Task> selectByTask(Task task);
 
 	int getTaskStatus(Task task);
+
+	int setStatusByTask(int status);
+
+	int setStatusByTask(Task task);
 }
