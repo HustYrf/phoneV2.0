@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>欢迎页面</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="${s.base}/res/images/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta http-equiv="refresh" content="4;URL=${s.base}/myindex.action">
+    <script type="text/javascript" src="js/jquery-3.3.1.min.js"></script>
+    <style>
+        html,body {
+            width: 100%;
+            height: 100%
+        }
+        body {
+            background: url("${s.base}/images/welcome.png") no-repeat;
+            background-size: 100%;
+        }
+        #timecount {
+            opacity: 0.3;
+            position: fixed;
+            width: 72px;
+            height: 30px;
+            border-radius: 15px;
+            margin-top: 15px;
+            right: 20px;         
+        } 
+    </style>
+</head>
+
+<body>
+    <button id="timecount"><span id="displayu">2</span></button>
+    <script>
+        $(function() {
+            var wait = 2;
+            time(wait);
+        });
+        function time(wait) {
+            $("#displayu").html(wait);
+            wait--;
+            if (wait <= 0) {
+                window.location = "${s.base}/myindex.action";
+            } else {
+                setTimeout(function() {
+                    time(wait);
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>

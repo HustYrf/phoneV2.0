@@ -1,0 +1,95 @@
+<#if taskList??>
+    <#list taskList as task>
+        <div class="card">
+            <div class="card-header">
+            <span style="width:100%;">任务名称：${task.name!}<br>
+            	状态：<#if task.finishstatus==0>未完成
+				<#elseif task.finishstatus==1>已完成		
+				</#if>	
+			</span>
+            </div>
+            <div class="card-content">
+                <div class="card-content-inner">
+                    	   起飞员编号：${task.userA!}
+                    <br> 降落员编号：${task.userZ!}
+                    <br> 飞机编号：${task.uavId!}
+                    <br> 飞行路径编号：${task.flyingpathId!}
+                    <br> 计划开始时间：${task.planstarttime?datetime!}
+                   	<br> 计划完成时间：${task.planendtime?datetime!}
+                </div>
+            </div>
+            <div class="card-footer">
+            	<#if task.role??>
+            	  <#if task.role == 1>
+            	     <#if task.status??> 
+            	        <!-- 这是放飞员的操作部分 -->         	          	 
+            	       
+            	        <#if task.status==-1><div ><a  class="button button-fill button-warning">故障或异常</a></div>                            	  
+            	        <#elseif task.status==2 >
+            	            <div><a class="button button-fill" 
+            	                onclick="rollbackTask(${task.id!},${task.userA!},${task.userZ!})">已分派 > 退回任务</a></div>
+            	            <div style="white-spacing:nowrap;"><a class="button button-fill"  
+            	                onclick="ensureTask(${task.id!},${task.userA!},${task.userZ!})">放飞员 > 确认</a></div>
+
+						<#elseif task.status==3 >
+						   <div><a  class="button button-fill external" onclick="exeTask('${task.id!}')">待接机员确认</a> </div>
+						<#elseif task.status==4 ><div><a  class="button button-fill external" >可执行</a> </div>
+						<div style="white-spacing:nowrap;"><a class="button button-fill external"  
+            	            onclick="exeTask('${task.id!}')">执行任务</a></div>
+						<#elseif task.status==5 ><div><a  class="button button-fill external" 
+						    href='${s.base}/toPlane.action?id=${task.id!}'>自检中</a> </div>
+						<#elseif task.status==6 ><div><a  class="button button-fill external" 
+						    href='${s.base}/toPlane.action?id=${task.id!}'>待飞</a> </div>
+						<#elseif task.status==7 ><div><a  class="button button-fill external" 
+						    href='${s.base}/toPlane.action?id=${task.id!}'>待批</a> </div>
+						<#elseif task.status==8 ><div><a  class="button button-fill external" 
+						    href='${s.base}/toPlane.action?id=${task.id!}'>准飞</a> </div>					
+						<#elseif task.status==9 ><div><a   class="button button-fill disabled button-success" 
+						    href='${s.base}/toPlane.action?id=${task.id!}'>飞行中</a> </div>	
+						<#elseif task.status==10 ><div><a  class="button button-fill disabled button-success" >无人机到达</a> </div>	
+						<#elseif task.status==11 ><div><a  class="button button-fill disabled button-success" >传图识别中</a> </div>	
+						<#elseif task.status==12 ><div><a  class="button button-fill disabled button-success" >识别完成</a> </div>	
+						<#elseif task.status==13 ><div><a  class="button button-fill disabled button-success" >完成任务</a> </div>	
+						<#elseif task.status==14 ><div><a  class="button button-fill disabled button-success" >已归档</a> </div>	
+					    </#if>
+						<!--<a onclick="getTaskDetail(${task.id!})">任务详情&nbsp;&nbsp;<span class="icon icon-right"></span></a>  -->
+				    </#if> 
+            	<#elseif task.role == 2>
+            	  <#if task.status??> 
+            	       <!-- 这是接机员的操作部分 --> 
+                 
+            	        <#if task.status==-1 ><div ><a  class="button button-fill button-warning">故障</a></div>
+            	        <#elseif task.status==2 >
+            	            <div><a class="button button-fill disabled button-warning" >已分派</a></div>
+            	            <div style="white-spacing:nowrap;"><a class="button button-fill"  
+            	                 onclick="rollbackTask(${task.id!},${task.userA!},${task.userZ!})">退回任务</a></div>
+						<#elseif task.status==3 ><div><a  class="button button-fill  disabled">放飞员已确认</a> </div>
+						    <div style="white-spacing:nowrap;"><a class="button button-fill"  
+						         onclick="ensureTask(${task.id!},${task.userA!},${task.userZ!})">接机员  > 确认</a></div>
+						<#elseif task.status==4 ><div><a  class="button button-fill  external" 
+						    href='${s.base}/toPlane.action?id=${task.id!}'>执行中</a> </div>
+						<#elseif task.status==5 ><div><a  class="button button-fill external" 
+						    href='${s.base}/toPlane.action?id=${task.id!}'>无人机自检中</a> </div>
+						<#elseif task.status==6 ><div><a  class="button button-fill external" 
+						    href='${s.base}/toPlane.action?id=${task.id!}'>待飞</a> </div>
+						<#elseif task.status==7 ><div><a  class="button button-fill external" 
+						    href='${s.base}/toPlane.action?id=${task.id!}'>待批</a> </div>
+						<#elseif task.status==8 ><div><a  class="button button-fill external" 
+						    href='${s.base}/toPlane.action?id=${task.id!}'>准飞</a> </div>
+					    <#elseif task.status==9 ><div><a  class="button button-fill disabled button-success" 
+					        href='${s.base}/toPlane.action?id=${task.id!}'>飞行中</a> </div>	
+						<#elseif task.status==10 ><div><a  class="button button-fill disabled button-success" >无人机到达</a> </div>	
+						<#elseif task.status==11 ><div><a  class="button button-fill disabled button-success" >传图识别中</a> </div>	
+						<#elseif task.status==12 ><div><a  class="button button-fill disabled button-success" >识别完成</a> </div>	
+						<#elseif task.status==13 ><div><a  class="button button-fill disabled button-success" >完成任务</a> </div>	
+						<#elseif task.status==14 ><div><a  class="button button-fill disabled button-success" >已归档</a> </div>	
+					    <#else><div><a class="button button-fill disabled button-success" >未知状态</a></div>	
+					    </#if>
+						<!--<a onclick="getTaskDetail(${task.taskid!})">任务详情&nbsp;&nbsp;<span class="icon icon-right"></span></a>  -->
+				    </#if> 
+            	</#if>
+            	</#if>
+            </div>
+        </div>
+    </#list>
+</#if>

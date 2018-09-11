@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>无人机指派系统</title>
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <link rel="shortcut icon" href="${s.base}/res/images/favicon.ico">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+    <link rel="stylesheet" href="${s.base}/light7/css/light7.min.css">
+    <link rel="stylesheet" href="${s.base}/res/light7/css/light7-swiper.min.css">
+    <script type='text/javascript' src='${s.base}/res/js/jquery-3.3.1.min.js'></script>
+     <link rel="stylesheet" href="${s.base}/res/css/index.css">
+</head>
+<style>  
+</style>
+ <script>
+  
+ 
+</script>
+
+<body>
+<div class="page-group">
+
+    <div class="page">
+        <header class="bar bar-nav">
+            <a class="icon icon-me pull-left open-panel"></a>
+            <h1 class="title">我的首页</h1>
+        </header>
+        <div class="bar bar-header-secondary">
+            <div class="searchbar">
+                <a class="searchbar-cancel">取消</a>
+                <div class="search-input">
+                    <label class="icon icon-search" for="search"></label> <input
+                        type="search" id='search' placeholder='输入关键字...'/>
+                </div>
+            </div>
+        </div>
+        <nav class="bar bar-tab">
+            <a class="tab-item active" href="#"> <span
+                    class="icon icon-home"></span> <span class="tab-label">首页</span>
+            </a>
+            <a class="tab-item external" href="${s.base}/toTask.action"><span
+                    class="icon icon-menu "></span><span class="tab-label" >工单处理
+                    </span><span class="badge" id="waittasknum" style="display:none;"></span>
+
+            </a> 
+            <!-- href="${s.base}/toPlaneControl.action"-->
+            <a class="tab-item external" > <span
+                class="icon icon-app "></span> <span class="tab-label">无人机操控</span>
+                </a>
+                <a class="tab-item external" href="${s.base}/alermList.action"> <span
+                class="icon icon-picture "></span> <span class="tab-label">告警信息</span>
+               
+                </a>
+        </nav>
+        <div class="content">
+            <div class="content-block-title">无人机危险检测</div>
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-content-inner">
+                        无人机，就是无人驾驶飞机，他们一般个子较小，经常被用作一些危险、愚钝的工作。无人机的应用广泛，最早被用于军事领域，慢慢的演变为各行各业，例如：警用、城市管理、农业、气象、电力、抢险救灾、视频拍摄等行业。。
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">巡检员任务</div>
+                <div class="card-content">
+                    <div class="card-content-inner">巡检员需要接受任务去巡检相关的路段。确保光缆的安全。</div>
+                </div>
+                <div class="card-footer">防范于未然，要有危机意识</div>
+            </div>
+            <div class="card">
+                <div class="card-content">
+                    <div class="card-content-inner">居安思危，做好光缆的寻访任务</div>
+                </div>
+            </div>
+            <div class="content-block-title">危险图示</div>
+            <div class="card demo-card-header-pic">
+                <div valign="bottom"
+                     class="card-header color-white no-border no-padding">
+                    <img class='card-cover'
+                         src="http://s7d2.scene7.com/is/image/Caterpillar/C10602924?$cc-s$"
+                         alt="">
+                </div>
+                <div class="card-content">
+                    <div class="card-content-inner">
+                        <p class="color-gray">发表于 2015/01/15</p>
+                        <p>挖掘机威胁图示</p>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+    <div class="panel panel-left panel-reveal">
+        <header class="bar bar-nav">
+            <h2 class="userTitle">用户中心</h2>
+        </header>
+
+        <div class="content">
+            <div class="firstBlock">
+                <div class="userImg"></div>
+                <div class="usertop">
+                    <span class="username"><b><#if Session["login_user"]?exists>
+                            ${Session["login_user"].name}</#if></b></span>
+                </div>
+
+                <div class="usertop">
+                    <span class="userRole"><b>昵称：<#if Session["login_user"]?exists>
+                        <#if Session["login_user"].nickname??>
+                    		${Session["login_user"].nickname}
+                         </#if>
+                    </#if></b></span>
+                </div>
+            </div>
+
+            <div class="secondBlock">
+                <div class="taskImg"></div>
+                <span class="taskSpan">我的工单</span>
+                <!--<div class="rightArr"></div>-->
+            </div>
+
+            <div class="thirdBlock">
+                <div class="thirdSpan1">
+                    <img class="taskImg1" src="${s.base}/res/img/fly.png">
+                    <span class="taskSpan1">无人机起飞</span>
+                    <!--<div class="rightArr1"></div>-->
+                </div>
+
+                <div class="thirdSpan2">
+                    <img class="taskImg2" src="${s.base}/res/img/down.png">
+                    <span class="taskSpan2">紧急迫降</span>
+                    <!--<div class="rightArr2"></div>-->
+                </div>
+                <div class="thirdSpan3">
+                    <img class="taskImg3" src="${s.base}/res/img/disconnect.png">
+                    <span class="taskSpan3">报告失联</span>
+                    <!--<div class="rightArr3"></div>-->
+                </div>
+                <div class="thirdSpan4">
+                    <img class="taskImg4" src="${s.base}/res/img/video.png">
+                    <span class="taskSpan4">实时影像</span>
+                    <!--<div class="rightArr4"></div>-->
+                </div>
+                <div class="thirdSpan5">
+                    <img src="${s.base}/res/img/location.png" class="taskImg5">
+                    <span class="taskSpan5">实时位置</span>
+                    <!--<div class="rightArr5"></div>-->
+                </div>
+                <div>
+                    <img src="${s.base}/res/img/voyage.png" class="taskImg6"></src>
+                    <span class="taskSpan6">紧急返航</span>
+                        <!--<div class="rightArr6"></div>-->
+                </div>
+            </div>
+
+            <div class="logout">
+                <input type="button" class="userLogout" value="退出当前账号"/>
+            </div>
+
+            <div class="userFooter">无人机智能巡检系统</div>
+        </div>
+
+    </div>
+</div>
+
+<script type='text/javascript' src='${s.base}/res/light7/js/light7.min.js'
+        charset='utf-8'></script>
+<script type='text/javascript' src='${s.base}/res/light7/js/light7-swiper.min.js'
+        charset='utf-8'></script>
+
+
+<script type="text/javascript">
+    $(".userLogout").click(function () {
+        window.location.href = "logout";
+    });
+    $(".secondBlock").click(function () {
+        window.location.href = "toTask";
+    });
+    /* $(".thirdSpan1").click(function () {
+        window.location.href = "toPlane";
+    });
+    $(".thirdSpan2").click(function () {
+        window.location.href = "toPlane";
+    });
+    $(".thirdSpan3").click(function () {
+        window.location.href = "toPlane";
+    });
+    $(".thirdSpan4").click(function () {
+        window.location.href = "toPlane";
+    });
+    $(".thirdSpan5").click(function () {
+        window.location.href = "toPlane";
+    });
+    $(".thirdSpan6").click(function () {
+        window.location.href = "toPlane";
+    }); */
+  
+  		//轮询工单列表
+    $(function () {
+    	
+    	/* tasknum=${tasknum};
+    	 
+    	 if(Number(tasknum)>0){
+    		$('#waittasknum').css('display','');
+     	    $('#waittasknum').text(tasknum);
+    	 }
+    	 push();
+    	
+         function push() {
+            $.ajax({
+                type: "post",
+                url: "${s.base}/getTaskNumber.action", 
+                timeout:6000,
+                success: function (data) {
+                	if(Number(data)>0){              		
+                		$('#waittasknum').css('display','');
+                	    $('#waittasknum').text(data);
+                	}
+                	push();
+                },
+                error:function(XMLHttpRequest, textStatus, errorThrown){
+                		push();
+                },
+                
+            }); 
+        } */
+    });
+</script>
+</body>
+</html>
+

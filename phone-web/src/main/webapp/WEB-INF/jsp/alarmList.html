@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>历史告警</title>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+<link rel="shortcut icon" href="/favicon.ico">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="stylesheet" href="light7/css/light7.min.css">
+<link rel="stylesheet" href="light7/css/light7-swiper.min.css">
+<style type="text/css">
+</style>
+<script type='text/javascript' src='js/jquery-3.3.1.min.js'></script>
+
+<script type='text/javascript' src='light7/js/light7.js' charset='utf-8'></script>
+<script type='text/javascript' src='light7/js/light7-swiper.js'
+	charset='utf-8'></script>
+
+</head>
+<body>
+	<div class="page-group">
+		<header class="bar bar-nav">
+			<a class="button button-link button-nav pull-left external"
+				href="${s.base}/myindex.html" data-transition='slide-out'> <span
+				class="icon icon-left"></span> 返回
+			</a>
+			<h1 class='title'>历史告警</h1>
+			<a class="button button-link button-nav pull-right"
+				href="${s.base}/alermList.action" data-transition='slide-out'> <span
+				class="icon icon-refresh">&nbsp;</span>
+			</a>
+		</header>
+		<div class="bar bar-header-secondary">
+			<div class="searchbar">
+				<a class="searchbar-cancel">取消</a>
+				<div class="search-input">
+					<label class="icon icon-search" for="search"></label> <input
+						type="search" id='search' placeholder='输入查询条件' />
+				</div>
+			</div>
+		</div>
+		<div class="content">
+			<#if alarmlist??>
+				<#list alarmlist as alarm>
+				<div class="card demo-card-header-pic">
+					<div valign="bottom" class="card-header color-white no-border no-padding">
+					<img class='card-cover'	src="${alarm.imageurl!}"
+						alt="图片太大无法显示"></div>
+					<div class="card-content">
+						<div class="card-content-inner">
+							<p>告警编号：${alarm.id!}</p>
+							<p>任务编号：${alarm.taskId!}
+							<p>描述：${alarm.description}</p>
+							<p>地点：${alarm.position!}</p>
+							<p class="color-gray">告警时间： ${alarm.createtime?datetime!}</p>
+						</div>
+					</div>
+					<div class="card-footer">
+						<#if alarm.status??>
+							<#if alarm.status == 1><a onclick="ensureAlarm(${alarm.alarmid!})" class="link">告警点确认</a>
+							<#elseif  alarm.status == 0><a class="link">已确认</a>
+							</#if>
+						</#if>					
+						<!-- <a href="#" class="link">详情</a> -->
+					</div>
+			    </div>								
+				</#list>
+			</#if>
+		</div>
+	</div>
+	<script type='text/javascript' src='js/jquery-3.3.1.min.js'></script>
+	<script type='text/javascript' src='light7/js/light7.js'
+		charset='utf-8'></script>
+	<script type='text/javascript' src='light7/js/light7-swiper.js'
+		charset='utf-8'></script>
+	<script>
+		function ensureAlarm(alarmid){
+			
+			$.confirm('是否确认告警点？', function () {
+		 	      //给后台发送请求
+			 	 $.ajax({
+			            type: "post",
+			            url: "${s.base}/ensureAlarm.action",
+			            data: {
+			            	'id':alarmid,			       	
+			            },		         
+			            success: function (result) {
+			            if(result.errcode=='1')	{
+				            	$.toast(result.message);
+				            	setTimeout(function(){
+				            		location.reload();
+				            	}, 1500);
+				            }else{
+				            	$.toast(result.message);
+				            }	            			               
+			           }
+			      });			
+		 	});
+		}
+	</script>
+</body>
+</html>

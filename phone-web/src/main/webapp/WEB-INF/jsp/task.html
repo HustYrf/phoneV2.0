@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>我的工单</title>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+   <link rel="shortcut icon" href="${s.base}/res/images/favicon.ico">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+<link rel="stylesheet" href="${s.base}/light7/css/light7.min.css">
+<link rel="stylesheet" href="${s.base}/light7/css/light7-swiper.min.css">
+<script type='text/javascript' src='${s.base}/js/jquery-3.3.1.min.js'></script>
+<script type='text/javascript' src='${s.base}/light7/js/light7.js' charset='utf-8'></script>
+<script type='text/javascript' src='${s.base}/light7/js/light7-swiper.js'	charset='utf-8'></script>
+</head>
+<body >
+	<div class="page-group">
+		<header class="bar bar-nav">
+			<a class="button button-link button-nav pull-left external"
+				href="${s.base}/myindex.html" data-transition='slide-out'> <span
+				class="icon icon-left"></span> 返回
+			</a>
+			<h1 class='title'>我的工单</h1>
+		</header>
+		<div class="bar bar-header-secondary buttons-tab">	
+				<li class="tab-link button col-33 active" id="tab00" onclick="exData(2)"><a
+					href="#tab0">全部</a></li>
+				<li class="tab-link button col-33" id="tab01" onclick="exData(0)"><a
+					href="#tab1">待完成</a></li>
+				<li class="tab-link button col-33" id="tab02" onclick="exData(1)"><a
+					href="#tab2">已完成</a></li>		
+		</div>
+		<div class="content">	
+			<div class="content-block">
+				<div class="tabs">
+					<div id="tab0" class="tab active"></div>
+					<div id="tab1" class="tab"></div>
+					<div id="tab2" class="tab"></div>
+				</div>
+			</div>
+			
+		</div>
+	</div>
+
+	<script>
+	function exData(flag) {
+		var url = '${s.base}/taskList.action';
+		$('.tab').removeClass('active');
+		$('li').removeClass('active');
+		if (flag == 0) {
+			$("#tab1").load(url, {
+				'flag' : flag
+			}, function() {
+				$("#tab01").addClass('active');
+				$("#tab1").addClass('active');
+			});
+		} else if (flag == 1) {
+			$("#tab2").load(url, {
+				'flag' : flag
+			}, function() {
+				$("#tab02").addClass('active');
+				$("#tab2").addClass('active');
+			});
+		} else {
+			$("#tab0").load(url, {
+				'flag' : flag
+			}, function() {
+				$("#tab00").addClass('active');
+				$("#tab0").addClass('active');
+			});
+		}
+	}
+	window.onload=function(){
+		 exData(2);
+	}
+	
+	//ajax请求确认任务，若成功则刷新当前页面
+	function ensureTask(TaskId,userA,userZ){
+		
+		$.confirm('是否确认任务？', function () {	
+	 	      //给后台发送请求	 	 
+		 	 $.ajax({
+		            type: "post",
+		            url: "${s.base}/ensureTask.action",		       
+		            data: {
+		            	'id':TaskId,
+		            	'userA':userA,
+		            	'userZ':userZ
+		            },		         
+		            success: function (result) {
+		            if(result.errcode=='1')	{
+			            	$.toast(result.message);
+			            	setTimeout(function(){
+			            		exData(0);
+			            	}, 1500);
+			            }else{
+			            	$.toast(result.message);
+			            }	            			               
+		           }
+		      });			
+	 	});
+	}
+	function rollbackTask(TaskId,userbid,usercid){
+		$.confirm('是否退回任务？', function () {
+	 	      //给后台发送请求
+		 	 $.ajax({
+		            type: "post",
+		            url: "${s.base}/rollbackTask.action",
+		            data: {
+		            	'taskid':TaskId,
+		            	'userbid':userbid,
+		            	'usercid':usercid
+		            },		         
+		            success: function (result) {
+		            if(result.errcode=='1')	{
+			            	$.toast(result.message);
+			            	setTimeout(function(){
+			            		exData(0);				            				            		
+			            	}, 1500);
+			            }else{
+			            	$.toast(result.message);
+			            }	            			               
+		           }
+		      });			
+	 	});
+	}
+	function exeTask(taskid){
+		$.confirm('是否开始执行任务？', function () {
+	 	      //给后台发送请求
+		 	 $.ajax({
+		            type: "post",
+		            url: "${s.base}/exeTask.action",
+		            data: {
+		            	'taskid':taskid,
+		            },		         
+		            success: function (result) {
+		            if(result.errcode=='1')	{
+			            	$.toast(result.message);
+			            	setTimeout(function(){
+			            		 location.href = "${s.base}/toPlane.action?taskid="+taskid;	
+			            		
+			            	}, 1500);
+			            }else{
+			            	$.toast(result.message);
+			            }
+		           }
+		      });			
+	 	});
+	}
+				
+</script>
+</body>
+</html>

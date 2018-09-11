@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>无人机操控</title>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+   <link rel="shortcut icon" href="${s.base}/res/images/favicon.ico">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<link rel="stylesheet" href="${s.base}/res/light7/css/sm.min.css">
+<link rel="stylesheet" href="${s.base}/res/css/phone.css">
+<link rel="stylesheet" href="${s.base}/res/css/main1119.css" />
+<link rel="stylesheet" href="${s.base}/res/light7/css/light7-swiper.min.css">
+
+<script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
+<script	src="http://webapi.amap.com/maps?v=1.4.6&key=82f9e75505b649be9ab81a45ae34aa14"></script>
+<!-- 这是放飞员界面 -->
+</head>
+<body>
+	<div class="page-group">
+		<header class="bar bar-nav">
+			<a class="button button-link button-nav pull-left extend"
+				href="${s.base}/myindex.html" data-transition='slide-out'> <span
+				class="icon icon-left"></span>返回
+			</a>
+			<h1 class='title'>   <!-- tip是为了当没有正在执行的任务的时候展示的提示信息   -->
+				<#if tip?? && tip!=""> <span>${tip!}</span> 
+				<#else> <span>任务编号：${task.id!}</span>
+				</#if>
+			</h1>
+			<a class="button button-link button-nav pull-right extend"
+				href="javascript:location.reload();" data-transition='slide-out'>
+				<span class="icon icon-refresh">&nbsp;</span>
+			</a>
+		</header>
+		<div id="content">
+
+			<div id="container"></div>
+			<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+			<script>
+        
+        	var  planePath =${planepath};
+        	var  planeMarker;
+        	var  pointlen = 0;
+        	
+            var map = new AMap.Map('container', {
+                resizeEnable: true,
+                zoom: 16,
+                center: planePath.pathdata[0],
+            });
+            AMapUI.loadUI(['control/BasicControl'],
+                function (BasicControl) {
+                    //缩放控件，显示Zoom值
+                     map.addControl(new BasicControl.Zoom({
+                        position: 'lt',
+                        showZoomNum: true,
+                    }));
+              
+                    var polyline = new AMap.Polyline({
+                        map: map,
+                        path: planePath.pathdata, //设置线覆盖物路径
+                        strokeColor: "#FF0000", //线颜色
+                        strokeOpacity: 1, //线透明度
+                        strokeWeight: 5, //线宽
+                        strokeStyle: "solid", //线样式
+                        strokeDasharray: [10, 5]
+                        //补充线样式
+                    });
+                    planeMarker = new AMap.Marker({
+	                    //map: map,
+	                    position: planePath.pathdata[pointlen],
+	                    icon: new AMap.Icon({
+	                        size: new AMap.Size(32, 32), //图标大小
+	                        image: "images/warn-32.png",
+	                        offset: new AMap.Pixel(0, -40) ,// 相对于基点的偏移位置
+	                    }),
+	                });
+		    	    map.add(planeMarker);  
+		    	   
+                });
+            
+        		         	
+    		   /* map.remove(planeMarker);
+	    	   planeMarker = new AMap.Marker({
+                    //map: map,
+                    position: data,
+                    icon: new AMap.Icon({
+                        size: new AMap.Size(32, 32), //图标大小
+                        image: "images/warn-32.png",
+                        offset: new AMap.Pixel(-32,32) ,// 相对于基点的偏移位置
+                    }),
+                });
+	    	   map.setCenter(data); 
+	    	   map.add(planeMarker); */	    	                      		                        	
+    		           
+    		  
+    	
+        </script>
+		</div>
+		
+		<!-- 输入密码模态框  css文件为phone.css-->
+		<div id="modal" class="pwdmodal">
+			<div class="pwdmodal-content">
+				<header class="pwdmodal-header">
+					<h4>无人机解锁密码</h4>					
+				</header>
+				<div class="pwdmodal-body">
+					<div class="inputBoxContainer" id="inputBoxContainer">
+						<input type="text" class="realInput"/>
+						<div class="bogusInput">
+							<input type="password" maxlength="4" disabled/>
+							<input type="password" maxlength="4" disabled/>
+							<input type="password" maxlength="4" disabled/>
+							<input type="password" maxlength="4" disabled/>              
+						</div>
+					</div>
+				</div>
+				<footer class="pwdmodal-footer">
+					<button id="cancel"  onclick="modalcancel()">取消</button>
+					<button id="sure" onclick="modalsure(${task.id!})">确定</button>
+				</footer>
+			</div>
+		</div>
+		<!-- 输入密码模态框  end -->	
+		
+        <!-- 操作按钮 start -->
+		<div class="optionArea">
+		 <#if tip??>
+         <#else>
+			<div class="content-block" style="margin-top: 25px">
+				<p class="buttons-row">
+					<a onclick="checkself()" class="button">自检完成</a> 
+					<a onclick="takeoff()" class="button">一键起飞</a>
+				</p>
+				<p class="buttons-row">
+					<a onclick="reportNotconnet()" class="button">报告失联</a>
+					<a onclick="emergencyback()" class="button">紧急返航</a>
+				</p>
+				<input id="option" type="hidden" value="" />
+			</div>
+		 </#if>
+		</div>
+        <!-- 操作按钮 end -->
+        
+	</div>
+	<script type='text/javascript' src='${s.base}/res/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+	<script type='text/javascript' src='${s.base}/js/jquery-3.3.1.min.js'></script>
+	<script type='text/javascript' src='${s.base}/light7/js/light7.js'></script>
+	<script type='text/javascript'	src='${s.base}/light7/js/light7-swiper.js'></script>
+	<script src="${s.base}/res/js/four_bit_password_input_box.js"></script>
+	<script>
+	
+	boxInput.init(function(){});
+	
+	var modal = document.getElementById('modal');   
+    function modalcancel(){
+    	boxInput.setNullValue();
+        modal.style.display = "none";
+    }
+    
+    function modalsure(taskid){  
+    	  //输入密码确认之后
+    	 modal.style.display = "none";              
+    	 var planeOption =$("#option").val(); 
+    	  
+         $.ajax({
+ 	        type: "post",
+ 	        url: "${s.base}/"+ planeOption,
+ 	        data: {
+ 	            'id': taskid,
+ 	        },
+ 	        success: function (result) {
+ 	            if (result.errcode == '1') {
+ 	                $.toast(result.message);
+ 	            } else {
+ 	                $.toast(result.message);
+ 	            }
+ 	        }
+        });
+         
+         //清空输入值
+         $("#option").attr("value",""); 
+    	 boxInput.setNullValue();
+    	
+    }
+    
+ 
+    function checkself(taskid) {
+
+        $.confirm('是否自检完成？', function () {
+            $.ajax({
+                type: "post",
+                url: "${s.base}/checkself.action",
+                data: {
+                    'id': taskid
+                },
+                success: function (result) {
+                    if (result.errcode == '1') {
+                        $.toast(result.message);
+                    } else {
+                        $.toast(result.message);
+                    }
+                }
+            });
+        });
+    }
+
+    function takeoff() {
+    	 $.confirm('是否起飞无人机？', function () {	
+    		 $("#option").attr("value","takeoff.action"); 
+    		 modal.style.display = "block";         
+         });
+   	 
+    }
+      
+    //确认飞机紧急返航
+    function emergencyback(taskid) {
+        $.confirm('是否紧急返航？', function () {
+        	$("#option").attr("value","emergencyback.action"); 
+	        modal.style.display = "block"; 
+        });
+	}
+	    
+	    //报告飞机失联
+	function reportNotconnet(taskid) {
+		$.confirm('是否报告失联？', function () {
+	    	$("#option").attr("value","reportNotconnet.action"); 
+	        modal.style.display = "block";         
+		});	
+	} 
+	    
+	/*function showposition(taskid) {
+  	 $.confirm('是否显示实时位置？', function () {
+           $.ajax({
+               type: "post",
+               url: "${s.base}/showPosition.action",
+               data: {
+                   'id': taskid,'uavId':${task.uavId}
+               },
+               success: function (result) {
+                   if (result.errcode == '1') {
+                       $.toast(result.message);
+                   } else {
+                       $.toast(result.message);
+                   }
+               }
+           });
+       });
+  } */
+				
+	</script>
+</body>
+</html>

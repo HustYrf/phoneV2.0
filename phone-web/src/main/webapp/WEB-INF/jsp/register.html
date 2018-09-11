@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>用户注册</title>
+    <meta name="viewport" content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width">
+    <meta name="viewport" media="(device-height: 568px)" content="initial-scale=1.0,user-scalable=no,maximum-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <link rel="stylesheet" href="${s.base}/res/css/gongyong.css">
+    <link href="${s.base}/res/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    <script src="${s.base}/res/js/jquery-1.11.3.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="${s.base}/res/js/bootstrap.min.js"></script>
+    <style>
+        #alertDiv {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="head">
+    <span class="head_lf"><a href="#">&nbsp;&nbsp;</a></span> 用户注册
+    <span class="head_rg"><a href="${s.base}/login.html">登录</a></span>
+</div>
+<form class="form-horizontal" method="post" id="registerForm">
+    <div class="zhuce">
+         <!-- <div class="text">
+            <span>身份选择</span>
+            <select class="input" name="role" id="role">
+                <option value="1" selected="selected">起飞员</option>
+                <option value="2">降落员</option>
+            </select>
+        </div> -->
+        <!--
+    <div class="text">
+        <span>验证码</span>
+        <input type="text" placeholder="请输入验证码" class="input" style="width:55%">
+        <span class="yzm"><input type="button" value="获取验证码"></span>
+    </div>
+-->
+        <div class="text">
+            <span>用户名</span>
+            <input type="text" name="username" placeholder="请输入用户名" class="input">
+        </div>
+        <div class="text">
+            <span>密 码</span>
+            <input type="text" name="password" id="password" placeholder="请输入密码" class="input">
+        </div>
+        <div class="text">
+            <span>确认密码</span>
+            <input type="text" name="confirmPassword" id="passwordensure" placeholder="请输入确认密码" class="input">
+        </div>
+        <div class="tip"><a><input type="checkbox" value="I`Agree" id="checkbox1" name="agree_me">
+            <label for="checkbox1"></label>同意注册条款</a></div>
+        <div class="btndl"><input type="button" id="registerButton" value="注 册"></div>
+        <div id="alertDiv">
+        </div>
+</form>
+</body>
+<script type="text/javascript">
+    $("#registerButton").click(function () {
+        var password = $("#password").val();
+        var passwordensure = $("#passwordensure").val();
+        if (password != passwordensure) {
+            showAlert('密码和确认密码不一致！');
+            setTimeout("closeAlert()",3000);
+        } else {
+            $.ajax({
+                url: "${s.base}/register.action",
+                type: "POST",
+                async: true,
+                data: $("#registerForm").serialize(),
+                timeout: 5000,
+                dataType: 'json',
+                success: function (result) {
+                    if (result.errcode == 0 && result.message == "SUCCESS") {
+                        showAlert(result.message);
+                        setTimeout('closeAlert()', 3000);
+                    } else {
+                        showAlert(result.message)
+                        setTimeout('closeAlert()', 3000);
+                    }
+                }
+            });
+        }
+    })
+
+    function showAlert(message) {
+        var alertitem = document.getElementById("alertDiv");
+        var innHTMl = '<div class="alert alert-danger alert-dismissable" id="alerth"><button type="button" class="close" data-dismiss="alert" >&times;</button>' + message + '</div>';
+        alertitem.innerHTML = innHTMl;
+        alertitem.style.display = "block";
+    }
+
+    function closeAlert() {
+        var alertitem = document.getElementById("alertDiv");
+        alertitem.style.display = "none";
+    }
+</script>
+</html>
