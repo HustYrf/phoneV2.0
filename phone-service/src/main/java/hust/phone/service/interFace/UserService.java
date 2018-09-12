@@ -12,4 +12,6 @@ public interface UserService {
 
 	int getTaskNumByUser(User loginUser);
 
+	String getNameByUserId(Integer usercreator);
+
 }

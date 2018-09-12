@@ -6,17 +6,17 @@ import java.util.Date;
 
 public class Task {
 	
-	private Integer role;
+	private int role;
 	
-	public Integer getRole() {
+	private Integer id;
+
+	public int getRole() {
 		return role;
 	}
 
-	public void setRole(Integer role) {
+	public void setRole(int role) {
 		this.role = role;
 	}
-
-	private Integer id;
 
 	private String name;
 

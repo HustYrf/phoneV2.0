@@ -450,6 +450,12 @@
 		from K_User
 		where id=#{id,jdbcType=INTEGER}
 	</select>
+	<select id="getNameByUserId" parameterType="java.lang.Integer"
+		resultType="java.lang.String">
+		select Name
+		from K_User
+		where id=#{id,jdbcType=INTEGER}
+	</select>
 
 	<update id="userAddTasknum" parameterType="hust.phone.mapper.pojo.User">
 		update K_User

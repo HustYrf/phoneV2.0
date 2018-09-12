@@ -50,4 +50,6 @@ public interface UserMapper {
 	int userReduceTasknum(User user);
 
 	int getTaskNumByUser(User user);
+
+	String getNameByUserId(Integer id);
 }

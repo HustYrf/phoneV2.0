@@ -17,6 +17,7 @@ import hust.phone.mapper.pojo.FlyingPath;
 import hust.phone.mapper.pojo.Task;
 import hust.phone.mapper.pojo.Uav;
 import hust.phone.mapper.pojo.User;
+import hust.phone.service.impl.UserServiceimpl;
 import hust.phone.service.interFace.FlyingPathService;
 import hust.phone.service.interFace.UserService;
 import hust.phone.service.interFace.UavService;
@@ -25,6 +26,7 @@ import hust.phone.utils.JsonUtils;
 import hust.phone.utils.pojo.JsonView;
 import hust.phone.utils.pojo.PhoneUtils;
 import hust.phone.web.controller.vo.FlyingPathVO;
+import hust.phone.web.controller.vo.TaskVO;
 
 @Controller
 public class TaskController {
@@ -87,42 +89,66 @@ public class TaskController {
 	public String ensureTask(Task task, HttpServletRequest request) {
 
 		User user = PhoneUtils.getLoginUser(request);
-
 		int userid = user.getId();
+		Task task2 = taskServiceImpl.getTaskByTask(task);
+		
 		String reString = "";
-		if (task.getUserA() == userid) { // 如果是用户在该任务是放飞者
+		if (task2.getUserA() == userid) { // 如果是用户在该任务是放飞者
 
-			taskServiceImpl.setStatusTaskByTask(task, 2);
-			reString = "放飞员确认任务成功";
+			if(taskServiceImpl.setStatusTaskByTask(task, 3)==true) {
+				reString = "放飞员确认任务成功!";
+			}else {
+				reString = "放飞员确认任务失败!";
+			}
+			
 		}
-		if (task.getUserZ() == userid) { // 如果是用户在该任务是接收者
+		if (task2.getUserZ() == userid) { // 如果是用户在该任务是接收者
 
-			taskServiceImpl.setStatusTaskByTask(task, 3);
-			reString = "接收员确认任务成功";
+			if(taskServiceImpl.setStatusTaskByTask(task, 4)==true) {
+				reString = "接收员确认任务成功!";
+			}else {
+				reString = "接收员确认任务失败！";
+			}
+			
 		}
 		return JsonView.render(1, reString);
 	}
 
-	// 退回任务，如果任一角色退回任务的话那该任务直接完成，并且完成结果为失败
+	// 未执行前退回任务，如果任一角色退回任务的话那该任务直接完成，并且完成结果为失败
 	@RequestMapping(value = "/rollbackTask", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String rollbackTask(Task task, HttpServletRequest request) {
 
 		User user = PhoneUtils.getLoginUser(request);
-
 		int userid = user.getId();
-		// 下面开始退回任务
-		String reString = "";
-
-		taskServiceImpl.rollbackTaskByTask(task, 0);
-
-		if (task.getUserA() == userid) { // 如果是用户在该任务是放飞者
-			reString = "放飞员退回任务成功";
-		}
-		if (task.getUserZ() == userid) { // 如果是用户在该任务是接收者
-			reString = "接机员退回任务成功";
-		}
-
+		Task task2 = taskServiceImpl.getTaskByTask(task);
+		
+		String reString = "未知错误，请重试";
+        int oldStatus = task2.getStatus();
+        
+       
+        if(oldStatus == 2 || oldStatus == 3 || oldStatus == 4) {
+        	
+        	if(taskServiceImpl.setStatusTaskByTask(task, 1)==true) {
+        		if (task2.getUserA() == userid) { // 如果是用户在该任务是放飞者
+        			reString = "放飞员退回任务成功";
+        		}
+        		if (task2.getUserZ() == userid) { // 如果是用户在该任务是接收者
+        			reString = "接机员退回任务成功";
+        		}
+        	}else {
+        		reString = "退回任务失败！";
+        	}        	 		
+        }
+        
+        if(oldStatus == 8) {
+        	if(taskServiceImpl.setStatusTaskByTask(task, 4)==true) {
+        		reString = "放飞员退回任务成功,返回到执行状态！";
+        	}else {
+        		reString = "放飞员退回任务失败！";
+        	}
+        }
+		
 		return JsonView.render(1, reString);
 	}
 
@@ -152,15 +178,23 @@ public class TaskController {
 		task.setUserZ(userid);
 
 		taskList = taskServiceImpl.selectAllByTask(task);
+		List<TaskVO> taskVOList = new ArrayList<TaskVO>();
+				
 		for (int i = 0; i < taskList.size(); i++) {
 			// 设置 task角色
 			Task taskitem = taskList.get(i);
+			TaskVO taskVO = new TaskVO();
+			taskVO.setTask(taskitem);
+			taskVO.setUserCreatorName(userService.getNameByUserId(taskitem.getUsercreator()));
+			taskVO.setUserAName(userService.getNameByUserId(taskitem.getUserA()));
+			taskVO.setUserZName(userService.getNameByUserId(taskitem.getUserZ()));
 			// 如果 role = 1表示放飞员， role=2表示接机员
 			int role = (userid == taskitem.getUserA()) ? 1 : 2;
-			taskitem.setRole(role);
+			taskVO.setRole(role);
+			taskVOList.add(taskVO);
 		}
 
-		model.addAttribute("taskList", taskList);
+		model.addAttribute("taskList", taskVOList);
 
 		return "subtasklist";
 	}
@@ -198,6 +232,7 @@ public class TaskController {
 		User user = PhoneUtils.getLoginUser(request);
 		Task task2 = taskServiceImpl.getTaskByTask(task);
 		// 如果 role = 1表示放飞员， role=2表示接机员
+		
 		int role = user.getId() == task2.getUserA() ? 1 : 2;
 		task2.setRole(role);
 

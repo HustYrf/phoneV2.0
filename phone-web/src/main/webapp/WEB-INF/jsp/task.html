@@ -77,7 +77,7 @@
 	}
 	
 	//ajax请求确认任务，若成功则刷新当前页面
-	function ensureTask(TaskId,userA,userZ){
+	function ensureTask(TaskId){
 		
 		$.confirm('是否确认任务？', function () {	
 	 	      //给后台发送请求	 	 
@@ -86,9 +86,7 @@
 		            url: "${s.base}/ensureTask.action",		       
 		            data: {
 		            	'id':TaskId,
-		            	'userA':userA,
-		            	'userZ':userZ
-		            },		         
+		             },		         
 		            success: function (result) {
 		            if(result.errcode=='1')	{
 			            	$.toast(result.message);
@@ -102,17 +100,15 @@
 		      });			
 	 	});
 	}
-	function rollbackTask(TaskId,userbid,usercid){
+	function rollbackTask(TaskId){
 		$.confirm('是否退回任务？', function () {
 	 	      //给后台发送请求
 		 	 $.ajax({
 		            type: "post",
 		            url: "${s.base}/rollbackTask.action",
 		            data: {
-		            	'taskid':TaskId,
-		            	'userbid':userbid,
-		            	'usercid':usercid
-		            },		         
+		            	'id':TaskId,
+		            			            },		         
 		            success: function (result) {
 		            if(result.errcode=='1')	{
 			            	$.toast(result.message);
@@ -133,13 +129,13 @@
 		            type: "post",
 		            url: "${s.base}/exeTask.action",
 		            data: {
-		            	'taskid':taskid,
+		            	'id':taskid,
 		            },		         
 		            success: function (result) {
 		            if(result.errcode=='1')	{
 			            	$.toast(result.message);
 			            	setTimeout(function(){
-			            		 location.href = "${s.base}/toPlane.action?taskid="+taskid;	
+			            		 location.href = "${s.base}/toPlane.action?id="+taskid;	
 			            		
 			            	}, 1500);
 			            }else{

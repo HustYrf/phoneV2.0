@@ -8,6 +8,15 @@ public class TaskVO {
 	private String userAName;
 	private String userZName;
 	private String userCreatorName;
+	private int role;
+
+	public int getRole() {
+		return role;
+	}
+
+	public void setRole(int role) {
+		this.role = role;
+	}
 
 	public Task getTask() {
 		return task;

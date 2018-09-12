@@ -81,4 +81,9 @@ public class UserServiceimpl implements UserService {
 		int tasknum = userMapper.getTaskNumByUser(user);
 		return tasknum;
 	}
+
+	@Override
+	public String getNameByUserId(Integer usercreator) {
+		return userMapper.getNameByUserId(usercreator);
+	}
 }
