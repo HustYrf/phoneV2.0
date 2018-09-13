@@ -385,7 +385,8 @@ public class TaskController {
 
 		int oldStatus = taskServiceImpl.getTaskStatus(task);
 		if (oldStatus == 5) {
-			if (taskServiceImpl.setStatusTaskByTask(task, 6) == true) {
+			taskServiceImpl.setStatusTaskByTask(task, 6);  //申请起飞
+			if (taskServiceImpl.setStatusTaskByTask(task, 7) == true) {
 				return JsonView.render(1, "无人机自检成功，等待放飞确认。");
 			} else {
 				return JsonView.render(1, "无人机自检失败，请重新确认。");

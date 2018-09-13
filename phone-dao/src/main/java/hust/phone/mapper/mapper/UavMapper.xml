@@ -39,14 +39,13 @@
           <![CDATA[  and DATE_FORMAT(CreateTime, '%Y-%m-%d') <= DATE_FORMAT(#{param3}, '%Y-%m-%d')    ]]>
 		</if>
 	</select>
-	<select id="selectByphoneStatus" resultMap="BaseResultMap">
+	<select id="selectByUavStatus" parameterType="hust.phone.mapper.pojo.Uav" resultMap="BaseResultMap">
 		select
 		<include refid="Base_Column_List" />
 		from K_Uav
 		where Status=#{param1}
 	</select>
-	<select id="getphoneByphone" parameterType="hust.phone.mapper.pojo.Uav"
-		resultMap="BaseResultMap">
+	<select id="getPlaneByPlane" parameterType="hust.phone.mapper.pojo.Uav"	resultMap="BaseResultMap">
 		select 
 		<include refid="Base_Column_List" />
 		from K_Uav

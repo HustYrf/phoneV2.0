@@ -37,7 +37,5 @@ public interface TaskMapper {
 
 	int getTaskStatus(Task task);
 
-	int setStatusByTask(int status);
-
 	int setStatusByTask(Task task);
 }
