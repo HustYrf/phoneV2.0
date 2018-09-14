@@ -113,6 +113,42 @@ public class TaskController {
 		}
 		return JsonView.render(1, reString);
 	}
+	
+	    // 申请起飞
+		@RequestMapping(value = "/applyTaskoff", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+		@ResponseBody
+		public String applyTaskoff(Task task) {
+
+			int oldStatus = taskServiceImpl.getTaskStatus(task);
+			if (oldStatus == 6) {
+				if (taskServiceImpl.setStatusTaskByTask(task, 7) == true) {
+					return JsonView.render(1, "申请成功，等待管理员确认。");
+				} else {
+					return JsonView.render(1, "申请失败，请重新申请。");
+				}
+			}
+			return JsonView.render(1, "当前状态无法撤销起飞！");
+			
+		}
+		
+	    // 撤销起飞
+		@RequestMapping(value = "/cancelTaskoff", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+		@ResponseBody
+		public String cancelTaskoff(Task task) {
+
+			//撤销起飞
+			
+			int oldStatus = taskServiceImpl.getTaskStatus(task);
+			if (oldStatus == 6) {
+				if (taskServiceImpl.setStatusTaskByTask(task, 4) == true) {
+					return JsonView.render(1, "撤销成功。");
+				} else {
+					return JsonView.render(1, "撤销失败，请重试。");
+				}
+			}
+			return JsonView.render(1, "当前状态无法撤销起飞！");	
+		}
+			
 
 	// 未执行前退回任务，如果任一角色退回任务的话那该任务直接完成，并且完成结果为失败
 	@RequestMapping(value = "/rollbackTask", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -241,7 +277,7 @@ public class TaskController {
 		// taskServiceImpl.setStatusTaskByTask(task, "5");
 
 		FlyingPath flyingPath = new FlyingPath();
-		flyingPath.setId(task2.getId());
+		flyingPath.setId(task2.getFlyingpathId());
 		FlyingPath flyingPath2 = flyingPathService.selectByPlanepathId(flyingPath);
 
 		FlyingPathVO flyingPathVO = new FlyingPathVO(flyingPath2);
@@ -385,9 +421,9 @@ public class TaskController {
 
 		int oldStatus = taskServiceImpl.getTaskStatus(task);
 		if (oldStatus == 5) {
-			taskServiceImpl.setStatusTaskByTask(task, 6);  //申请起飞
-			if (taskServiceImpl.setStatusTaskByTask(task, 7) == true) {
-				return JsonView.render(1, "无人机自检成功，等待放飞确认。");
+			//taskServiceImpl.setStatusTaskByTask(task, 6);  //申请起飞
+			if (taskServiceImpl.setStatusTaskByTask(task, 6) == true) {
+				return JsonView.render(1, "无人机自检成功，等待申请起飞。");
 			} else {
 				return JsonView.render(1, "无人机自检失败，请重新确认。");
 			}
