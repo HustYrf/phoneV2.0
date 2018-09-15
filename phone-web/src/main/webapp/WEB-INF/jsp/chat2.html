@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Chat Client</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <script type="text/javascript">
+    	function login(planeid) {
+    	var  scontent =planeid+WebTypeUtil.SENDUSERLOGIN;
+    	//alert(scontent);
+    	send(scontent);
+	} 
+    	function flying(planeid) {
+        	var  scontent =planeid+WebTypeUtil.SENDUSERFLYING;
+        	//alert(scontent);
+        	WebSocketUtil.webSocket.send(scontent);
+    	} 
+   </script>
+</head>
+<body>
+	<input type="button" id="login" onclick="login(${planeid})" value="登录"></br>
+	<input type="button" id="flying" onclick="flying(${planeid})" value="放飞">
+	<br>
+<textarea id="log" rows="30" cols="100" style="font-family:monospace; color:red;"></textarea>
+<input type="text" id="plane" value="${planeid}">
+	<br>
+	 <script type="text/javascript" src="js/chat.js"></script>
+	 <script type="text/javascript" src="js/home.js"></script>  
+	<script src="js/jQuery.js" type="text/javascript"></script>
+	<br>
+</body>
+</html>
