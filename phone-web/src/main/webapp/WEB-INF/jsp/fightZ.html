@@ -126,7 +126,7 @@
 	        <#else>
 	        <div class="content-block" style="margin-top:25px">
 	            <p class="buttons-row">
-	                <a onclick="reportFinish()" class="button">任务完成</a>
+	                <a onclick="reportFinish(${task.id!})" class="button">任务完成</a>
 	                <a onclick="reportNotconnet()" class="button">飞机失联</a>
 	            </p>
 	            <p class="buttons-row">
@@ -206,7 +206,7 @@
 		            type: "post",
 		            url: "${s.base}/reportFinish.action",
 		            data: {
-		            	'taskid':taskid
+		            	'id':taskid,
 		            },		         
 		            success: function (result) {
 		            if(result.errcode=='1')	{

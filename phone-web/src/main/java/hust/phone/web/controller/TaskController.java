@@ -113,6 +113,42 @@ public class TaskController {
 		}
 		return JsonView.render(1, reString);
 	}
+	
+	    // 申请起飞
+		@RequestMapping(value = "/applyTaskoff", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+		@ResponseBody
+		public String applyTaskoff(Task task) {
+
+			int oldStatus = taskServiceImpl.getTaskStatus(task);
+			if (oldStatus == 6) {
+				if (taskServiceImpl.setStatusTaskByTask(task, 7) == true) {
+					return JsonView.render(1, "申请成功，等待管理员确认。");
+				} else {
+					return JsonView.render(1, "申请失败，请重新申请。");
+				}
+			}
+			return JsonView.render(1, "当前状态无法撤销起飞！");
+			
+		}
+		
+	    // 撤销起飞
+		@RequestMapping(value = "/cancelTaskoff", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+		@ResponseBody
+		public String cancelTaskoff(Task task) {
+
+			//撤销起飞
+			
+			int oldStatus = taskServiceImpl.getTaskStatus(task);
+			if (oldStatus == 6) {
+				if (taskServiceImpl.setStatusTaskByTask(task, 4) == true) {
+					return JsonView.render(1, "撤销成功。");
+				} else {
+					return JsonView.render(1, "撤销失败，请重试。");
+				}
+			}
+			return JsonView.render(1, "当前状态无法撤销起飞！");	
+		}
+			
 
 	// 未执行前退回任务，如果任一角色退回任务的话那该任务直接完成，并且完成结果为失败
 	@RequestMapping(value = "/rollbackTask", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -241,7 +277,7 @@ public class TaskController {
 		// taskServiceImpl.setStatusTaskByTask(task, "5");
 
 		FlyingPath flyingPath = new FlyingPath();
-		flyingPath.setId(task2.getId());
+		flyingPath.setId(task2.getFlyingpathId());
 		FlyingPath flyingPath2 = flyingPathService.selectByPlanepathId(flyingPath);
 
 		FlyingPathVO flyingPathVO = new FlyingPathVO(flyingPath2);
@@ -341,7 +377,7 @@ public class TaskController {
 					return JsonView.render(0, "紧急返航执行失败，请重试！");
 				}
 			} else {
-				return JsonView.render(0, "报告失联失败，当前未处于飞行中！");
+				return JsonView.render(0, "紧急返航执行失败，当前未处于飞行中！");
 			}
 		} else {
 			return JsonView.render(0, "紧急返航失败，密码错误！");
@@ -385,9 +421,9 @@ public class TaskController {
 
 		int oldStatus = taskServiceImpl.getTaskStatus(task);
 		if (oldStatus == 5) {
-			taskServiceImpl.setStatusTaskByTask(task, 6);  //申请起飞
-			if (taskServiceImpl.setStatusTaskByTask(task, 7) == true) {
-				return JsonView.render(1, "无人机自检成功，等待放飞确认。");
+			//taskServiceImpl.setStatusTaskByTask(task, 6);  //申请起飞
+			if (taskServiceImpl.setStatusTaskByTask(task, 6) == true) {
+				return JsonView.render(1, "无人机自检成功，等待申请起飞。");
 			} else {
 				return JsonView.render(1, "无人机自检失败，请重新确认。");
 			}
@@ -401,6 +437,7 @@ public class TaskController {
 	public String takeoff(@RequestParam("taskid") int taskid, @RequestParam("uavid") int uavid,
 			@RequestParam("pwd") String pwd) {
 
+		
 		Task task = new Task();
 		task.setId(taskid);
 		Uav uav = new Uav();
@@ -410,12 +447,13 @@ public class TaskController {
 		Uav uav2 = uavServiceImpl.getPlaneByPlane(uav);
 		if (uav2.getPassword().equals(pwd)) {
 			if (oldStatus == 8) {
-				if (taskServiceImpl.setStatusTaskByTask(task, 8) == true) {
+				if (taskServiceImpl.setStatusTaskByTask(task, 9) == true) {
 					// 放飞指令
-					uavServiceImpl.takeoff(task.getUavId());
-					return JsonView.render(1, "无人机放飞！！");
+					//uavServiceImpl.takeoff(task.getUavId());
+					
+					return JsonView.render(1, "无人机放飞成功！！");
 				} else {
-					return JsonView.render(0, "放飞失败!");
+					return JsonView.render(0, "无人机放飞失败!");
 				}
 
 			} else {
@@ -444,6 +482,7 @@ public class TaskController {
 		}
 	}
 
+	//报告完成
 	@RequestMapping(value = "/reportFinish", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String reportFinish(Task task) {
