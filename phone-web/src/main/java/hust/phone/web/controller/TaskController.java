@@ -377,7 +377,7 @@ public class TaskController {
 					return JsonView.render(0, "紧急返航执行失败，请重试！");
 				}
 			} else {
-				return JsonView.render(0, "报告失联失败，当前未处于飞行中！");
+				return JsonView.render(0, "紧急返航执行失败，当前未处于飞行中！");
 			}
 		} else {
 			return JsonView.render(0, "紧急返航失败，密码错误！");
@@ -437,6 +437,7 @@ public class TaskController {
 	public String takeoff(@RequestParam("taskid") int taskid, @RequestParam("uavid") int uavid,
 			@RequestParam("pwd") String pwd) {
 
+		
 		Task task = new Task();
 		task.setId(taskid);
 		Uav uav = new Uav();
@@ -446,12 +447,13 @@ public class TaskController {
 		Uav uav2 = uavServiceImpl.getPlaneByPlane(uav);
 		if (uav2.getPassword().equals(pwd)) {
 			if (oldStatus == 8) {
-				if (taskServiceImpl.setStatusTaskByTask(task, 8) == true) {
+				if (taskServiceImpl.setStatusTaskByTask(task, 9) == true) {
 					// 放飞指令
-					uavServiceImpl.takeoff(task.getUavId());
-					return JsonView.render(1, "无人机放飞！！");
+					//uavServiceImpl.takeoff(task.getUavId());
+					
+					return JsonView.render(1, "无人机放飞成功！！");
 				} else {
-					return JsonView.render(0, "放飞失败!");
+					return JsonView.render(0, "无人机放飞失败!");
 				}
 
 			} else {
@@ -480,6 +482,7 @@ public class TaskController {
 		}
 	}
 
+	//报告完成
 	@RequestMapping(value = "/reportFinish", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
 	public String reportFinish(Task task) {
