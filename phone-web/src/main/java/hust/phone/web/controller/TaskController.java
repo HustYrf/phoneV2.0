@@ -287,7 +287,7 @@ public class TaskController {
 
 		model.addAttribute("planepath", JsonUtils.objectToJson(flyingPathVO));
 		model.addAttribute("task", task2);
-
+		model.addAttribute("role",role);
 		if (role == 1) {
 			return "fightA";
 		} else {

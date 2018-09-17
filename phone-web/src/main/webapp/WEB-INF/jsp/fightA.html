@@ -250,7 +250,7 @@
             });
         });
     }
-
+/*
     function takeoff() {
     	 $.confirm('是否起飞无人机？', function () {	
     		 $("#option").attr("value","takeoff.action"); 
@@ -292,7 +292,51 @@
                }
            });
        });
-  } */
+  } */ 
+
+
+  function takeoff() {
+  	 $.confirm('是否起飞无人机？', function () {	
+  		 $("#option").attr("value","takeoff.action"); 
+  		 modal.style.display = "block";         
+       });
+ 	 
+  }
+    
+  //确认飞机紧急返航
+  function emergencyback(taskid) {
+      $.confirm('是否紧急返航？', function () {
+      	$("#option").attr("value","emergencyback.action"); 
+	        modal.style.display = "block"; 
+      });
+	}
+	    
+	    //报告飞机失联
+	function reportNotconnet(taskid) {
+		$.confirm('是否报告失联？', function () {
+	    	$("#option").attr("value","reportNotconnet.action"); 
+	        modal.style.display = "block";         
+		});	
+	} 
+	    
+	/*function showposition(taskid) {
+	 $.confirm('是否显示实时位置？', function () {
+         $.ajax({
+             type: "post",
+             url: "${s.base}/showPosition.action",
+             data: {
+                 'id': taskid,'uavId':${task.uavId}
+             },
+             success: function (result) {
+                 if (result.errcode == '1') {
+                     $.toast(result.message);
+                 } else {
+                     $.toast(result.message);
+                 }
+             }
+         });
+     });
+} */
 				
 	</script>
 </body>

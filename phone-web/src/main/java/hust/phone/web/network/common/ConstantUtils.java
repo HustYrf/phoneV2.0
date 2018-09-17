@@ -30,7 +30,19 @@ public interface ConstantUtils {
 	short RES_WAIT = 3;
 	//无人机发送状态给手机
 	String MSG_TANS_STATUS ="status";
-		
+	String MSG_TANS_STATUS_OPEN ="已开机";
+	String MSG_TANS_STATUS_LOGINSUCCESS = "系统登录成功";
+	String MSG_TANS_STATUS_CHECK ="待自检";
+	String MSG_TANS_STATUS_CHECKFINISH = "飞机准备就绪";
+	String MSG_TANS_STATUS_UNLOCKED ="解锁完成";
+	String MSG_TANS_STATUS_FLYINGUP = "爬升";
+	String MSG_TANS_STATUS_FLYING ="巡航中";
+	String MSG_TANS_STATUS_LANDING = "降落";
+	String MSG_TANS_STATUS_LANDED ="着陆";
+	String MSG_TANS_STATUS_CLOSED = "关机";
+	String MSG_TANS_STATUS_EXCEPTION ="有异常";
+	String MSG_TANS_STATUS_PARACHATEOPENING = "开伞";
+	String MSG_TANS_STATUS_RETURN ="返航";
 	// 判断客户端类型的CODE
 	String ATTR_CLIENT_CODE = "GET";
 	//服务器的设备类型

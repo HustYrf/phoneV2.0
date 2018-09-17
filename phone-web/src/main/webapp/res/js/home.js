@@ -1,9 +1,11 @@
 var ws=null;
 var log=null;
 var plane=null;
+var planeStatus = null;
 window.onload=function(){ 
 	log=document.getElementById("log");
 	plane =document.getElementById("plane");
+	planeStatus =document.getElementById("fightStatus");
 	HomeChatOperateUtil.ready();
 }
 //
