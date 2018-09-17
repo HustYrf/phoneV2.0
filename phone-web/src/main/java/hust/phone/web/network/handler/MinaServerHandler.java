@@ -181,7 +181,66 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		SlpMsgStatus unpack = (SlpMsgStatus) packet.unpack();
 		String lon = unpack.GPS_LON/(10000000.0)+"";
 		String lat = unpack.GPS_LAT/(10000000.0)+"";
+		short mode =unpack.BASEMODE;
 		String content = ConstantUtils.MSG_TANS_STATUS+":"+lon+","+lat;
+		switch (mode) {
+		case 1: 
+			//开机状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_OPEN;
+			break;
+		case 2: 
+			//系统登录成功状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_LOGINSUCCESS;
+			break;
+		case 3: 
+			//待自检状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_CHECK;
+			break;
+		case 4: 
+			//飞机准备就绪状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_CHECKFINISH;
+			break;
+		case 5: 
+			//解锁完成状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_UNLOCKED;
+			break;
+		case 6: 
+			//以起飞，爬升状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_FLYINGUP;
+			break;
+		case 7: 
+			//巡航中状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_FLYING;
+			break;
+		case 8: 
+			//降落状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_LANDING;
+			break;
+		case 9: 
+			//着陆状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_LANDED;
+			break;
+		case 10: 
+			//关机状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_CLOSED;
+			break;
+		case 11: 
+			//有异常状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_EXCEPTION;
+			break;
+		case 12: 
+			//开伞状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_PARACHATEOPENING;
+			break;
+		case 13: 
+			//返航状态
+			content =content+":"+ConstantUtils.MSG_TANS_STATUS_RETURN;
+			break;
+
+		default:
+			break;
+		}
+		
 		System.out.println(content);
 		//将数据推送给手机客户端,并保存在数据库中
 		processResResult(content,packet);
@@ -280,7 +339,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		String land = packet.SND_DEVICE_ID+"land";
 		MinaBean msg = new MinaBean();
 		msg.setContent(content);
-		//将数据推送给手机客户端,并保存在数据库中
+		//将数据推送给手机客户端,
 		IoSession sessionMobile1 = IOSessionManager.getSessionMobile(send);
 		//System.out.println(msg.getContent());
 		if(sessionMobile1!=null)

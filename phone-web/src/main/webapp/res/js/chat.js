@@ -12,6 +12,7 @@ var WebTypeUtil=
 		MESSAGETYPEFRETURNFAILURE:"returnFailure",
 		MESSAGETYPEFRETURNWAIT:"returnWait",
 		MESSAGETYPESTATUS:"status"
+		
 }
 
 var WebSocketUtil = {
@@ -48,7 +49,7 @@ var WebSocketUtil = {
 		switch(messageType[0]){
 		case WebTypeUtil.MESSAGETYPESTATUS:
 			//处理接收到的经纬度消息
-			PlaneHandleServiceUtil.handleStatus(messageType[1]);
+			PlaneHandleServiceUtil.handleStatus(messageType[1],messageType[2]);
 			break;
 		case WebTypeUtil.MESSAGETYPEFLYINGEXCUTE:
 			//处理起飞执行的消息
@@ -100,8 +101,10 @@ var WebSocketUtil = {
 }
 
 var PlaneHandleServiceUtil ={
-		handleStatus:function(message)
+		handleStatus:function(message,status)
 		{
+			//显示无人机的状态信息
+			planeStatus.value = status;
 			WebSocketUtil.print("[send] '" + message + "'\n");
 		},
 		handleFlyingExcute:function()
