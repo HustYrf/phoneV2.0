@@ -4,6 +4,7 @@ var plane=null;
 window.onload=function(){ 
 	log=document.getElementById("log");
 	plane =document.getElementById("plane");
+	role = document.getElementById("role");
 	HomeChatOperateUtil.ready();
 }
 //

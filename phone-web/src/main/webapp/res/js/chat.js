@@ -30,7 +30,14 @@ var WebSocketUtil = {
 		
 	},
 	onOpen : function(event) {
-		var content = plane.value+"send@login";
+		if(role == 1)
+		{
+			var content = plane.value+WebTypeUtil.SENDUSERLOGIN;
+			
+		}else if(role ==2)
+		{
+			var content = plane.value+WebTypeUtil.LANDUSERLOGIN;
+		}
 		
 		WebSocketUtil.webSocket.send(content);
 	},
@@ -99,11 +106,11 @@ var PlaneHandleServiceUtil ={
 		},
 		handleFlyingExcute:function()
 		{
-			alert(WebTypeUtil.MESSAGETYPEFLYINGEXCUTE)
+			$.toast("飞机起飞执行成功");
 		},
 		handleFlyingFalure:function()
 		{
-			
+			$.toast("飞机起飞执行失败");
 		},
 		handleFlyingWait:function()
 		{

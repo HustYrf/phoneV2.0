@@ -8,7 +8,7 @@
         font-weight: 500;
         line-height: 2.2rem;
         color: #fff;
-        background-color: #00A083;
+        background-color: #5CACEE;
         text-align: center;
         white-space: nowrap;
     }
@@ -304,37 +304,34 @@
         margin-top: 4px;
     }
 
+  .userLogout {
+        font-size: .85rem;      
+        width: 100%;
+        height: 40px;
+        justify-content: center;
+        padding: auto 40px;
+        display: block;
+        border:0;
+    }
     .logout {
         position: absolute;
-        top: 460px;
-        left: 0px;
+        bottom:80px;
         height: 40px;
         width: 100%;
         background: #fff;
     }
-
-    .userLogout {
-        font-size: .85rem;
-        background-color: red;
-        color: #fff;
-        width: 100%;
-        height: 40px;
-        justify-content: center;
-        padding-left: 40px;
-        padding-right: 40px;
-    }
-
     .userFooter {
         position: absolute;
-        top: 633px;
+        bottom:0px;
         left: 0px;
         height: 50px;
         width: 100%;
-        background: #00A083;
+        background: #5CACEE;
         color: #fff;
         font-family: fantasy;
         text-align: center;
         font-size: .85rem;
         padding-top: 10px;
         display: block;
-    }
+    } 
+    

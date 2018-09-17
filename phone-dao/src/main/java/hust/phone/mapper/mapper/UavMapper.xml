@@ -51,4 +51,9 @@
 		from K_Uav
 		where id = #{id,jdbcType=INTEGER}
 	</select>
+	<update id="updatePositionByPlane" parameterType="hust.phone.mapper.pojo.Uav">
+		update K_Uav
+		set Position=#{position,jdbcType=VARCHAR}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
 </mapper>
