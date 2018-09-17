@@ -126,7 +126,7 @@ public class TaskController {
 					return JsonView.render(1, "申请失败，请重新申请。");
 				}
 			}
-			return JsonView.render(1, "当前状态无法撤销起飞！");
+			return JsonView.render(1, "当前状态无法申请起飞！");
 			
 		}
 		
@@ -402,30 +402,23 @@ public class TaskController {
 	// 报告失联
 	@RequestMapping(value = "/reportNotconnet", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String reportNotconnet(@RequestParam("taskid") int taskid, @RequestParam("uavid") int uavid,
-			@RequestParam("pwd") String pwd) {
+	public String reportNotconnet(@RequestParam("taskid") int taskid) {
 
 		Task task = new Task();
 		task.setId(taskid);
-		Uav uav = new Uav();
-		uav.setId(uavid);
 
 		int oldStatus = taskServiceImpl.getTaskStatus(task);
-		Uav uav2 = uavServiceImpl.getPlaneByPlane(uav);
-		if (uav2.getPassword().equals(pwd)) {
-			if (oldStatus == 9) {
-				if (taskServiceImpl.setStatusTaskByTask(task, -1) == true) {
-					return JsonView.render(1, "报告失联成功！");
-				} else {
-					return JsonView.render(0, "报告失联失败，请重试！");
-				}
+		
+		if (oldStatus == 9) {
+			if (taskServiceImpl.setStatusTaskByTask(task, -1) == true) {
+				return JsonView.render(1, "报告失联成功！");
 			} else {
-				return JsonView.render(0, "报告失联失败，当前未处于飞行中！");
+				return JsonView.render(0, "报告失联失败，请重试！");
 			}
 		} else {
-
-			return JsonView.render(0, "报告失联失败，密码错误！");
+			return JsonView.render(0, "报告失联失败，当前未处于飞行中！");
 		}
+		
 	}
 
 	// 无人机自检
@@ -462,18 +455,13 @@ public class TaskController {
 	// 无人机起飞
 	@RequestMapping(value = "/takeoff", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String takeoff(@RequestParam("taskid") int taskid, @RequestParam("uavid") int uavid,
-			@RequestParam("pwd") String pwd) {
+	public String takeoff(@RequestParam("taskid") int taskid) {
 
 		
 		Task task = new Task();
 		task.setId(taskid);
-		Uav uav = new Uav();
-		uav.setId(uavid);
 
 		int oldStatus = taskServiceImpl.getTaskStatus(task);
-		Uav uav2 = uavServiceImpl.getPlaneByPlane(uav);
-		if (uav2.getPassword().equals(pwd)) {
 			if (oldStatus == 8) {
 				if (taskServiceImpl.setStatusTaskByTask(task, 9) == true) {
 					// 放飞指令
@@ -486,11 +474,6 @@ public class TaskController {
 			} else {
 				return JsonView.render(0, "当前状态下不可放飞！");
 			}
-
-		} else {
-			return JsonView.render(0, "无人机起飞失败，密码错误！");
-		}
-
 	}
 
 	// 无人机实时位置
@@ -514,7 +497,6 @@ public class TaskController {
 	@ResponseBody
 	public String reportFinish(Task task) {
 
-		// 测试****
 		int oldStatus = taskServiceImpl.getTaskStatus(task);
 		if (oldStatus == 9) {
 			if (taskServiceImpl.setStatusTaskByTask(task, 10) == true) {

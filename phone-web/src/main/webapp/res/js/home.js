@@ -5,11 +5,7 @@ var planeStatus = null;
 window.onload=function(){ 
 	log=document.getElementById("log");
 	plane =document.getElementById("plane");
-<<<<<<< HEAD
-	role = document.getElementById("role");
-=======
 	planeStatus =document.getElementById("fightStatus");
->>>>>>> branch 'master' of https://github.com/HustYrf/phoneV2.0.git
 	HomeChatOperateUtil.ready();
 }
 //

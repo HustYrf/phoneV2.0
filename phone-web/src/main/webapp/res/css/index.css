@@ -305,7 +305,7 @@
     }
 
   .userLogout {
-        font-size: .85rem;      
+        font-size: .90rem;      
         width: 100%;
         height: 40px;
         justify-content: center;
@@ -319,6 +319,7 @@
         height: 40px;
         width: 100%;
         background: #fff;
+        padding:auto;
     }
     .userFooter {
         position: absolute;

@@ -26,7 +26,7 @@ body {
 }
 
 .amap-ui-control-zoom {
-	margin-top: 25px !important;
+	margin-top: 65px !important;
 	margin-left: -18px !important;
 	padding: 0 !important;
 }
@@ -168,4 +168,20 @@ to {
 
 .inputBoxContainer .bogusInput input:last-child {
 	border: none;
+}
+.uavStatus{
+   width:100%;
+   height:40px;
+   position: absolute;
+   margin-top:45px;
+   padding-right:20px;
+   font-size: .75rem;
+   line-height:40px;
+   text-align:center;
+   z-index:999;
+   background-color:#cccccc;
+}
+.desp{
+  visible:false;
+  width:20px;
 }
