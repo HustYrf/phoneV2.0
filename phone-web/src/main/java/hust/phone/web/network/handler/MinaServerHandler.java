@@ -149,6 +149,8 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			msgHandle.COM_TYPE = 3;
 			msgHandle.RES_RELULT = 0;
 			SlpPacket pack = msgHandle.pack();
+			pack.SND_DEVICE_ID = ConstantUtils.Server_Num;
+			pack.SND_DEVICE_ID = Long.parseLong(s);
 			byte[] encoding = pack.encoding();
 			sessionPlane.write(IoBuffer.wrap(encoding));
 		}
@@ -166,6 +168,8 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			msgHandle.COM_TYPE = 2;
 			msgHandle.RES_RELULT = 0;
 			SlpPacket pack = msgHandle.pack();
+			pack.SND_DEVICE_ID = ConstantUtils.Server_Num;
+			pack.SND_DEVICE_ID = Long.parseLong(s);
 			byte[] encoding = pack.encoding();
 	//		//反馈给无人机消息成功，写入字节流
 	//		//写入session中,一定要加IoBuffer.wrap
