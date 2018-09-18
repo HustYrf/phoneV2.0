@@ -8,7 +8,10 @@ import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import hust.phone.mapper.pojo.Uav;
+import hust.phone.service.impl.UavServiceImpl;
 import hust.phone.web.network.SLP.SlpPacket;
 import hust.phone.web.network.SLP.message.SlpMsgHandle;
 import hust.phone.web.network.SLP.message.SlpMsgHandleRes;
@@ -22,8 +25,13 @@ import hust.phone.web.network.iosession.IOSessionManager;
 
 
 public class MinaServerHandler extends IoHandlerAdapter {
+	
 	public static final Logger logger = LoggerFactory.getLogger(MinaServerHandler.class);
 
+	
+	@Autowired
+	UavServiceImpl uavServiceImpl;
+	
 	@Override
 	public void sessionCreated(IoSession session) throws Exception {
 		System.out.println("创建连接");
@@ -120,13 +128,11 @@ public class MinaServerHandler extends IoHandlerAdapter {
 	
 	@Override
 	public void messageSent(IoSession session, Object message) throws Exception {
-		// TODO Auto-generated method stub
 		super.messageSent(session, message);
 	}
 
 	@Override
 	public void inputClosed(IoSession session) throws Exception {
-		// TODO Auto-generated method stub
 		super.inputClosed(session);
 	}
 	
@@ -186,6 +192,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		String lon = unpack.GPS_LON/(10000000.0)+"";
 		String lat = unpack.GPS_LAT/(10000000.0)+"";
 		short mode =unpack.BASEMODE;
+		long uavId = packet.SND_DEVICE_ID;
 		String content = ConstantUtils.MSG_TANS_STATUS+":"+lon+","+lat;
 		switch (mode) {
 		case 1: 
@@ -248,6 +255,11 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		System.out.println(content);
 		//将数据推送给手机客户端,并保存在数据库中
 		processResResult(content,packet);
+		Uav uav = new Uav();
+		
+		//uav.setId(uavId);
+		
+		//数据库插入。。。。。
 		
 	}
 	

@@ -13,13 +13,12 @@
 <link rel="stylesheet" href="${s.base}/res/css/main1119.css" />
 <link rel="stylesheet" href="${s.base}/res/light7/css/light7-swiper.min.css">
 
-<!-- 无人机接口js -->
-<script type="text/javascript" src="js/chat.js"></script>
-
 <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
 <script	src="http://webapi.amap.com/maps?v=1.4.6&key=82f9e75505b649be9ab81a45ae34aa14"></script>
 </head>
 <body>
+<input type="hidden" id="plane" value="${task.uavId!}"><br/>
+<input type="hidden" id="peoplerole" value="${task.role!}"><br/>
 	<div class="page-group">
 		<header class="bar bar-nav">
 			<a class="button button-link button-nav pull-left extend"
@@ -27,14 +26,14 @@
 				class="icon icon-left"></span>返回
 			</a>
 			<h1 class='title'>
-				<#if tip?? && tip!=""> <span>${tip!}</span> <#else> <span>任务编号：${task.id!}</span></#if>
+				 <span>任务编号：${task.name!}</span>
 			</h1>
 			<a class="button button-link button-nav pull-right extend"
 				href="javascript:location.reload();" data-transition='slide-out'>
 				<span class="icon icon-refresh">&nbsp;</span>
 			</a>
 		</header>
-		<div class="uavStatus">飞机状态：<span id="statusDes"><input type="text" id="fightStatus" value=""></span>
+		<div class="uavStatus">飞机状态：<span id="fightStatus">暂无</span>
 		</div>
 		<div id="content">
 
@@ -125,19 +124,16 @@
 
 		<!-- 操作按钮 start -->
 		<div class="optionArea">
-			<#if tip??>
-	        <#else>
 	        <div class="content-block" style="margin-top:25px">
 	            <p class="buttons-row">
 	                <a onclick="reportFinish(${task.id!})" class="button">任务完成</a><span class="desp"></span>
-	                <a onclick="reportNotconnet()" class="button">飞机失联</a>
+	                <a onclick="reportNotconnet(${task.id!})" class="button">飞机失联</a>
 	            </p>
 	            <p class="buttons-row">
-	                <a onclick="emergencyback()" class="button">紧急返航</a>
+	                <a onclick="emergencyback(${task.id!})" class="button">紧急返航</a>
 	            </p>
-	                    
 			</div>
-			</#if>
+			
          </div>
 		<!-- 操作按钮 end -->
      <input id="option" type="hidden" value="" />  
@@ -148,7 +144,7 @@
 	<script type='text/javascript' src='${s.base}/light7/js/light7-swiper.js' charset='utf-8'></script>
 	<script src="${s.base}/res/js/four_bit_password_input_box.js"></script>
 	 <script type="text/javascript" src="${s.base}/res/js/chat.js"></script>
-	 <script type="text/javascript" src="${s.base}/res/js/home.js"></script>  
+	 <script type="text/javascript" src="${s.base}/res/js/home.js"></script>
 	<script>
 	
 	boxInput.init(function(){});
@@ -177,16 +173,17 @@
  	        	
  	            if (result.errcode == '1') {   //密码验证成功
  	                $.toast(result.message);
- 	                //ajaxAction(planeOption,taskId);
+ 	               
  	                //发起飞或者降落指令等
  	             if(planeOption == "emergencyback.action"){
  	                	//如果是紧急返航指令
- 	                	var  scontent =uavId+WebTypeUtil.LANDUSERRETURN;
- 	                	WebSocketUtil.webSocket.send(scontent);
+ 	            	    var  scontent =uavId+WebTypeUtil.SENDUSERRETURN;
+	                	WebSocketUtil.webSocket.send(scontent);
+	                	ajaxAction("emergencyback.action",taskId);
  	                }else if(planeOption=="reportNotconnet.action"){
  	                	//如果是报告失联指令
- 	                	ajaxAction(planeOption,taskId);
- 	                } 
+ 	                	ajaxAction("reportNotconnet.action",taskId);
+ 	               } 
  	                
  	            } else {                       //密码验证失败
  	                $.toast(result.message);
@@ -204,7 +201,7 @@
 	            type: "post",
 	            url: "${s.base}/"+url,
 	            data: {
-	                'id': taskid
+	                'taskid': taskid
 	            },
 	            success: function (result) {
 	                if (result.errcode == '1') {
@@ -219,16 +216,42 @@
     //报告飞机失联
 	function reportNotconnet(taskid) {
 		$.confirm('是否报告失联？', function () {
-	    	$("#option").attr("value","reportNotconnet.action"); 
-	        modal.style.display = "block";         
+	        $.ajax({
+                type: "post",
+                url: "${s.base}/reportNotconnet.action",
+                data: {
+                    'taskid': taskid
+                },
+                success: function (result) {
+                    if (result.errcode == '1') {
+                    	$("#option").attr("value","reportNotconnet.action"); 
+               		    modal.style.display = "block"; 
+                    } else {
+                        $.toast(result.message);
+                    }
+                }
+            });
 		});
 	}
     
 	 //确认飞机紧急返航
     function emergencyback(taskid) {
         $.confirm('是否紧急返航？', function () {
-        	$("#option").attr("value","emergencyback.action"); 
-	        modal.style.display = "block"; 
+        	 $.ajax({
+                 type: "post",
+                 url: "${s.base}/emergencybackCheck.action",
+                 data: {
+                     'taskid': taskid
+                 },
+                 success: function (result) {
+                     if (result.errcode == '1') {
+                    	 $("#option").attr("value","emergencyback.action"); 
+                		 modal.style.display = "block"; 
+                     } else {
+                         $.toast(result.message);
+                     }
+                 }
+             });
         });
 	}
 	 
@@ -244,11 +267,11 @@
 		            	'id':taskid,
 		            },		         
 		            success: function (result) {
-		            if(result.errcode=='1')	{
-			            	$.toast(result.message);				            			            				            		                
-			            }else{
-			            	$.toast(result.message);
-			            }	            			               
+			            if(result.errcode=='1')	{
+				            	$.toast(result.message);				            			            				            		                
+				        }else{
+				            	$.toast(result.message);
+				        }	            			               
 		           },error:function (){
 		        	       $.toast("报告任务完成失败，请重试！");
 		           }

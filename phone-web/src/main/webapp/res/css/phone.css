@@ -12,7 +12,7 @@ body {
 
 .optionArea {
 	width: 100%;
-	height: 130px;
+	height: 17%;
 	position: fixed;
 	bottom: 0;
 	background-color: #cccccc;
@@ -173,7 +173,7 @@ to {
    width:100%;
    height:40px;
    position: absolute;
-   margin-top:45px;
+   margin-top:40px;
    padding-right:20px;
    font-size: .75rem;
    line-height:40px;
@@ -184,4 +184,10 @@ to {
 .desp{
   visible:false;
   width:20px;
+}
+.amap-logo{
+	display:none !important;
+}
+.amap-copyright{
+	display:none !important;
 }

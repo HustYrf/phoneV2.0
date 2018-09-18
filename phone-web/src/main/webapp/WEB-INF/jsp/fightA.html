@@ -14,9 +14,6 @@
 <link rel="stylesheet"
 	href="${s.base}/res/light7/css/light7-swiper.min.css">
 
-<!-- 无人机接口js -->
-<script type="text/javascript" src="js/chat.js"></script>
-
 <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
 <script	src="http://webapi.amap.com/maps?v=1.4.6&key=82f9e75505b649be9ab81a45ae34aa14"></script>
 <!-- 这是放飞员界面 -->
@@ -40,7 +37,7 @@
 				<span class="icon icon-refresh">&nbsp;</span>
 			</a>
 		</header>
-		<div class="uavStatus">飞机状态：<span id="statusDes"><input type="text" id="fightStatus" value=""></span>
+		<div class="uavStatus"  style="color:#4169E1;">飞机状态：<span id="fightStatus">暂无</span>
 		</div>
 		<div id="content">
 
@@ -70,7 +67,7 @@
                         path: planePath.pathdata, //设置线覆盖物路径
                         strokeColor: "#FF0000", //线颜色
                         strokeOpacity: 1, //线透明度
-                        strokeWeight: 5, //线宽
+                        strokeWeight: 3, //线宽
                         strokeStyle: "solid", //线样式
                         strokeDasharray: [10, 5]
                         //补充线样式
@@ -88,22 +85,6 @@
 		    	   
                 });
             
-        		         	
-    		   /* map.remove(planeMarker);
-	    	   planeMarker = new AMap.Marker({
-                    //map: map,
-                    position: data,
-                    icon: new AMap.Icon({
-                        size: new AMap.Size(32, 32), //图标大小
-                        image: "images/warn-32.png",
-                        offset: new AMap.Pixel(-32,32) ,// 相对于基点的偏移位置
-                    }),
-                });
-	    	   map.setCenter(data); 
-	    	   map.add(planeMarker); */	    	                      		                        	
-    		           
-    		  
-    	
         </script>
 		</div>
 
@@ -135,7 +116,7 @@
 
 		<!-- 操作按钮 start -->
 		<div class="optionArea">
-			<#if tip??> <#else>
+			
 			<div class="content-block" style="margin-top: 25px">
 
 				<p class="buttons-row">
@@ -144,15 +125,15 @@
 					<a onclick="applyTaskoff(${task.id!})" class="button">申请起飞</a>
 				</p>
 				<p class="buttons-row">
-					<a onclick="reportNotconnet()" class="button">报告失联</a><span class="desp"></span>
+					<a onclick="reportNotconnet(${task.id!})" class="button">飞机失联</a><span class="desp"></span>
 					<!-- 发无人机降落指令 -->
-					<a onclick="emergencyback()" class="button">紧急返航</a><span class="desp"></span>
+					<a onclick="emergencyback(${task.id!})" class="button">紧急返航</a><span class="desp"></span>
 					<!-- 发无人机起飞指令 -->
-					<a onclick="takeoff()" class="button">一键起飞</a>
+					<a onclick="takeoff(${task.id!})" class="button">一键起飞</a>
 				</p>
 				<input id="option" type="hidden" value="" />
 			</div>
-			</#if>
+			
 		</div>
 		<!-- 操作按钮 end -->
 
@@ -161,11 +142,10 @@
 		src='${s.base}/res/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 	<script type='text/javascript' src='${s.base}/js/jquery-3.3.1.min.js'></script>
 	<script type='text/javascript' src='${s.base}/light7/js/light7.js'></script>
-	<script type='text/javascript'
-		src='${s.base}/light7/js/light7-swiper.js'></script>
+	<script type='text/javascript' src='${s.base}/light7/js/light7-swiper.js'></script>
 	<script src="${s.base}/res/js/four_bit_password_input_box.js"></script>
+	 <script type="text/javascript" src="${s.base}/res/js/home.js"></script>
 	 <script type="text/javascript" src="${s.base}/res/js/chat.js"></script>
-	 <script type="text/javascript" src="${s.base}/res/js/home.js"></script>  
 	<script>
 	
 	boxInput.init(function(){});
@@ -193,22 +173,21 @@
  	        	
  	            if (result.errcode == '1') {   //密码验证成功
  	                $.toast(result.message);
- 	                ajaxAction("takeoff.action",taskId);
  	                //发起飞或者降落指令等
  	                 if(planeOption == "takeoff.action"){
  	                	//如果是起飞指令
  	                	var  scontent = uavId+WebTypeUtil.SENDUSERFLYING;
  	               	    WebSocketUtil.webSocket.send(scontent);
- 	                	
+ 	               	    ajaxAction("takeoff.action",taskId);
  	                }else if(planeOption == "emergencyback.action"){
  	                	//如果是紧急返航指令
  	                	var  scontent =uavId+WebTypeUtil.SENDUSERRETURN;
  	                	WebSocketUtil.webSocket.send(scontent);
- 	                	
+ 	                	ajaxAction("emergencyback.action",taskId);
  	                	
  	                }else if(planeOption=="reportNotconnet.action"){
  	                	//如果是报告失联指令
- 	                	ajaxAction(planeOption,taskId);
+ 	                	ajaxAction("reportNotconnet.action",taskId);
  	                } 
  	                
  	            } else {                       //密码验证失败
@@ -225,7 +204,7 @@
     function ajaxAction(url,taskid){
     	$.ajax({
             type: "post",
-            url: "${s.base}/takeoff.action",
+            url: "${s.base}/"+url,
             data: {
                 'taskid': taskid
             },
@@ -239,6 +218,7 @@
         });
     }
  
+    //自检完成
     function checkself(taskid) {
 
         $.confirm('是否自检完成？', function () {
@@ -258,6 +238,8 @@
             });
         });
     }
+    
+    //撤销起飞
     function cancel(taskid){
     	
     	$.confirm('是否撤销起飞？', function () {
@@ -299,27 +281,68 @@
         });
     }
 
-    function takeoff() {
-    	 $.confirm('是否起飞无人机？', function () {	
-    		 $("#option").attr("value","takeoff.action"); 
-    		 modal.style.display = "block";   
-    		 
+    function takeoff(taskid) {   	
+          	
+    	 $.confirm('是否起飞无人机？', function () {
+    		 $.ajax({
+                 type: "post",
+                 url: "${s.base}/takeoffCheck.action",
+                 data: {
+                     'taskid': taskid
+                 },
+                 success: function (result) {
+                     if (result.errcode == '1') {
+                    	 $("#option").attr("value","takeoff.action"); 
+                		 modal.style.display = "block";   
+                     } else {
+                         $.toast(result.message);
+                     }
+                 }
+             });
          });
     }
       
     //确认飞机紧急返航
     function emergencyback(taskid) {
         $.confirm('是否紧急返航？', function () {
-        	$("#option").attr("value","emergencyback.action"); 
-	        modal.style.display = "block"; 
+        	
+        	 $.ajax({
+                 type: "post",
+                 url: "${s.base}/emergencybackCheck.action",
+                 data: {
+                     'taskid': taskid
+                 },
+                 success: function (result) {
+                     if (result.errcode == '1') {
+                    	 $("#option").attr("value","emergencyback.action"); 
+                		 modal.style.display = "block";   
+                     } else {
+                         $.toast(result.message);
+                     }
+                 }
+             });
         });
 	}
 	    
-	    //报告飞机失联
+	//报告飞机失联
 	function reportNotconnet(taskid) {
 		$.confirm('是否报告失联？', function () {
-	    	$("#option").attr("value","reportNotconnet.action"); 
-	        modal.style.display = "block";         
+			
+			$.ajax({
+                type: "post",
+                url: "${s.base}/reportNotconnetCheck.action",
+                data: {
+                    'taskid': taskid
+                },
+                success: function (result) {
+                    if (result.errcode == '1') {
+                   	 $("#option").attr("value","reportNotconnet.action"); 
+               		 modal.style.display = "block";   
+                    } else {
+                        $.toast(result.message);
+                    }
+                }
+            });
 		});	
 	} 
    	   
