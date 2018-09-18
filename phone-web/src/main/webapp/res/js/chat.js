@@ -107,24 +107,28 @@ var PlaneHandleServiceUtil ={
 			planeStatus.value = status;
 			var mes = message.split(",");
 			var data = new Array();
-			
+	        var value = mes[0] *1
+	        var value2=mes[1]*1;
+	        data[0] = value;
+	        data[1] = value2;
 			map.remove(planeMarker);
 		    	   planeMarker = new AMap.Marker({
 	                    //map: map,
 	                    position:  data,
 	                    icon: new AMap.Icon({
 	                    size: new AMap.Size(30, 30), //图标大小
-	                    image: "images/locate.png",
+	                    image: "images/warn-32.png",
 	                    offset: new AMap.Pixel(-15,-15) ,// 相对于基点的偏移位置
 	                    }),
 	                });
 		    map.setCenter(data); 
 		    map.add(planeMarker);
-			WebSocketUtil.print("[send] '" + message + "'\n");
+			//WebSocketUtil.print("[send] '" + message + "'\n");
 		},
 		handleFlyingExcute:function()
 		{
 			$.toast("飞机起飞执行成功");
+			
 		},
 		handleFlyingFalure:function()
 		{
