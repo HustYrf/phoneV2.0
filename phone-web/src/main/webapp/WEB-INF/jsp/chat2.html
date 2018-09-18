@@ -8,12 +8,13 @@
     	var  scontent =planeid+WebTypeUtil.SENDUSERRETURN;
     	//alert(scontent);
     	send(scontent);
-	} 
+	   } 
     	function flying(planeid) {
+    		
         	var  scontent =planeid+WebTypeUtil.SENDUSERFLYING;
         	//alert(scontent);
         	WebSocketUtil.webSocket.send(scontent);
-    	} 
+    } 
    </script>
 </head>
 <body>
@@ -22,6 +23,7 @@
 	
 	<br>
 	<input type="text" id="fightStatus" value=""></br>
+
 <textarea id="log" rows="30" cols="100" style="font-family:monospace; color:red;"></textarea><br/>
 <input type="hidden" id="plane" value="${planeid}"><br/>
 
