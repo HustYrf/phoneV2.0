@@ -11,12 +11,13 @@
 <link rel="stylesheet" href="${s.base}/res/light7/css/sm.min.css">
 <link rel="stylesheet" href="${s.base}/res/css/phone.css">
 <link rel="stylesheet" href="${s.base}/res/css/main1119.css" />
-<link rel="stylesheet"
-	href="${s.base}/res/light7/css/light7-swiper.min.css">
+<link rel="stylesheet" href="${s.base}/res/light7/css/light7-swiper.min.css">
+
+<!-- 无人机接口js -->
+<script type="text/javascript" src="js/chat.js"></script>
 
 <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
 <script	src="http://webapi.amap.com/maps?v=1.4.6&key=82f9e75505b649be9ab81a45ae34aa14"></script>
-
 </head>
 <body>
 	<div class="page-group">
@@ -33,6 +34,8 @@
 				<span class="icon icon-refresh">&nbsp;</span>
 			</a>
 		</header>
+		<div class="uavStatus">飞机状态：<span id="statusDes"><input type="text" id="fightStatus" value=""></span>
+		</div>
 		<div id="content">
 
 			<div id="container"></div>
@@ -114,7 +117,7 @@
 				</div>
 				<footer class="pwdmodal-footer">
 					<button id="cancel" onclick="modalcancel()">取消</button>
-					<button id="sure" onclick="modalsure(${task.id!},${task.uavId!})">确定</button>
+					<button id="sure" onclick="modalsure(${task.id!},${task.uavId!},${task.role!})">确定</button>
 				</footer>
 			</div>
 		</div>
@@ -126,24 +129,26 @@
 	        <#else>
 	        <div class="content-block" style="margin-top:25px">
 	            <p class="buttons-row">
-	                <a onclick="reportFinish(${task.id!})" class="button">任务完成</a>
+	                <a onclick="reportFinish(${task.id!})" class="button">任务完成</a><span class="desp"></span>
 	                <a onclick="reportNotconnet()" class="button">飞机失联</a>
 	            </p>
 	            <p class="buttons-row">
 	                <a onclick="emergencyback()" class="button">紧急返航</a>
 	            </p>
-	            <input id="option" type="hidden" value="" />          
+	                    
 			</div>
 			</#if>
          </div>
 		<!-- 操作按钮 end -->
-
+     <input id="option" type="hidden" value="" />  
 	</div>
 	<script type='text/javascript' src='${s.base}/res/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 	<script type='text/javascript' src='${s.base}/js/jquery-3.3.1.min.js'></script>
 	<script type='text/javascript' src='${s.base}/light7/js/light7.js'	charset='utf-8'></script>
 	<script type='text/javascript' src='${s.base}/light7/js/light7-swiper.js' charset='utf-8'></script>
 	<script src="${s.base}/res/js/four_bit_password_input_box.js"></script>
+	 <script type="text/javascript" src="${s.base}/res/js/chat.js"></script>
+	 <script type="text/javascript" src="${s.base}/res/js/home.js"></script>  
 	<script>
 	
 	boxInput.init(function(){});
@@ -155,32 +160,62 @@
 	    modal.style.display = "none";
 	}
 	
-	function modalsure(taskId,uavId){ 
-		
-		 modal.style.display = "none";              
-		 var planeOption =$("#option").val(); 
-		  
-	     $.ajax({
-		        type: "post",
-		        url: "${s.base}/"+ planeOption,
-		        data: {
-		        	'taskid': taskId,
-	 	            'uavid':uavId,
-	 	            'pwd': boxInput.getBoxInputValue(),
-		        },
-		        success: function (result) {
-		            if (result.errcode == '1') {
-		                $.toast(result.message);
-		            } else {
-		                $.toast(result.message);
-		            }
-		        }
-	    });
-	     //清空输入值
-	     $("#option").attr("value",""); 
-		 boxInput.setNullValue();	
-	}
+	 //role=1则为放飞员，role=2则为接机员
+    function modalsure(taskId,uavId,role){  
+    	  //输入密码确认之后
+    	 modal.style.display = "none";              
+    	 var planeOption =$("#option").val(); 
+    	  
+         $.ajax({
+ 	        type: "post",
+ 	        url: "${s.base}/passwordEnsure.action",
+ 	        data: {
+ 	            'uavid':uavId,
+ 	            'pwd': boxInput.getBoxInputValue(),
+ 	        },
+ 	        success: function (result) {
+ 	        	
+ 	            if (result.errcode == '1') {   //密码验证成功
+ 	                $.toast(result.message);
+ 	                //ajaxAction(planeOption,taskId);
+ 	                //发起飞或者降落指令等
+ 	             if(planeOption == "emergencyback.action"){
+ 	                	//如果是紧急返航指令
+ 	                	var  scontent =uavId+WebTypeUtil.LANDUSERRETURN;
+ 	                	WebSocketUtil.webSocket.send(scontent);
+ 	                }else if(planeOption=="reportNotconnet.action"){
+ 	                	//如果是报告失联指令
+ 	                	ajaxAction(planeOption,taskId);
+ 	                } 
+ 	                
+ 	            } else {                       //密码验证失败
+ 	                $.toast(result.message);
+ 	            }
+ 	        }
+        });
+         //清空输入值
+         $("#option").attr("value",""); 
+    	 boxInput.setNullValue();
+    }
 
+	 //ajax请求，完成对工单的操作
+	  function ajaxAction(url,taskid){
+	    	$.ajax({
+	            type: "post",
+	            url: "${s.base}/"+url,
+	            data: {
+	                'id': taskid
+	            },
+	            success: function (result) {
+	                if (result.errcode == '1') {
+	                    $.toast(result.message);
+	                } else {
+	                    $.toast(result.message);
+	                }
+	            }
+	        });
+	    }
+	
     //报告飞机失联
 	function reportNotconnet(taskid) {
 		$.confirm('是否报告失联？', function () {

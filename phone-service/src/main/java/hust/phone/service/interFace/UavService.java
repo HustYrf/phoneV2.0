@@ -14,5 +14,7 @@ public interface UavService {
 	
 	void planeReturn(int id);
 
+	void updatePositionByUav(Uav uav);
+
 	
 }

@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.common.msg_command_long;
-import com.MAVLink.common.msg_heartbeat;
 import com.MAVLink.common.msg_set_mode;
 
 import hust.phone.mapper.mapper.UavMapper;
@@ -231,7 +230,6 @@ public class UavServiceImpl implements UavService {
 					 socket.close();
 				 }
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		 }finally {
@@ -241,11 +239,14 @@ public class UavServiceImpl implements UavService {
 					 socket.close();
 				 }
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 		}
 		
+	}
+	@Override
+	public void updatePositionByUav(Uav uav) {
+		uavMapper.updatePositionByPlane(uav);
 	}
 	
 

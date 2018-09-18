@@ -12,4 +12,5 @@ public interface UavMapper {
 	List<Uav> selectByUavStatus(int status);
 	Uav getPlaneByPlane(Uav uav);
 	int updateByPlane(Uav uav);
+	void updatePositionByPlane(Uav uav);
 }

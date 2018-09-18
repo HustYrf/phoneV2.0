@@ -427,7 +427,7 @@
 		and Status != 0 
 		and Status != 1	
 		and (User_A = #{userA,jdbcType=INTEGER} or User_Z = #{userZ,jdbcType=INTEGER})
-			
+		ORDER BY PlanStartTime DESC
 	</select>
 	 <select id="selectByTaskOptions" parameterType="hust.phone.mapper.pojo.Task" resultMap="BaseResultMap">
 		SELECT 

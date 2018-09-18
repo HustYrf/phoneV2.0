@@ -17,7 +17,6 @@ import hust.phone.mapper.pojo.FlyingPath;
 import hust.phone.mapper.pojo.Task;
 import hust.phone.mapper.pojo.Uav;
 import hust.phone.mapper.pojo.User;
-import hust.phone.service.impl.UserServiceimpl;
 import hust.phone.service.interFace.FlyingPathService;
 import hust.phone.service.interFace.UserService;
 import hust.phone.service.interFace.UavService;
@@ -127,7 +126,7 @@ public class TaskController {
 					return JsonView.render(1, "申请失败，请重新申请。");
 				}
 			}
-			return JsonView.render(1, "当前状态无法撤销起飞！");
+			return JsonView.render(1, "当前状态无法申请起飞！");
 			
 		}
 		
@@ -267,8 +266,8 @@ public class TaskController {
 
 		User user = PhoneUtils.getLoginUser(request);
 		Task task2 = taskServiceImpl.getTaskByTask(task);
-		// 如果 role = 1表示放飞员， role=2表示接机员
 		
+		// 如果 role = 1表示放飞员， role=2表示接机员
 		int role = user.getId() == task2.getUserA() ? 1 : 2;
 		task2.setRole(role);
 
@@ -287,7 +286,6 @@ public class TaskController {
 
 		model.addAttribute("planepath", JsonUtils.objectToJson(flyingPathVO));
 		model.addAttribute("task", task2);
-		model.addAttribute("role",role);
 		if (role == 1) {
 			return "fightA";
 		} else {
@@ -385,33 +383,41 @@ public class TaskController {
 		
 	}
 
+	// 确认密码
+	@RequestMapping(value = "/passwordEnsure", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String passwordEnsure(@RequestParam("uavid") int uavid,@RequestParam("pwd") String pwd) {
+		
+		Uav uav = new Uav();
+		uav.setId(uavid);
+		Uav uav2 = uavServiceImpl.getPlaneByPlane(uav);
+		if (uav2.getPassword().equals(pwd)) {
+			return JsonView.render(1, "密码正确！");
+		}else {
+			return JsonView.render(0, "密码错误！");
+		}
+	}
+		
 	// 报告失联
 	@RequestMapping(value = "/reportNotconnet", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String reportNotconnet(@RequestParam("taskid") int taskid, @RequestParam("uavid") int uavid,
-			@RequestParam("pwd") String pwd) {
+	public String reportNotconnet(@RequestParam("taskid") int taskid) {
 
 		Task task = new Task();
 		task.setId(taskid);
-		Uav uav = new Uav();
-		uav.setId(uavid);
 
 		int oldStatus = taskServiceImpl.getTaskStatus(task);
-		Uav uav2 = uavServiceImpl.getPlaneByPlane(uav);
-		if (uav2.getPassword().equals(pwd)) {
-			if (oldStatus == 9) {
-				if (taskServiceImpl.setStatusTaskByTask(task, -1) == true) {
-					return JsonView.render(1, "报告失联成功！");
-				} else {
-					return JsonView.render(0, "报告失联失败，请重试！");
-				}
+		
+		if (oldStatus == 9) {
+			if (taskServiceImpl.setStatusTaskByTask(task, -1) == true) {
+				return JsonView.render(1, "报告失联成功！");
 			} else {
-				return JsonView.render(0, "报告失联失败，当前未处于飞行中！");
+				return JsonView.render(0, "报告失联失败，请重试！");
 			}
 		} else {
-
-			return JsonView.render(0, "报告失联失败，密码错误！");
+			return JsonView.render(0, "报告失联失败，当前未处于飞行中！");
 		}
+		
 	}
 
 	// 无人机自检
@@ -430,27 +436,35 @@ public class TaskController {
 		}
 		return JsonView.render(1, "当前状态无法自检完成！");
 	}
-
+	
+	//更新无人机位置，写入到数据库
+	@RequestMapping(value = "/updataPosition", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public void takeoff(@RequestParam("uavid") int uavid,@RequestParam("position") String position) {
+		
+		Uav uav = new Uav();
+		uav.setId(uavid);
+		uav.setPosition(position);
+		uavServiceImpl.updatePositionByUav(uav);
+		
+		//不用返回数据
+		
+	}
+	
 	// 无人机起飞
 	@RequestMapping(value = "/takeoff", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String takeoff(@RequestParam("taskid") int taskid, @RequestParam("uavid") int uavid,
-			@RequestParam("pwd") String pwd) {
+	public String takeoff(@RequestParam("taskid") int taskid) {
 
 		
 		Task task = new Task();
 		task.setId(taskid);
-		Uav uav = new Uav();
-		uav.setId(uavid);
 
 		int oldStatus = taskServiceImpl.getTaskStatus(task);
-		Uav uav2 = uavServiceImpl.getPlaneByPlane(uav);
-		if (uav2.getPassword().equals(pwd)) {
 			if (oldStatus == 8) {
 				if (taskServiceImpl.setStatusTaskByTask(task, 9) == true) {
 					// 放飞指令
 					//uavServiceImpl.takeoff(task.getUavId());
-					
 					return JsonView.render(1, "无人机放飞成功！！");
 				} else {
 					return JsonView.render(0, "无人机放飞失败!");
@@ -459,11 +473,6 @@ public class TaskController {
 			} else {
 				return JsonView.render(0, "当前状态下不可放飞！");
 			}
-
-		} else {
-			return JsonView.render(0, "无人机起飞失败，密码错误！");
-		}
-
 	}
 
 	// 无人机实时位置
@@ -487,7 +496,6 @@ public class TaskController {
 	@ResponseBody
 	public String reportFinish(Task task) {
 
-		// 测试****
 		int oldStatus = taskServiceImpl.getTaskStatus(task);
 		if (oldStatus == 9) {
 			if (taskServiceImpl.setStatusTaskByTask(task, 10) == true) {

@@ -31,7 +31,14 @@ var WebSocketUtil = {
 		
 	},
 	onOpen : function(event) {
-		var content = plane.value+"send@login";
+		if(role.value == "1")
+		{
+			var content = plane.value+WebTypeUtil.SENDUSERLOGIN;
+			
+		}else if(role.value =="2")
+		{
+			var content = plane.value+WebTypeUtil.LANDUSERLOGIN;
+		}
 		
 		WebSocketUtil.webSocket.send(content);
 	},
@@ -98,31 +105,46 @@ var PlaneHandleServiceUtil ={
 		{
 			//显示无人机的状态信息
 			planeStatus.value = status;
+			var mes = message.split(",");
+			var data = new Array();
+			
+			map.remove(planeMarker);
+		    	   planeMarker = new AMap.Marker({
+	                    //map: map,
+	                    position:  data,
+	                    icon: new AMap.Icon({
+	                    size: new AMap.Size(30, 30), //图标大小
+	                    image: "images/locate.png",
+	                    offset: new AMap.Pixel(-15,-15) ,// 相对于基点的偏移位置
+	                    }),
+	                });
+		    map.setCenter(data); 
+		    map.add(planeMarker);
 			WebSocketUtil.print("[send] '" + message + "'\n");
 		},
 		handleFlyingExcute:function()
 		{
-			alert(WebTypeUtil.MESSAGETYPEFLYINGEXCUTE)
+			$.toast("飞机起飞执行成功");
 		},
 		handleFlyingFalure:function()
 		{
-			
+			$.toast("飞机起飞执行失败");
 		},
 		handleFlyingWait:function()
 		{
-			
+			$.toast("飞机起飞等待");
 		},
 		handleReturnExcute:function()
 		{
-			
+			$.toast("飞机返回执行成功");
 		},
 		handleReturnFalure:function()
 		{
-			
+			$.toast("飞机返回执行失败");
 		},
 		handleReturnWait:function()
 		{
-			
+			$.toast("飞机返回等待");
 		}
 		
 		

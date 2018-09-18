@@ -2,10 +2,12 @@ var ws=null;
 var log=null;
 var plane=null;
 var planeStatus = null;
+var role = null;
 window.onload=function(){ 
 	log=document.getElementById("log");
 	plane =document.getElementById("plane");
 	planeStatus =document.getElementById("fightStatus");
+	role =document.getElementById("peoplerole");
 	HomeChatOperateUtil.ready();
 }
 //
