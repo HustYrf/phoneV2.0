@@ -14,6 +14,6 @@
             <dependency-type>uses</dependency-type>
         </dependent-module>
         <property name="java-output-path" value="/phone-web/target/classes"/>
-        <property name="context-root" value="phone-web"/>
+        <property name="context-root" value="/"/>
     </wb-module>
 </project-modules>

@@ -132,7 +132,23 @@ var PlaneHandleServiceUtil ={
 		},
 		handleFlyingExcute:function()
 		{
-			$.toast("飞机起飞执行成功");
+			//$.toast("飞机起飞执行成功");
+			//写入数据库，改变任务状态  放飞
+			$.ajax({
+	            type: "post",
+	            url: base.value+'/takeoff.action',
+	            data: {
+	                'taskid': task.value,
+	            },
+	            success: function (result) {
+	                if (result.errcode == '1') {
+	                    $.toast(result.message);
+	                } else {
+	                    $.toast(result.message);
+	                }
+	            }
+	        });
+			
 		},
 		handleFlyingFalure:function()
 		{
@@ -144,7 +160,23 @@ var PlaneHandleServiceUtil ={
 		},
 		handleReturnExcute:function()
 		{
-			$.toast("飞机返回执行成功");
+			//$.toast("飞机返回执行成功");
+			//写入数据库，改变任务状态  无人机紧急返航
+			$.ajax({
+	            type: "post",
+	            url: base.value+'/emergencyback.action',
+	            data: {
+	                'taskid': task.value,
+	            },
+	            success: function (result) {
+	                if (result.errcode == '1') {
+	                    $.toast(result.message);
+	                } else {
+	                    $.toast(result.message);
+	                }
+	            }
+	        });
+			
 		},
 		handleReturnFalure:function()
 		{

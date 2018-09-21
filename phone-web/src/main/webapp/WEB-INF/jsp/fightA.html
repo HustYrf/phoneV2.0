@@ -20,8 +20,10 @@
 </head>
 
 <body>
+<input type="hidden" id="base" value="${s.base}"><br/>
 <input type="hidden" id="plane" value="${task.uavId!}"><br/>
 <input type="hidden" id="peoplerole" value="${task.role!}"><br/>
+<input type="hidden" id="task" value="${task.id!}"><br/>
 	<div class="page-group">
 		<header class="bar bar-nav">
 			<a class="button button-link button-nav pull-left extend"
@@ -178,12 +180,12 @@
  	                	//如果是起飞指令
  	                	var  scontent = uavId+WebTypeUtil.SENDUSERFLYING;
  	               	    WebSocketUtil.webSocket.send(scontent);
- 	               	    ajaxAction("takeoff.action",taskId);
+ 	               	    //ajaxAction("takeoff.action",taskId);
  	                }else if(planeOption == "emergencyback.action"){
  	                	//如果是紧急返航指令
  	                	var  scontent =uavId+WebTypeUtil.SENDUSERRETURN;
  	                	WebSocketUtil.webSocket.send(scontent);
- 	                	ajaxAction("emergencyback.action",taskId);
+ 	                	//ajaxAction("emergencyback.action",taskId);
  	                	
  	                }else if(planeOption=="reportNotconnet.action"){
  	                	//如果是报告失联指令

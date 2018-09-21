@@ -57,7 +57,7 @@
             	        <#elseif taskpojo.task.status== 5 || taskpojo.task.status == 6 || taskpojo.task.status == 7 || taskpojo.task.status == 8 || taskpojo.task.status == 9>
 						   <div><a  class="button button-fill external" href='${s.base}/toPlane.action?id=${taskpojo.task.id!}'>无人机操纵</a></div>
 					    <#else>
-					        <div><a class="button button-fill disabled button-success" >无操作</a></div>	
+					        <div><a class="button button-fill disabled button-success" >暂不需要操作</a></div>	
 					    </#if>
 						<!--<a onclick="getTaskDetail(${taskpojo.task.id!})">任务详情&nbsp;&nbsp;<span class="icon icon-right"></span></a>  -->
 				    </#if> 
