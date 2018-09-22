@@ -281,7 +281,11 @@ public class TaskController {
 
 		// exeFlyingPathVO = flyingPathVO;
 		// exeindex = 0;
-
+		Uav uav = new Uav();
+		uav.setId(task2.getUavId());
+        Uav uav1 = uavServiceImpl.getPlaneByPlane(uav);
+		
+        model.addAttribute("uav",uav1);
 		model.addAttribute("planepath", JsonUtils.objectToJson(flyingPathVO));
 		model.addAttribute("task", task2);
 		if (role == 1) {

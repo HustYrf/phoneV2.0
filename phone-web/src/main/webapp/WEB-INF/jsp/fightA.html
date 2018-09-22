@@ -21,7 +21,7 @@
 
 <body>
 <input type="hidden" id="base" value="${s.base}"><br/>
-<input type="hidden" id="plane" value="${task.uavId!}"><br/>
+<input type="hidden" id="plane" value="${uav.deviceid!}"><br/>
 <input type="hidden" id="peoplerole" value="${task.role!}"><br/>
 <input type="hidden" id="task" value="${task.id!}"><br/>
 	<div class="page-group">
@@ -31,8 +31,7 @@
 				class="icon icon-left"></span>返回
 			</a>
 			<h1 class='title'>
-				<!-- tip是为了当没有正在执行的任务的时候展示的提示信息   -->
-				<#if tip?? && tip!=""> <span>${tip!}</span> <#else> <span>任务编号：${task.name!}</span></#if>
+				<span>任务名称：${task.name!}</span>
 			</h1>
 			<a class="button button-link button-nav pull-right extend"
 				href="javascript:location.reload();" data-transition='slide-out'>
