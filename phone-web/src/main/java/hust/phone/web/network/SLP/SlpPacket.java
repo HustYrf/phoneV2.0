@@ -104,8 +104,8 @@ public class SlpPacket implements Serializable{
 		
 		byte data[]=Arrays.copyOfRange(buffer, 6, i);
 		byte[] check=Uni16ToByte(SLpCRC.calculateCrc(data));
-		buffer[i++] = check[0];
-		buffer[i]=check[1];
+		buffer[i++] = check[1];
+		buffer[i]=check[0];
 		return buffer;
 	}
 	
@@ -167,10 +167,19 @@ public class SlpPacket implements Serializable{
 				slp.VAL_TIME=bytes2Long(valtime)&0xFFFFFFFFFFFFFFFFl;
 				//得到
 				byte check[]=new byte[2];
-				check[0]=encoding[encoding.length-2];
-				check[1]=encoding[encoding.length-1];
+				check[1]=encoding[encoding.length-2];
+				check[0]=encoding[encoding.length-1];
 				slp.CHECKSUM = Byte2Uni16(check)&0xFFFF;
-				return slp;
+				
+				byte data[]=Arrays.copyOfRange(encoding, 6, encoding.length-2);
+				byte[] check1=Uni16ToByte(SLpCRC.calculateCrc(data));
+				if(check[0]==check1[0]&& check[1]==check1[1])
+				{
+					return slp;
+				}else
+				{
+					return null;
+				}
 			}
 			else {
 				return null;

@@ -20,6 +20,8 @@ public interface ConstantUtils {
 	String Mobile_FlYING ="flying";
 	String Mobile_RETURN = "return";
 	String Mobile_Login = "login";
+	String WEB_LOGIN = "web";
+	String WEB_BROWSE_LOGIN = "browse";
 	//无人机应答消息类型
 	short RES_FLYINF = 1;
 	short RES_TRANS = 2;
@@ -29,6 +31,7 @@ public interface ConstantUtils {
 	short RES_FAILURE = 2;
 	short RES_WAIT = 3;
 	//无人机发送状态给手机
+	String MSG_PLANE_LOGIN = "planeLogin";
 	String MSG_TANS_STATUS ="status";
 	String MSG_TANS_STATUS_OPEN ="已开机";
 	String MSG_TANS_STATUS_LOGINSUCCESS = "系统登录成功";
