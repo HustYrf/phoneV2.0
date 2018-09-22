@@ -93,7 +93,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			{
 				 revId = minaBean.getContent().split("@")[0];
 				 mobile_msgtype = minaBean.getContent().split("@")[1];
-				 System.out.println(revId+mobile_msgtype);
+				 System.out.println(revId+":"+mobile_msgtype);
 			}
 			if (minaBean.isWebAccept()) {
 				//建立双工通信
@@ -121,11 +121,21 @@ public class MinaServerHandler extends IoHandlerAdapter {
 				case ConstantUtils.Mobile_RETURN:
 					processMobileMessageReturn(revId);
 					break;
+				case ConstantUtils.WEB_LOGIN:
+					//web端登录
+					processWebLogin(session,revId);
+					break;
+				case ConstantUtils.WEB_BROWSE_LOGIN:
+					//处理浏览者登录
+					processWebBrowseLogin(session,revId);
+					break;
 				}
 			}
 		}
 	}
 	
+
+
 	@Override
 	public void messageSent(IoSession session, Object message) throws Exception {
 		super.messageSent(session, message);
@@ -136,11 +146,25 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		super.inputClosed(session);
 	}
 	
+	private void processWebBrowseLogin(IoSession session,String revId) {
+		System.out.println("将web浏览者账号保存在session中");
+		session.setAttribute(ConstantUtils.ATTR_USRENO,revId);
+		IOSessionManager.addSession(session);
+		
+		
+	}
 	private void processMobileMessageLogin(IoSession session,String revId) {
 		//设置手机的账号
 		System.out.println("将手机账号保存在session中");
 		session.setAttribute(ConstantUtils.ATTR_USRENO,revId);
 		IOSessionManager.addSession(session);
+	}
+	
+	private void processWebLogin(IoSession session,String revId) {
+		System.out.println("将web账号保存在session中");
+		session.setAttribute(ConstantUtils.ATTR_USRENO,revId);
+		IOSessionManager.addSession(session);
+		
 	}
 
 	//手机端给无人机发送返回指令
@@ -253,8 +277,8 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		}
 		
 		System.out.println(content);
-		//将数据推送给手机客户端,并保存在数据库中
-		processResResult(content,packet);
+		//将数据推送给手机web客户端,并保存在数据库中
+		processResTOResult(content,packet);
 		Uav uav = new Uav();
 		
 		//uav.setId(uavId);
@@ -263,7 +287,42 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		
 	}
 	
-	
+	//将飞机状态信息推送给手机，web端
+	private void processResTOResult(String content, SlpPacket packet) {
+		String send = packet.SND_DEVICE_ID+"send";
+		String land = packet.SND_DEVICE_ID+"land";
+		String web = packet.SND_DEVICE_ID+ "web";
+		String browse = packet.SND_DEVICE_ID+"browse";
+		MinaBean msg = new MinaBean();
+		msg.setContent(content);
+		//将数据推送给手机客户端,
+		IoSession sessionMobile1 = IOSessionManager.getSessionMobile(send);
+		//System.out.println(msg.getContent());
+		if(sessionMobile1!=null)
+		{
+			sessionMobile1.write(msg);
+		}
+		IoSession sessionMobile2 = IOSessionManager.getSessionMobile(land);
+		System.out.println(msg.getContent());
+		if(sessionMobile2!=null)
+		{
+			sessionMobile2.write(msg);
+		}
+		IoSession sessionMobileweb = IOSessionManager.getSessionMobile(web);
+		//System.out.println(msg.getContent());
+		if(sessionMobileweb!=null)
+		{
+			sessionMobileweb.write(msg);
+		}
+		IoSession sessionMobilebrowse = IOSessionManager.getSessionMobile(browse);
+		System.out.println(msg.getContent());
+		if(sessionMobilebrowse!=null)
+		{
+			sessionMobilebrowse.write(msg);
+		}
+		
+	}
+
 	private void processMessageHandle(IoSession session, SlpPacket packet) {
 		//下发起飞，返航指令
 		System.out.println("下放起飞");
@@ -281,6 +340,10 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			System.out.println("将无人机账号保存在session中");
 			session.setAttribute(ConstantUtils.ATTR_PLANENO,packet.SND_DEVICE_ID);
 			IOSessionManager.addSession(session);
+			//将消息推送给手机
+			String content =ConstantUtils.MSG_PLANE_LOGIN+":"+"Login";
+			processResTOResult(content,packet);
+			
 			loginRes.UAV_LOGIN=1;
 			loginRes.RES_RELULT=1;
 		}
@@ -326,30 +389,43 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		
 	}
 	
-	//应答指示无人机起飞
+	//应答指示无人机起飞给放飞员
 	private void processResFlying(SlpPacket packet,short resrelult) {
 		String content =null;
 		switch (resrelult) {
 		case ConstantUtils.RES_EXCUTE:
 			content ="flyingExcute:excute";
 			//向手机指示消息，无人机收到起飞指令并执行
-			processResResult(content,packet);
+			processResResultToSend(content,packet);
 			break;
 		case ConstantUtils.RES_FAILURE:
 			content ="flyingFailure:failure";
 			//向手机指示消息，无人机收到起飞指令但无法执行
-			processResResult(content,packet);
+			processResResultToSend(content,packet);
 			break;
 		case ConstantUtils.RES_WAIT:
 			content ="flyingWait:wait";
 			//向手机指示消息，无人机收到起飞指令但等待执行
-			processResResult(content,packet);
+			processResResultToSend(content,packet);
 		default:
 			break;
 		}
 		
 	}
-	//处理将数据写给手机
+	//处理起飞数据
+	private void processResResultToSend(String content, SlpPacket packet) {
+		String send = packet.SND_DEVICE_ID+"send";
+		MinaBean msg = new MinaBean();
+		msg.setContent(content);
+		//将数据推送给手机客户端,
+		IoSession sessionMobile1 = IOSessionManager.getSessionMobile(send);
+		if(sessionMobile1!=null)
+		{
+			sessionMobile1.write(msg);
+		}		
+	}
+
+	//处理返回将数据写给手机
 	private void processResResult(String content, SlpPacket packet) {
 		String send = packet.SND_DEVICE_ID+"send";
 		String land = packet.SND_DEVICE_ID+"land";

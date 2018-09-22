@@ -11,7 +11,8 @@ var WebTypeUtil=
 		MESSAGETYPEFRETURNEXCUTE:"returnExcute",
 		MESSAGETYPEFRETURNFAILURE:"returnFailure",
 		MESSAGETYPEFRETURNWAIT:"returnWait",
-		MESSAGETYPESTATUS:"status"
+		MESSAGETYPESTATUS:"status",
+		MESSAGEPLANELOGIN:"planeLogin"
 		
 }
 
@@ -75,6 +76,9 @@ var WebSocketUtil = {
 			//处理返回等待的消息
 			PlaneHandleServiceUtil.handleReturnWait();
 			break;	
+		case WebTypeUtil.MESSAGEPLANELOGIN:
+			PlaneHandleServiceUtil.handleLogin();
+			break;
 		}
 		
 		//WebSocketUtil.print("[send] '" + event.data + "'\n");
@@ -185,6 +189,9 @@ var PlaneHandleServiceUtil ={
 		handleReturnWait:function()
 		{
 			$.toast("飞机返回等待");
+		},
+		handleLogin:function(){
+			$.toast("无人机登录");
 		}
 		
 		

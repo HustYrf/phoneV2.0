@@ -40,8 +40,8 @@ public class SlpMsgStatus implements SlpAbstractMessage {
 		this.GPS_LON = payload.getUnsignedInt();
 		this.GPS_ELV = payload.getFloat();
 		this.GPS_HDG = payload.getUnsignedShort();
-		this.HORI_AGL = payload.getUnsignedShort();
-		this.VERT_AGL = payload.getUnsignedShort();
+		this.HORI_AGL = payload.getShort();
+		this.VERT_AGL = payload.getShort();
 	}
 	
 	public SlpPacket pack()
@@ -58,8 +58,8 @@ public class SlpMsgStatus implements SlpAbstractMessage {
 		packet.payload.putUnsignedInt(GPS_LON);
 		packet.payload.putFloat(GPS_ELV);
 		packet.payload.putUnsignedShort(GPS_HDG);
-		packet.payload.putUnsignedShort(HORI_AGL);
-		packet.payload.putUnsignedShort(VERT_AGL);
+		packet.payload.putShort((short)HORI_AGL);
+		packet.payload.putShort((short)VERT_AGL);
 		return packet;
 	}
 	
