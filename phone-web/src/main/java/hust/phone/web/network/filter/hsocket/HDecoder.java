@@ -12,15 +12,11 @@ import hust.phone.web.network.SLP.SlpPacket;
 
 //解码工具
 public class HDecoder extends CumulativeProtocolDecoder{
-	//private  Charset charset;  
 
 	public HDecoder()
 	{
 		
 	}
-//	public HDecoder(Charset charSet) {
-//		this.charset = charSet;
-//	}
 
 	@Override
 	protected boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
@@ -47,19 +43,10 @@ public class HDecoder extends CumulativeProtocolDecoder{
 		 byte [] encoding = new byte[(int) (len+8)];
 		 in.get(encoding, 0, (int)(len+8));
 		 SlpPacket packet = SlpPacket.parse(encoding);
-		 out.write(packet);
-//		SlpPacket packet = new SlpPacket(2);
-//		 for(int i=0;i<head;i++)
-//		{
-//			in.get();
-//		}
-//		 packet.MSG_LEN=in.getUnsignedInt();
-//		 packet.MSG_SEQ=in.getUnsignedShort();
-//		 packet.REV_DEVICE_ID=in.getUnsignedInt();
-//		 packet.SND_DEVICE_ID=in.getUnsignedInt();
-//		 packet.MSG_TYPE=in.getUnsigned();
-//		 packet.MSG_TIME=in.getLong();
-//		 out.write(packet);
+		 if(packet!=null)
+		 {
+			 out.write(packet);
+		 }
 		
 		return false;
 	}
