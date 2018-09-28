@@ -302,9 +302,9 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			sessionMobile2.write(msg);
 		}
 		MinaBean msg2= new MinaBean();
+		msg2.setContent(content2);
 		//多推送更多的状态消息给web端和browse端
 		IoSession sessionMobileweb = IOSessionManager.getSessionMobile(web);
-		System.out.println(msg2.getContent());
 		if(sessionMobileweb!=null)
 		{
 			sessionMobileweb.write(msg2);
