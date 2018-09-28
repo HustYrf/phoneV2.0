@@ -104,11 +104,6 @@ public class MinaServerHandler extends IoHandlerAdapter {
 				session.write(sendMessage);
 				
 			} else {
-//				Collection<IoSession> ioSessionSet = session.getService()
-//						.getManagedSessions().values();
-//				for (IoSession is : ioSessionSet) {
-//					is.write(message);
-//				}
 				switch (mobile_msgtype) {
 				case ConstantUtils.Mobile_Login:
 					//手机登录
@@ -275,10 +270,10 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		default:
 			break;
 		}
-		
-		System.out.println(content);
+		String content2 = content+":"+unpack.AR_SPD+":"+unpack.GR_SPD+":"+lon+":"+lat+":"+unpack.GPS_ELV+":"+unpack.GPS_HDG+":"
+				+unpack.HORI_AGL+":"+unpack.VERT_AGL;
 		//将数据推送给手机web客户端,并保存在数据库中
-		processResTOResult(content,packet);
+		processResTOResult(content,packet,content2);
 		Uav uav = new Uav();
 		
 		//uav.setId(uavId);
@@ -288,38 +283,36 @@ public class MinaServerHandler extends IoHandlerAdapter {
 	}
 	
 	//将飞机状态信息推送给手机，web端
-	private void processResTOResult(String content, SlpPacket packet) {
-		String send = packet.SND_DEVICE_ID+"send";
-		String land = packet.SND_DEVICE_ID+"land";
-		String web = packet.SND_DEVICE_ID+ "web";
-		String browse = packet.SND_DEVICE_ID+"browse";
+	private void processResTOResult(String content, SlpPacket packet,String content2) {
+		String send = packet.SND_DEVICE_ID+ConstantUtils.Phone_SEND;
+		String land = packet.SND_DEVICE_ID+ConstantUtils.Phone_LAND;
+		String web = packet.SND_DEVICE_ID+ ConstantUtils.WEB_LOGIN;
+		String browse = packet.SND_DEVICE_ID+ConstantUtils.WEB_BROWSE_LOGIN;
 		MinaBean msg = new MinaBean();
 		msg.setContent(content);
 		//将数据推送给手机客户端,
 		IoSession sessionMobile1 = IOSessionManager.getSessionMobile(send);
-		//System.out.println(msg.getContent());
 		if(sessionMobile1!=null)
 		{
 			sessionMobile1.write(msg);
 		}
 		IoSession sessionMobile2 = IOSessionManager.getSessionMobile(land);
-		System.out.println(msg.getContent());
 		if(sessionMobile2!=null)
 		{
 			sessionMobile2.write(msg);
 		}
+		MinaBean msg2= new MinaBean();
 		//多推送更多的状态消息给web端和browse端
 		IoSession sessionMobileweb = IOSessionManager.getSessionMobile(web);
-		//System.out.println(msg.getContent());
+		System.out.println(msg2.getContent());
 		if(sessionMobileweb!=null)
 		{
-			sessionMobileweb.write(msg);
+			sessionMobileweb.write(msg2);
 		}
 		IoSession sessionMobilebrowse = IOSessionManager.getSessionMobile(browse);
-		System.out.println(msg.getContent());
 		if(sessionMobilebrowse!=null)
 		{
-			sessionMobilebrowse.write(msg);
+			sessionMobilebrowse.write(msg2);
 		}
 		
 	}
@@ -343,7 +336,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			IOSessionManager.addSession(session);
 			//将消息推送给手机
 			String content =ConstantUtils.MSG_PLANE_LOGIN+":"+"Login";
-			processResTOResult(content,packet);
+			processResTOResult(content,packet,content);
 			
 			loginRes.UAV_LOGIN=1;
 			loginRes.RES_RELULT=1;
@@ -417,7 +410,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 	}
 	//处理起飞数据
 	private void processResResultToSend(String content, SlpPacket packet) {
-		String send = packet.SND_DEVICE_ID+"send";
+		String send = packet.SND_DEVICE_ID+ConstantUtils.Phone_SEND;
 		MinaBean msg = new MinaBean();
 		msg.setContent(content);
 		//将数据推送给手机客户端,
@@ -430,8 +423,8 @@ public class MinaServerHandler extends IoHandlerAdapter {
 
 	//处理返回将数据写给手机
 	private void processResResult(String content, SlpPacket packet) {
-		String send = packet.SND_DEVICE_ID+"send";
-		String land = packet.SND_DEVICE_ID+"land";
+		String send = packet.SND_DEVICE_ID+ConstantUtils.Phone_SEND;
+		String land = packet.SND_DEVICE_ID+ConstantUtils.Phone_LAND;
 		MinaBean msg = new MinaBean();
 		msg.setContent(content);
 		//将数据推送给手机客户端,

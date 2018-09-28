@@ -11,15 +11,15 @@ public class SlpMsgStatus implements SlpAbstractMessage {
 	public short BASEMODE;
 	public long CUSTMODE;
 	public short SYS_STATUS;
-	public short BATT_REMN;
-	public float AR_SPD;
-	public float GR_SPD;
+	public short BATT_REMN = 255;
+	public float AR_SPD = -1.0f;
+	public float GR_SPD = -1.0f;
 	public long GPS_LAT;
 	public long GPS_LON;
 	public float GPS_ELV;
-	public int GPS_HDG;
-	public int HORI_AGL;
-	public int VERT_AGL;
+	public int GPS_HDG = 0xffff;
+	public int HORI_AGL = 360;
+	public int VERT_AGL = 360;
 	
 	public SlpMsgStatus() {
 		// TODO Auto-generated constructor stub

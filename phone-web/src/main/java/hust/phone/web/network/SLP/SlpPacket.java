@@ -32,7 +32,7 @@ public class SlpPacket implements Serializable{
 	//消息时间8
 	public long MSG_TIME;
 	//有效时间8
-    public long VAL_TIME;
+    public long VAL_TIME = -1;
 	//消息体
 	public SlpPayload payload;
     //校验码2

@@ -22,7 +22,7 @@ var WebSocketUtil = {
 	isActive : true,
 	connect : function() {
 		
-		WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
+		WebSocketUtil.webSocket = new WebSocket("ws:///172.16.29.58:17020");
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
 		WebSocketUtil.webSocket.onmessage = WebSocketUtil.onMessage;
 		WebSocketUtil.webSocket.onclose = WebSocketUtil.onClose;
@@ -160,7 +160,22 @@ var PlaneHandleServiceUtil ={
 		},
 		handleFlyingWait:function()
 		{
-			$.toast("飞机起飞等待");
+			//$.toast("飞机起飞等待");
+			$.ajax({
+	            type: "post",
+	            url: base.value+'/takeoff.action',
+	            data: {
+	                'taskid': task.value,
+	            },
+	            success: function (result) {
+	                if (result.errcode == '1') {
+	                    $.toast(result.message);
+	                } else {
+	                    $.toast(result.message);
+	                }
+	            }
+	        });
+			
 		},
 		handleReturnExcute:function()
 		{
@@ -188,7 +203,21 @@ var PlaneHandleServiceUtil ={
 		},
 		handleReturnWait:function()
 		{
-			$.toast("飞机返回等待");
+			//$.toast("飞机返回等待");
+			$.ajax({
+	            type: "post",
+	            url: base.value+'/emergencyback.action',
+	            data: {
+	                'taskid': task.value,
+	            },
+	            success: function (result) {
+	                if (result.errcode == '1') {
+	                    $.toast(result.message);
+	                } else {
+	                    $.toast(result.message);
+	                }
+	            }
+	        });
 		},
 		handleLogin:function(){
 			$.toast("无人机登录");

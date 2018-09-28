@@ -20,6 +20,9 @@ public interface ConstantUtils {
 	String Mobile_FlYING ="flying";
 	String Mobile_RETURN = "return";
 	String Mobile_Login = "login";
+	//用户端类别
+	String Phone_SEND = "send";
+	String Phone_LAND = "land";
 	String WEB_LOGIN = "web";
 	String WEB_BROWSE_LOGIN = "browse";
 	//无人机应答消息类型
