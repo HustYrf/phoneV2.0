@@ -9,6 +9,31 @@ public class TaskVO {
 	private String userZName;
 	private String userCreatorName;
 	private int role;
+	private String deviceid;
+	private String pathname;
+	private String uavname;
+	public String getUavname() {
+		return uavname;
+	}
+
+	public void setUavname(String uavname) {
+		this.uavname = uavname;
+	}
+	public String getDeviceid() {
+		return deviceid;
+	}
+
+	public void setDeviceid(String deviceid) {
+		this.deviceid = deviceid;
+	}
+
+	public String getPathname() {
+		return pathname;
+	}
+
+	public void setPathname(String pathname) {
+		this.pathname = pathname;
+	}
 
 	public int getRole() {
 		return role;

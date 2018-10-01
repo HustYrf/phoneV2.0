@@ -218,6 +218,22 @@ public class TaskController {
 			Task taskitem = taskList.get(i);
 			TaskVO taskVO = new TaskVO();
 			taskVO.setTask(taskitem);
+			//得到无人机的名称
+			Uav uav = new Uav();
+			uav.setId(taskitem.getUavId());
+			Uav uav2 =uavServiceImpl.getPlaneByPlane(uav);
+			if(uav2!=null)
+			{
+				taskVO.setDeviceid(uav2.getDeviceid());
+				taskVO.setUavname(uav2.getName());
+			}else {
+				taskVO.setDeviceid(null);
+				taskVO.setUavname(null);
+			}
+			//得到路径的名称
+			FlyingPath path  = new FlyingPath();
+			path.setId(taskitem.getFlyingpathId());
+			taskVO.setPathname((flyingPathService.selectByPlanepathId(path)).getName());
 			taskVO.setUserCreatorName(userService.getNameByUserId(taskitem.getUsercreator()));
 			taskVO.setUserAName(userService.getNameByUserId(taskitem.getUserA()));
 			taskVO.setUserZName(userService.getNameByUserId(taskitem.getUserZ()));
