@@ -40,7 +40,21 @@ public class User {
 
     private int historyzoom;
 
-    public int getId() {
+    private String departmentName;
+    
+    public String getDepartmentName() {
+		return departmentName;
+	}
+
+	public void setDepartmentName(String departmentName) {
+		this.departmentName = departmentName;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public int getId() {
         return id;
     }
 

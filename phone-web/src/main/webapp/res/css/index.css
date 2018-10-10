@@ -1,338 +1,128 @@
 .userTitle {
-        position: absolute;
-        display: block;
-        width: 100%;
-        padding: 0;
-        margin: 0 -.5rem;
-        font-size: .85rem;
-        font-weight: 500;
-        line-height: 2.2rem;
-        color: #fff;
-        background-color: #5CACEE;
-        text-align: center;
-        white-space: nowrap;
-    }
+	position: absolute;
+	display: block;
+	width: 100%;
+	padding: 0;
+	margin: 0 -.5rem;
+	font-size: .85rem;
+	font-weight: 500;
+	line-height: 2.2rem;
+	color: #fff;
+	background-color: #5CACEE;
+	text-align: center;
+	white-space: nowrap;
+}
 
-    .userImg {
-        position: absolute;
-        top: 20px;
-        left: 15px;
-        height: 80px;
-        width: 80px;
-        background-image: url(../../res/img/user.jpg);
-        background-color: aliceblue;
-        border-radius: 6px;
-    }
+.userImg {
+	position: absolute;
+	top: 20px;
+	left: 15px;
+	height: 80px;
+	width: 80px;
+	background-image: url(../../res/img/user.jpg);
+	background-color: aliceblue;
+	border-radius: 6px;
+}
 
-    .taskImg {
-        position: absolute;
-        left: 0px;
-        height: 36px;
-        width: 36px;
-        background-image: url(../../res/img/task.jpg);
-    }
 
-    .firstBlock {
-        position: absolute;
-        top: 10px;
-        left: 0px;
-        height: 130px;
-        width: 100%;
-        background-color: #fff;
-    }
+.firstBlock {
 
-    .usertop {
-        padding: 20px;
-    }
+	top: 10px;
+	left: 0px;
+	height: 130px;
+	width: 100%;
+	background-color: #fff;
+}
 
-    .username {
-        position: absolute;
-        display: inline-block;
-        top: 30px;
-        /*偏移*/
-        left: 45%;
-        /*偏移*/
-        font-size: 20px;
-    }
+.usertop {
+	padding: 20px;
+}
 
-    .userRole {
-        position: absolute;
-        display: inline-block;
-        top: 70px;
-        left: 45%;
-        font-size: 10px;
-    }
+.username {
+	position: absolute;
+	display: inline-block;
+	top: 30px;
+	left: 45%;
+	font-size: 20px;
+}
 
-    .secondBlock {
-        position: absolute;
-        top: 160px;
-        left: 0px;
-        height: 35px;
-        width: 100%;
-        background: #fff;
-    }
+.userRole {
+	position: absolute;
+	display: inline-block;
+	top: 70px;
+	left: 45%;
+	font-size: 10px;
+}
 
-    .taskSpan {
-        position: absolute;
-        left: 60px;
-        font-size: 17px;
-        margin-top: 4px;
-    }
+.itemBlock {
+    margin-top:8px;
+	height: 35px;
+	width: 100%;
+	background: #fff;
+	padding-left:5px;
+}
 
-    .rightArr {
-        position: absolute;
-        left: 220px;
-        height: 36px;
-        width: 36px;
-        background-image: url(../../res/img/right.png);
-    }
+.taskSpan {
+	position: absolute;
+	left: 60px;
+	font-size: 17px;
+	margin-top: 4px;
+}
 
-    .thirdBlock {
-        position: absolute;
-        top: 220px;
-        left: 0px;
-        height: 210px;
-        width: 100%;
-        background: #fff;
-    }
+.rightArr {
+	position: absolute;
+	left: 220px;
+	height: 36px;
+	width: 36px;
+	
+}
 
-    .taskImg1 {
-        position: absolute;
-        left: 0px;
-        height: 36px;
-        width: 36px;
-    }
+.taskImg1 {
+	position: absolute;
+	left: 0px;
+	height: 36px;
+	width: 36px;
+	/* background-image: url(../../res/img/right.png); */
+}
 
-    .taskImg2 {
-        position: absolute;
-        left: 0px;
-        top: 35px;
-        height: 36px;
-        width: 36px;
-    }
+.taskImg2 {
+	position: absolute;
+	left: 0px;
+	top: 35px;
+	height: 36px;
+	width: 36px;
+}
 
-    .taskImg3 {
-        position: absolute;
-        top: 70px;
-        left: 0px;
-        height: 32px;
-        width: 32px;
-    }
+.userLogout {
+	font-size: .90rem;
+	width: 100%;
+	height: 40px;
+	justify-content: center;
+	padding: auto 10px;
+	display: block;
+	border: 0;
+}
 
-    .taskImg4 {
-        position: absolute;
-        top: 110px;
-        left: 0px;
-        height: 32px;
-        width: 32px;
-    }
+.logout {
+	position: absolute;
+	bottom: 60px;
+	height: 40px;
+	width: 100%;
+	background: #fff;
+	padding: auto;
+}
 
-    .taskImg5 {
-        position: absolute;
-        left: 0px;
-        top: 145px;
-        height: 36px;
-        width: 36px;
-    }
-
-    .taskImg6 {
-        position: absolute;
-        left: 0px;
-        height: 32px;
-        width: 32px;
-        top: 180px;
-    }
-
-    .thirdBlock .rightArr1 {
-        position: absolute;
-        left: 220px;
-        height: 36px;
-        width: 36px;
-        background-image: url(../../res/img/right.png);
-    }
-
-    .thirdBlock .rightArr2 {
-        position: absolute;
-        top: 35px;
-        left: 220px;
-        height: 36px;
-        width: 36px;
-        background-image: url(../../res/img/right.png);
-    }
-
-    .thirdBlock .rightArr3 {
-        position: absolute;
-        top: 70px;
-        left: 220px;
-        height: 36px;
-        width: 36px;
-        background-image: url(../../res/img/right.png);
-    }
-
-    .thirdBlock .rightArr4 {
-        position: absolute;
-        top: 105px;
-        left: 220px;
-        height: 36px;
-        width: 36px;
-        background-image: url(../../res/img/right.png);
-    }
-
-    .thirdBlock .rightArr5 {
-        position: absolute;
-        top: 140px;
-        left: 220px;
-        height: 36px;
-        width: 36px;
-        background-image: url(../../res/img/right.png);
-    }
-
-    .thirdBlock .rightArr6 {
-        position: absolute;
-        top: 175px;
-        left: 220px;
-        height: 36px;
-        width: 36px;
-        background-image: url(../../res/img/right.png);
-    }
-
-    .thirdBlock .thirdSpan1 {
-        position: absolute;
-        height: 35px;
-        width: 100%;
-        border-bottom-style: solid;
-        border-bottom-color: #EFF0FF;
-        border-bottom-width: 1px;
-        border-bottom-left-radius: 15px;
-        border-bottom-right-radius: 15px;
-    }
-
-    .thirdBlock .thirdSpan2 {
-        position: absolute;
-        height: 70px;
-        width: 100%;
-        border-bottom-style: solid;
-        border-bottom-color: #EFF0FF;
-        border-bottom-width: 1px;
-        border-bottom-left-radius: 15px;
-        border-bottom-right-radius: 15px;
-    }
-
-    .thirdBlock .thirdSpan3 {
-        position: absolute;
-        height: 105px;
-        width: 100%;
-        border-bottom-style: solid;
-        border-bottom-color: #EFF0FF;
-        border-bottom-width: 1px;
-        border-bottom-left-radius: 15px;
-        border-bottom-right-radius: 15px;
-    }
-
-    .thirdBlock .thirdSpan4 {
-        position: absolute;
-        height: 140px;
-        width: 100%;
-        border-bottom-style: solid;
-        border-bottom-color: #EFF0FF;
-        border-bottom-width: 1px;
-        border-bottom-left-radius: 15px;
-        border-bottom-right-radius: 15px;
-    }
-
-    .thirdBlock .thirdSpan5 {
-        position: absolute;
-        height: 170px;
-        width: 100%;
-        border-bottom-style: solid;
-        border-bottom-color: #EFF0FF;
-        border-bottom-width: 1px;
-        border-bottom-left-radius: 15px;
-        border-bottom-right-radius: 15px;
-    }
-
-    .thirdBlock .taskSpan1 {
-        position: absolute;
-        height: 35px;
-        left: 60px;
-        font-size: 17px;
-        margin-top: 4px;
-    }
-
-    .thirdBlock .taskSpan2 {
-        position: absolute;
-        top: 35px;
-        height: 35px;
-        left: 60px;
-        font-size: 17px;
-        margin-top: 4px;
-    }
-
-    .thirdBlock .taskSpan3 {
-        position: absolute;
-        top: 70px;
-        height: 35px;
-        left: 60px;
-        font-size: 17px;
-        margin-top: 4px;
-    }
-
-    .thirdBlock .taskSpan4 {
-        position: absolute;
-        top: 105px;
-        height: 35px;
-        left: 60px;
-        font-size: 17px;
-        margin-top: 4px;
-    }
-
-    .thirdBlock .taskSpan5 {
-        position: absolute;
-        top: 140px;
-        height: 35px;
-        left: 60px;
-        font-size: 17px;
-        margin-top: 4px;
-    }
-
-    .thirdBlock .taskSpan6 {
-        position: absolute;
-        top: 175px;
-        height: 35px;
-        left: 60px;
-        font-size: 17px;
-        margin-top: 4px;
-    }
-
-  .userLogout {
-        font-size: .90rem;      
-        width: 100%;
-        height: 40px;
-        justify-content: center;
-        padding: auto 40px;
-        display: block;
-        border:0;
-    }
-    .logout {
-        position: absolute;
-        bottom:80px;
-        height: 40px;
-        width: 100%;
-        background: #fff;
-        padding:auto;
-    }
-    .userFooter {
-        position: absolute;
-        bottom:0px;
-        left: 0px;
-        height: 50px;
-        width: 100%;
-        background: #5CACEE;
-        color: #fff;
-        font-family: fantasy;
-        text-align: center;
-        font-size: .85rem;
-        padding-top: 10px;
-        display: block;
-    } 
-    
+.userFooter {
+	position: absolute;
+	bottom: 0px;
+	left: 0px;
+	height: 50px;
+	width: 100%;
+	background: #5CACEE;
+	color: #fff;
+	font-family: fantasy;
+	text-align: center;
+	font-size: .85rem;
+	padding-top: 10px;
+	display: block;
+}

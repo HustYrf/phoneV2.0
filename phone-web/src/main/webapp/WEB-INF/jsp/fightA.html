@@ -99,10 +99,10 @@
 					<div class="inputBoxContainer" id="inputBoxContainer">
 						<input type="text" class="realInput" />
 						<div class="bogusInput">
-							<input type="password" maxlength="4" disabled /> <input
-								type="password" maxlength="4" disabled /> <input
-								type="password" maxlength="4" disabled /> <input
-								type="password" maxlength="4" disabled />
+							<input type="password" maxlength="4" disabled /> 
+							<input type="password" maxlength="4" disabled /> 
+							<input type="password" maxlength="4" disabled /> 
+							<input type="password" maxlength="4" disabled />
 						</div>
 					</div>
 				</div>
@@ -117,13 +117,11 @@
 
 		<!-- 操作按钮 start -->
 		<div class="optionArea">
-			
 			<div class="content-block" style="margin-top: 25px">
-
 				<p class="buttons-row">
 					<a onclick="checkself(${task.id!})" class="button">自检完成</a><span class="desp"></span>
-					<a onclick="cancel(${task.id!})" class="button">撤销起飞</a> <span class="desp"></span>
 					<a onclick="applyTaskoff(${task.id!})" class="button">申请起飞</a>
+					<a onclick="cancel(${task.id!})" class="button">撤销起飞</a> <span class="desp"></span>
 				</p>
 				<p class="buttons-row">
 					<a onclick="reportNotconnet(${task.id!})" class="button">飞机失联</a><span class="desp"></span>
@@ -134,19 +132,17 @@
 				</p>
 				<input id="option" type="hidden" value="" />
 			</div>
-			
 		</div>
 		<!-- 操作按钮 end -->
 
 	</div>
-	<script type='text/javascript'
-		src='${s.base}/res/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 	<script type='text/javascript' src='${s.base}/js/jquery-3.3.1.min.js'></script>
+	<script type='text/javascript' src='${s.base}/res/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 	<script type='text/javascript' src='${s.base}/light7/js/light7.js'></script>
 	<script type='text/javascript' src='${s.base}/light7/js/light7-swiper.js'></script>
-	<script src="${s.base}/res/js/four_bit_password_input_box.js"></script>
-	 <script type="text/javascript" src="${s.base}/res/js/home.js"></script>
-	 <script type="text/javascript" src="${s.base}/res/js/chat.js"></script>
+	<script type='text/javascript' src="${s.base}/res/js/four_bit_password_input_box.js"></script>
+	<script type="text/javascript" src="${s.base}/res/js/home.js"></script>
+	<script type="text/javascript" src="${s.base}/res/js/chat.js"></script>
 	<script>
 	
 	boxInput.init(function(){});

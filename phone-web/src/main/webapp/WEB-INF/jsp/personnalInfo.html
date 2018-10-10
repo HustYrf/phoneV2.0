@@ -1,132 +1,240 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>个人信息</title>
-    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-    <link rel="shortcut icon" href="${s.base}/res/images/favicon.ico">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>个人信息</title>
+<meta name="viewport" content="initial-scale=1, maximum-scale=1">
+<link rel="shortcut icon" href="${s.base}/res/images/favicon.ico">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
-    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm.min.css">
-    <link rel="stylesheet" href="//g.alicdn.com/msui/sm/0.6.2/css/sm-extend.min.css">
+<link rel="stylesheet" href="${s.base}/light7/css/sm.min.css">
+<link rel="stylesheet" href="${s.base}/light7/css/sm-extend.min.css">
+
+<script type='text/javascript' src='${s.base}/res/js/jquery-3.3.1.min.js'></script>
 
 </head>
 
 <body>
-    <header class="bar bar-nav">
-        <h1 class='title'>个人信息</h1>
-        <a class="button button-link button-nav pull-left" href="index.html" data-transition='slide-out'>
-      <span class="icon icon-left"></span>
-      返回
-    </a>
-    </header>
+	<header class="bar bar-nav">
+		<h1 class='title'>个人信息</h1>
+		<a class="button button-link button-nav pull-left"
+			href="${s.base}/myindex.html" data-transition='slide-out'> <span
+			class="icon icon-left"></span>返回
+		</a>
+	</header>
 
-    <div class="content">
-        <div class="list-block">
-            <ul>
-                <!-- Text inputs -->
-                <li>
-                    <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-name"></i></div>
-                        <div class="item-inner">
-                            <div class="item-title label">姓名</div>
-                            <div class="item-input">
-                                <input type="text" placeholder="用户名">
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-email"></i></div>
-                        <div class="item-inner">
-                            <div class="item-title label">邮箱</div>
-                            <div class="item-input">
-                                <input type="email" placeholder="邮箱">
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-password"></i></div>
-                        <div class="item-inner">
-                            <div class="item-title label">密码</div>
-                            <div class="item-input">
-                                <input type="password" placeholder="密码" class="">
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-gender"></i></div>
-                        <div class="item-inner">
-                            <div class="item-title label">性别</div>
-                            <div class="item-input">
-                                <select>
-                <option>男</option>
-                <option>女</option>
-              </select>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <!-- Date -->
-                <li>
-                    <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-calendar"></i></div>
-                        <div class="item-inner">
-                            <div class="item-title label">生日</div>
-                            <div class="item-input">
-                                <input type="date" placeholder="Birth day" value="2014-04-30">
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <!-- Switch (Checkbox) -->
-                <li>
-                    <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-toggle"></i></div>
-                        <div class="item-inner">
-                            <div class="item-title label">开关</div>
-                            <div class="item-input">
-                                <label class="label-switch">
-                <input type="checkbox">
-                <div class="checkbox"></div>
-              </label>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-                <li class="align-top">
-                    <div class="item-content">
-                        <div class="item-media"><i class="icon icon-form-comment"></i></div>
-                        <div class="item-inner">
-                            <div class="item-title label">个人介绍</div>
-                            <div class="item-input">
-                                <textarea></textarea>
-                            </div>
-                        </div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-        <div class="content-block">
-            <div class="row">
-                <div class="col-50"><a href="#" class="button button-big button-fill button-danger">取消</a></div>
-                <div class="col-50"><a href="#" class="button button-big button-fill button-success">提交</a></div>
-            </div>
-        </div>
-    </div>
+	<div class="content">
+		<div class="list-block">
+			<ul>
+				<!-- Text inputs -->
+				<li>
+					<div class="item-content">
+						<div class="item-media">
+							<i class="icon icon-form-name"></i>
+						</div>
+						<div class="item-inner">
+							<div class="item-title label">账号</div>
+							<div class="item-input">
+								<input type="text" value="${user.name}"  disabled> 
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item-content">
+						<div class="item-media">
+							<i class="icon icon-form-name"></i>
+						</div>
+						<div class="item-inner">
+							<div class="item-title label">密码</div>
+							<div class="item-input">
+								<input type="password" id="password" maxlength="10" placeholder="请输入你的新密码">
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item-content">
+						<div class="item-media">
+							<i class="icon icon-form-name"></i>
+						</div>
+						<div class="item-inner">
+							<div class="item-title label">工号</div>
+							<div class="item-input">
+								<input type="text" id="worknumber"  maxlength="16" value="${user.worknumber!}">
+							</div>
+						</div>
+					</div>
+				</li>
+				<!-- Select -->
+				<li>
+					<div class="item-content">
+						<div class="item-media">
+							<i class="icon icon-form-gender"></i>
+						</div>
+						<div class="item-inner">
+							<div class="item-title label">部门</div>
+							<div class="item-input">
+								<select id="departmentId">
+								            <option value="${user.departmentId!}" selected>${user.departmentName!}</option>
+									<#if departments??>
+										<#list departments as department>
+											<option value="${department.id}">${department.name}</option>
+										</#list>
+									</#if>												
+								</select>
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item-content">
+						<div class="item-media">
+							<i class="icon icon-form-name"></i>
+						</div>
+						<div class="item-inner">
+							<div class="item-title label">昵称</div>
+							<div class="item-input">
+								<input type="text" id="nickname" placeholder="用户昵称" maxlength="10" value="${user.nickname!}">
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item-content">
+						<div class="item-media">
+							<i class="icon icon-form-name"></i>
+						</div>
+						<div class="item-inner">
+							<div class="item-title label">电话1</div>
+							<div class="item-input">
+								<input type="text" id="phoneone" placeholder="请输入电话1" maxlength="11" value="${user.phoneone!}">
+							</div>
+						</div>
+					</div>
+				</li>
+				<li>
+					<div class="item-content">
+						<div class="item-media">
+							
+						</div>
+						<div class="item-inner">
+							<div class="item-title label">电话2</div>
+							<div class="item-input">
+								<input type="text" id="phonetwo" placeholder="请输入电话2" maxlength="11" value="${user.phonetwo!}">
+							</div>
+						</div>
+					</div>
+				</li>
 
-    <script type='text/javascript' src='//g.alicdn.com/sj/lib/zepto/zepto.min.js' charset='utf-8'></script>
-    <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm.min.js' charset='utf-8'></script>
-    <script type='text/javascript' src='//g.alicdn.com/msui/sm/0.6.2/js/sm-extend.min.js' charset='utf-8'></script>
-
+				<li>
+					<div class="item-content">
+						<div class="item-media">
+							
+						</div>
+						<div class="item-inner">
+							<div class="item-title label">邮箱</div>
+							<div class="item-input">
+								<input type="text" id="email" maxlength="30" value="${user.email!}">
+							</div>
+						</div>
+					</div>
+				</li>
+				<li class="align-top">
+					<div class="item-content">
+						<div class="item-media">
+							<i class="icon icon-form-comment"></i>
+						</div>
+						<div class="item-inner">
+							<div class="item-title label">个人简介</div>
+							<div class="item-input">
+								<textarea maxlength="30" id="description">${user.description!}</textarea>
+							</div>
+						</div>
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="content-block">
+			<div class="row">
+				<div class="col-50">
+					<a href="javascript:void(0)" onclick="location.reload()" class="button button-big button-fill button-danger">取消</a>
+				</div>
+				<div class="col-50">
+					<a href="#" onclick="modifyUserInfo()" class="button button-big button-fill button-success">修改</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<script type='text/javascript' src='${s.base}/res/light7/js/light7.min.js' charset='utf-8'></script>
+	<script type='text/javascript' src='${s.base}/res/light7/js/light7-swiper.min.js' charset='utf-8'></script>
+	<script type="text/javascript">
+	
+	function modifyUserInfo(){
+		
+		var password = $("#password").val();
+		var worknumber = $("#worknumber").val();
+		var departmentId = $("#departmentId").val();
+		var nickname = $("#nickname").val();
+		var phoneone = $("#phoneone").val();
+		var phonetwo = $("#phonetwo").val();
+		var email = $("#email").val();
+		var description = $("#description").val();
+		
+		
+		/* 
+	    if(password=="" || password==null){
+	    	$.toast("密码不能为空！");
+			return;
+	    } */
+		var phonereg = /^1[0-9]{10}$/;  //手机号验证
+		if(!phonereg.test(phoneone)){
+			$.toast("电话1格式不正确！");
+			return;
+		}
+		if(!phonereg.test(phonetwo)){
+			$.toast("电话2格式不正确！");
+			return;
+		}
+		var mailReg = /^(\w-*\.*)+@(\w-?)+(\.\w{2,})+$/;  //邮箱验证
+		if(!mailReg.test(email)){
+			$.toast("邮箱格式不正确！");
+			return;
+		}
+		
+		
+		$.ajax({
+            type: "post",
+            url: "${s.base}/userInfoModify.action", 
+            data:{
+            	"password": password,
+            	"worknumber": worknumber,
+            	"departmentId": departmentId,
+            	"nickname": nickname,
+            	"phoneone": phoneone,
+            	"phonetwo": phonetwo,
+            	"email": email,
+            	"description": description,
+            },
+            timeout:6000,
+            success: function (result) {
+            	if (result.errcode == '1') {
+                    $.toast(result.message);
+                } else {
+                    $.toast(result.message);
+                }
+            	setTimeout('window.location.reload()',1500);  //延迟1s执行 
+            	
+            },
+            error:function(XMLHttpRequest, textStatus, errorThrown){
+            	   $.toast("修改失败！");
+            },
+        }); 
+	}
+	
+	</script>
 </body>
-
 </html>
