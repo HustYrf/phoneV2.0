@@ -15,4 +15,9 @@
     from K_Department
     where id = #{id,jdbcType=INTEGER}
   </select>
+   <select id="getAllDepartment" resultMap="BaseResultMap">
+  	select 
+    <include refid="Base_Column_List" />
+    from K_Department
+  </select>
 </mapper>
