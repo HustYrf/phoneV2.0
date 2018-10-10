@@ -374,6 +374,19 @@ public class TaskController {
 			return JsonView.render(0, "不可紧急返航，当前未处于飞行中！");
 		}
 	}
+	//紧急异常处理
+	@RequestMapping(value = "/emergencException", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String emergencException(@RequestParam("taskid") int taskid) {
+
+		Task task = new Task();
+		task.setId(taskid);
+		if (taskServiceImpl.setStatusTaskByTask(task, -1) == true) {
+			return JsonView.render(1, "紧急异常执行成功！");
+		} else {
+			return JsonView.render(0, "紧急异常执行失败，请重试！");
+		}
+	}
 
 	// 紧急返航
 	@RequestMapping(value = "/emergencyback", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
