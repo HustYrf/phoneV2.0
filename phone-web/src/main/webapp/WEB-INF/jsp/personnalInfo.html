@@ -37,7 +37,7 @@
 						<div class="item-inner">
 							<div class="item-title label">账号</div>
 							<div class="item-input">
-								<input type="text" value="胡吧" disabled>
+								<input type="text" value="${user.name}"  disabled> 
 							</div>
 						</div>
 					</div>
@@ -50,7 +50,7 @@
 						<div class="item-inner">
 							<div class="item-title label">密码</div>
 							<div class="item-input">
-								<input type="password" id="password" value="123456" maxlength="10">
+								<input type="password" id="password" maxlength="10" placeholder="请输入你的新密码">
 							</div>
 						</div>
 					</div>
@@ -63,7 +63,7 @@
 						<div class="item-inner">
 							<div class="item-title label">工号</div>
 							<div class="item-input">
-								<input type="text" value="123-43" id="worknumber"  maxlength="16">
+								<input type="text" id="worknumber"  maxlength="16" value="${user.worknumber!}">
 							</div>
 						</div>
 					</div>
@@ -78,8 +78,12 @@
 							<div class="item-title label">部门</div>
 							<div class="item-input">
 								<select id="departmentId">
-									<option value="1">外勤部</option>
-									<option value="2">任务派发部</option>
+								            <option value="${user.departmentId!}" selected>${user.departmentName!}</option>
+									<#if departments??>
+										<#list departments as department>
+											<option value="${department.id}">${department.name}</option>
+										</#list>
+									</#if>												
 								</select>
 							</div>
 						</div>
@@ -93,7 +97,7 @@
 						<div class="item-inner">
 							<div class="item-title label">昵称</div>
 							<div class="item-input">
-								<input type="text" id="nickname" placeholder="用户昵称" maxlength="10">
+								<input type="text" id="nickname" placeholder="用户昵称" maxlength="10" value="${user.nickname!}">
 							</div>
 						</div>
 					</div>
@@ -106,7 +110,7 @@
 						<div class="item-inner">
 							<div class="item-title label">电话1</div>
 							<div class="item-input">
-								<input type="text" id="phoneone" placeholder="请输入电话1" maxlength="11">
+								<input type="text" id="phoneone" placeholder="请输入电话1" maxlength="11" value="${user.phoneone!}">
 							</div>
 						</div>
 					</div>
@@ -114,12 +118,12 @@
 				<li>
 					<div class="item-content">
 						<div class="item-media">
-							<i class="icon icon-form-name"></i>
+							
 						</div>
 						<div class="item-inner">
 							<div class="item-title label">电话2</div>
 							<div class="item-input">
-								<input type="text" id="phonetwo" placeholder="请输入电话2" maxlength="11">
+								<input type="text" id="phonetwo" placeholder="请输入电话2" maxlength="11" value="${user.phonetwo!}">
 							</div>
 						</div>
 					</div>
@@ -128,12 +132,12 @@
 				<li>
 					<div class="item-content">
 						<div class="item-media">
-							<i class="icon icon-form-email"></i>
+							
 						</div>
 						<div class="item-inner">
 							<div class="item-title label">邮箱</div>
 							<div class="item-input">
-								<input type="email" id="email" placeholder="邮箱" maxlength="30">
+								<input type="text" id="email" maxlength="30" value="${user.email!}">
 							</div>
 						</div>
 					</div>
@@ -146,7 +150,7 @@
 						<div class="item-inner">
 							<div class="item-title label">个人简介</div>
 							<div class="item-input">
-								<textarea maxlength="30" id="description"></textarea>
+								<textarea maxlength="30" id="description">${user.description!}</textarea>
 							</div>
 						</div>
 					</div>
@@ -181,11 +185,11 @@
 		var description = $("#description").val();
 		
 		
-		
+		/* 
 	    if(password=="" || password==null){
 	    	$.toast("密码不能为空！");
 			return;
-	    }
+	    } */
 		var phonereg = /^1[0-9]{10}$/;  //手机号验证
 		if(!phonereg.test(phoneone)){
 			$.toast("电话1格式不正确！");
@@ -222,12 +226,13 @@
                 } else {
                     $.toast(result.message);
                 }
+            	setTimeout('window.location.reload()',1500);  //延迟1s执行 
+            	
             },
             error:function(XMLHttpRequest, textStatus, errorThrown){
             	   $.toast("修改失败！");
             },
         }); 
-		
 	}
 	
 	</script>

@@ -24,16 +24,9 @@
 	border-radius: 6px;
 }
 
-.taskImg {
-	position: absolute;
-	left: 0px;
-	height: 36px;
-	width: 36px;
-	background-image: url(../../res/img/task.jpg);
-}
 
 .firstBlock {
-	position: absolute;
+
 	top: 10px;
 	left: 0px;
 	height: 130px;
@@ -49,9 +42,7 @@
 	position: absolute;
 	display: inline-block;
 	top: 30px;
-	/*偏移*/
 	left: 45%;
-	/*偏移*/
 	font-size: 20px;
 }
 
@@ -63,13 +54,12 @@
 	font-size: 10px;
 }
 
-.secondBlock {
-	position: absolute;
-	top: 160px;
-	left: 0px;
+.itemBlock {
+    margin-top:8px;
 	height: 35px;
 	width: 100%;
 	background: #fff;
+	padding-left:5px;
 }
 
 .taskSpan {
@@ -84,7 +74,7 @@
 	left: 220px;
 	height: 36px;
 	width: 36px;
-	background-image: url(../../res/img/right.png);
+	
 }
 
 .taskImg1 {
@@ -92,6 +82,7 @@
 	left: 0px;
 	height: 36px;
 	width: 36px;
+	/* background-image: url(../../res/img/right.png); */
 }
 
 .taskImg2 {
@@ -107,14 +98,14 @@
 	width: 100%;
 	height: 40px;
 	justify-content: center;
-	padding: auto 20px;
+	padding: auto 10px;
 	display: block;
 	border: 0;
 }
 
 .logout {
 	position: absolute;
-	bottom: 80px;
+	bottom: 60px;
 	height: 40px;
 	width: 100%;
 	background: #fff;

@@ -9,4 +9,6 @@ public interface DepartmentMapper {
     Department getDepartmentById(int id);
 
 	List<Department> getAllDepartment();
+
+	String getDepartmentNameById(Integer departmentId);
 }

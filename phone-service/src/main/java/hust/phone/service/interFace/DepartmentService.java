@@ -8,4 +8,6 @@ public interface DepartmentService {
 
 	List<Department> getAllDepartment();
 
+	String getNameById(Integer departmentId);
+
 }

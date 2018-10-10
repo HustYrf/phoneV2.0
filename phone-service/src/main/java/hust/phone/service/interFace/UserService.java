@@ -14,4 +14,6 @@ public interface UserService {
 
 	String getNameByUserId(Integer usercreator);
 
+	boolean updateByUser(User user);
+
 }

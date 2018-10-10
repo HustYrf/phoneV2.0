@@ -86,4 +86,14 @@ public class UserServiceimpl implements UserService {
 	public String getNameByUserId(Integer usercreator) {
 		return userMapper.getNameByUserId(usercreator);
 	}
+
+	@Override
+	public boolean updateByUser(User user) {
+		if(userMapper.updateByPrimaryKeySelective(user)==1) {
+			return true;
+		}else {
+			return false;
+		}
+			
+	}
 }

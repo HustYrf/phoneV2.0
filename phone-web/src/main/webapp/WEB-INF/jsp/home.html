@@ -96,7 +96,6 @@
         <header class="bar bar-nav">
             <h2 class="userTitle">用户中心</h2>
         </header>
-
         <div class="content">
             <div class="firstBlock">
                 <div class="userImg"></div>
@@ -106,7 +105,8 @@
                 </div>
 
                 <div class="usertop">
-                    <span class="userRole"><b>昵称：<#if Session["login_user"]?exists>
+                    <span class="userRole"><b>昵称：
+                    <#if Session["login_user"]?exists>
                         <#if Session["login_user"].nickname??>
                     		${Session["login_user"].nickname!}
                          </#if>
@@ -114,19 +114,26 @@
                 </div>
             </div>
 
-            <div class="secondBlock">
-                <div class="taskImg"></div>
+            <div class="itemBlock" id="task" style="margin-top:50px;">
+                <img alt="" src="${s.base}/res/img/task.png" style="height:36px;width:36px;">
                 <span class="taskSpan">我的工单</span>
                <!--  <div class="rightArr"></div> -->
             </div>
-          
+            
+            <div class="itemBlock" id="info">
+                <img alt="" src="${s.base}/res/img/info.png" style="height:36px;width:36px;">
+                <span class="taskSpan">个人信息</span>
+               <!--  <div class="rightArr"></div> -->
+            </div>
 
             <div class="logout " >
                 <input type="button" class="userLogout" value="退出当前账号"/>
             </div>
-            <div class="userFooter">无人机智能巡视系统</div>
+          
         </div>
-
+		<footer>
+		  <div class="userFooter">无人机智能巡视系统</div>
+		</footer>
     </div>
 </div>
 
@@ -140,27 +147,13 @@
     $(".userLogout").click(function () {
         window.location.href = "logout";
     });
-    $(".secondBlock").click(function () {
+    $("#task").click(function () {
         window.location.href = "toTask";
     });
-    /* $(".thirdSpan1").click(function () {
-        window.location.href = "toPlane";
+    $("#info").click(function () {
+        window.location.href = "userInfo";
     });
-    $(".thirdSpan2").click(function () {
-        window.location.href = "toPlane";
-    });
-    $(".thirdSpan3").click(function () {
-        window.location.href = "toPlane";
-    });
-    $(".thirdSpan4").click(function () {
-        window.location.href = "toPlane";
-    });
-    $(".thirdSpan5").click(function () {
-        window.location.href = "toPlane";
-    });
-    $(".thirdSpan6").click(function () {
-        window.location.href = "toPlane";
-    }); */
+   
   
   		//轮询工单列表
 /*     $(function () {
