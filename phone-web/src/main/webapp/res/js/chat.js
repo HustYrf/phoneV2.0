@@ -107,6 +107,23 @@ var WebSocketUtil = {
 var PlaneHandleServiceUtil ={
 		handleStatus:function(message,status)
 		{
+			if(status =="有异常" )
+			{
+				$.ajax({
+		            type: "post",
+		            url: base.value+'/emergencException.action',
+		            data: {
+		                'taskid': task.value,
+		            },
+		            success: function (result) {
+		                if (result.errcode == '1') {
+		                    $.toast(result.message);
+		                } else {
+		                    $.toast(result.message);
+		                }
+		            }
+		        });
+			}
 			//显示无人机的状态信息
 			planeStatus.innerHTML = status;
 			var mes = message.split(",");
