@@ -55,8 +55,11 @@
             	                onclick="rollbackTask(${taskpojo.task.id!})">退回任务</a></div>
 						    <div style="white-spacing:nowrap;"><a class="button button-fill external"  
             	             onclick="exeTask('${taskpojo.task.id!}')">执行任务</a></div>
-            	        <#elseif taskpojo.task.status== 5 || taskpojo.task.status == 6 || taskpojo.task.status == 7 || taskpojo.task.status == 8 || taskpojo.task.status == 9>
+            	        <#elseif taskpojo.task.status== 5 || taskpojo.task.status == 6 || taskpojo.task.status == 7 || taskpojo.task.status == 9>
 						   <div><a  class="button button-fill external" href='${s.base}/toPlane.action?id=${taskpojo.task.id!}'>跳转无人机操纵</a></div>
+					    <#elseif taskpojo.task.status == 8>
+					       <div><a class="button button-fill"  onclick="rollbackTask(${taskpojo.task.id!})">退回任务</a></div>
+						   <div><a class="button button-fill external" href='${s.base}/toPlane.action?id=${taskpojo.task.id!}' style="white-spacing:nowrap;">跳转无人机操纵</a></div>
 					    <#else>
 					        <div><a class="button button-fill disabled button-success" >暂不需要操作</a></div>	
 					    </#if>
