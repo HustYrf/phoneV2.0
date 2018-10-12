@@ -136,6 +136,7 @@ public class Parser {
             m.payload.add((byte) c);
             if (m.payloadIsFilled()) {
                 state = MAV_states.MAVLINK_PARSE_STATE_GOT_PAYLOAD;
+                return m;
             }
             break;
 

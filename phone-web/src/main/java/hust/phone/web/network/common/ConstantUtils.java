@@ -49,9 +49,11 @@ public interface ConstantUtils {
 	String MSG_TANS_STATUS_EXCEPTION ="有异常";
 	String MSG_TANS_STATUS_PARACHATEOPENING = "开伞";
 	String MSG_TANS_STATUS_RETURN ="返航";
+	String MSG_TANS_STATUS_INIT = "暂无";
 	// 判断客户端类型的CODE
 	String ATTR_CLIENT_CODE = "GET";
 	//服务器的设备类型
 	long Server_Num = 0x01010001;
+	
 	
 }

@@ -679,8 +679,8 @@ public class MAVLinkPacket implements Serializable {
                  
             case msg_debug.MAVLINK_MSG_ID_DEBUG:
                 return new msg_debug(this);
-            
-            
+            case msg_new_login_res.MAVLINK_MSG_ID_NEW_LOGIN_RES:
+                return new msg_new_login_res(this);
             default:
                 return null;
         }
