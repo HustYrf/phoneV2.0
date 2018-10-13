@@ -169,15 +169,10 @@ public class test {
 	@Test
 	public void test5() throws Exception
 	{
-		Date currentTime = new Date(); 
-		//改变输出格式（自己想要的格式） 
-		 SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); 
-		 //得到字符串时间 
-		 String s8 = formatter.format(currentTime); 
-		 System.out.println(s8);
-		Date date = formatter.parse(s8);
-		long s = date.getTime();
-		System.out.println(s);
+		byte b[] = {84, 69, 76, 85, 65, 86, 33, 0, 0, 0, 0, 0, 1, 0, 1, 3, 1, 0, 1, 3, 4, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		SlpPacket parse = SlpPacket.parse(b);
+		SlpMsgLogin login = (SlpMsgLogin) parse.unpack();
+		System.out.println(login.toString());
 
 		
 	}

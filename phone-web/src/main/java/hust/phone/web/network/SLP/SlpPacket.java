@@ -171,15 +171,16 @@ public class SlpPacket implements Serializable{
 				check[0]=encoding[encoding.length-1];
 				slp.CHECKSUM = Byte2Uni16(check)&0xFFFF;
 				
-				byte data[]=Arrays.copyOfRange(encoding, 6, encoding.length-2);
-				byte[] check1=Uni16ToByte(SLpCRC.calculateCrc(data));
-				if(check[0]==check1[0]&& check[1]==check1[1])
-				{
-					return slp;
-				}else
-				{
-					return null;
-				}
+//				byte data[]=Arrays.copyOfRange(encoding, 6, encoding.length-2);
+//				byte[] check1=Uni16ToByte(SLpCRC.calculateCrc(data));
+//				if(check[0]==check1[0]&& check[1]==check1[1])
+//				{
+//					return slp;
+//				}else
+//				{
+//					return null;
+//				}
+				return slp;
 			}
 			else {
 				return null;

@@ -1,6 +1,8 @@
 package hust.phone.web.network.filter.hsocket;
 
 
+import java.util.Arrays;
+
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
@@ -28,7 +30,7 @@ public class HDecoder extends CumulativeProtocolDecoder{
 		int b = in.get() &0xff;
 		if(b!=0xfe)
 		{
-			int head =5;
+			 int head =5;
 			 for(int i=0;i<head;i++)
 			 {
 				 in.get();
@@ -54,9 +56,14 @@ public class HDecoder extends CumulativeProtocolDecoder{
 			 {
 				 out.write(packet);
 			 }
+			if (in.remaining() > 0) {
+				// 如果读取内容后还粘了包，进行下一次解析
+					return true;
+			}
 		}
 		else {
 			//智能鸟的解析
+			System.out.println("进入智能鸟解析");
 			short len = (short) (in.getUnsigned()+2+6);
 			//System.out.println(len);
 			in.reset();
@@ -78,13 +85,19 @@ public class HDecoder extends CumulativeProtocolDecoder{
 			 {
 				 MAVLinkPayload pay =m1.payload;
 				 byte []p1=pay.payload.array();
+				 System.out.println(Arrays.toString(p1));
 				 SlpPacket packet = SlpPacket.parse(p1);
 				 if(packet!=null)
 				 {
 					 out.write(packet);
 				 }
 			 }
+			if (in.remaining() > 0) {
+				// 如果读取内容后还粘了包，进行下一次解析
+					return true;
+			}
 		}
+		//处理下一个包
 		return false;
 	}
 
