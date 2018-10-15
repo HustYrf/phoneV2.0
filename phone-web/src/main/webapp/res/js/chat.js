@@ -23,6 +23,7 @@ var WebSocketUtil = {
 	connect : function() {
 		
 		WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
+		//WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
 		WebSocketUtil.webSocket.onmessage = WebSocketUtil.onMessage;
 		WebSocketUtil.webSocket.onclose = WebSocketUtil.onClose;
@@ -50,7 +51,7 @@ var WebSocketUtil = {
 		switch(messageType[0]){
 		case WebTypeUtil.MESSAGETYPESTATUS:
 			//处理接收到的经纬度消息
-			PlaneHandleServiceUtil.handleStatus(messageType[1],messageType[2]);
+			PlaneHandleServiceUtil.handleStatus(messageType[1],messageType[2],messageType[3]);
 			break;
 		case WebTypeUtil.MESSAGETYPEFLYINGEXCUTE:
 			//处理起飞执行的消息
@@ -105,7 +106,7 @@ var WebSocketUtil = {
 }
 
 var PlaneHandleServiceUtil ={
-		handleStatus:function(message,status)
+		handleStatus:function(message,status,GPS_HDG)
 		{
 			if(status =="有异常" )
 			{
