@@ -143,7 +143,7 @@ var PlaneHandleServiceUtil ={
                 image: "images/uav-32.png",
                 offset: new AMap.Pixel(-15,-15) ,// 相对于基点的偏移位置
                 }),
-                //angle:GPS_HDG,
+                angle:GPS_HDG,
             });
 		    map.setCenter(data); 
 		    map.add(planeMarker);
