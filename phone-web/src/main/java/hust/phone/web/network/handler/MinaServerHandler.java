@@ -194,20 +194,23 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			IoSession sessionPlane = IOSessionManager.getSessionPlane(Long.parseLong(s));
 			if(sessionPlane!=null)
 			{
-				int uavId = (type[2] &0xff)*16+(type[3] &0xff);
-				msg_set_mode msg1=new msg_set_mode();
-				msg1.base_mode=29;
-				msg1.target_system=(short) uavId;//无人机编号
-				//return
-				msg1.custom_mode=84148224;
-				MAVLinkPacket pack4 = msg1.pack();
-				byte[] encodePacket1 = pack4.encodePacket();
-				 int i=3;
-				  while(i>0)
-				  {
-					  sessionPlane.write(IoBuffer.wrap(encodePacket1));
-					  i--;
-				  }
+
+				  int uavId = (type[2] &0xff)*16+(type[3] &0xff);
+				  msg_set_mode msg1=new msg_set_mode();
+		          msg1.base_mode=29;
+		          msg1.target_system=(short) uavId;//无人机编号
+		          //return
+		          msg1.custom_mode=84148224;
+		          MAVLinkPacket pack4 = msg1.pack();
+		          int i = 3;
+		          
+		          byte[] encodePacket1 = pack4.encodePacket();
+		          while(i>0)
+		          {
+		        	  sessionPlane.write(IoBuffer.wrap(encodePacket1));
+		        	  i--;
+		          }
+
 			}
 			
 		}
@@ -250,7 +253,9 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		          msg3.param1=1;
 		          MAVLinkPacket pack3 = msg3.pack();
 		          byte[] encodePacket3 = pack3.encodePacket();
-		          msg_set_mode msg=new msg_set_mode();
+
+		         
+				  msg_set_mode msg=new msg_set_mode();
 		          msg.base_mode=29;
 		          msg.target_system=(short) uavId;//无人机编号
 		          msg.custom_mode=67371008;
@@ -261,11 +266,12 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		          {
 			          sessionPlane.write(IoBuffer.wrap(encodePacket3));
 			          try {
-						Thread.sleep(500);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+
+							Thread.sleep(500);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 			          sessionPlane.write(IoBuffer.wrap(encodePacket));
 			          i--;
 		          }
@@ -343,6 +349,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		default:
 			break;
 		}
+		content = content+":"+unpack.GPS_HDG;
 		String content2 = content+":"+unpack.AR_SPD+":"+unpack.GR_SPD+":"+lon+":"+lat+":"+unpack.GPS_ELV+":"+unpack.GPS_HDG+":"
 				+unpack.HORI_AGL+":"+unpack.VERT_AGL;
 		//将数据推送给手机web客户端,并保存在数据库中
@@ -409,15 +416,20 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			{
 				//登录消息
 				//将无人机端的登录保存
-				System.out.println("将无人机账号保存在session中");
-				session.setAttribute(ConstantUtils.ATTR_PLANENO,packet.SND_DEVICE_ID);
-				IOSessionManager.addSession(session);
-				//将消息推送给手机
-				String content =ConstantUtils.MSG_PLANE_LOGIN+":"+"Login";
-				processResTOResult(content,packet,content);
+				if((IOSessionManager.getSessionPlane(packet.SND_DEVICE_ID)==null))
+				{
+					System.out.println("将无人机账号保存在session中");
+					session.setAttribute(ConstantUtils.ATTR_PLANENO,packet.SND_DEVICE_ID);
+					IOSessionManager.addSession(session);
+				
+					//将消息推送给手机
+					String content =ConstantUtils.MSG_PLANE_LOGIN+":"+"Login";
+					processResTOResult(content,packet,content);
+				}
 				
 				loginRes.UAV_LOGIN=1;
 				loginRes.RES_RELULT=1;
+				
 			}
 			else if(res.UAV_LOGIN==2)
 			{
@@ -444,7 +456,9 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			{
 				//登录消息
 				//将无人机端的登录保存
-				if(IOSessionManager.getSessionPlane(packet.SND_DEVICE_ID)==null)
+
+				
+				if((IOSessionManager.getSessionPlane(packet.SND_DEVICE_ID)==null))
 				{
 					System.out.println("将无人机账号保存在session中");
 					session.setAttribute(ConstantUtils.ATTR_PLANENO,packet.SND_DEVICE_ID);
@@ -452,28 +466,28 @@ public class MinaServerHandler extends IoHandlerAdapter {
 					//将消息推送给手机
 					String content =ConstantUtils.MSG_PLANE_LOGIN+":"+"Login";
 					processResTOResult(content,packet,content);
+					//反馈消息给无人机登录成功
+					msg_new_login_res loginRes = new msg_new_login_res();
+					loginRes.HEAD[0]= 0x54;
+					loginRes.HEAD[1]=0x45;
+					loginRes.HEAD[2]=0x4C;
+					loginRes.HEAD[3]=0x55;
+					loginRes.HEAD[4]=0x41;
+					loginRes.HEAD[5]=0x56;
+					loginRes.MSG_TYPE=5;
+					loginRes.MSG_LEN =33;
+					loginRes.REV_DEVICE_ID = packet.SND_DEVICE_ID;
+					loginRes.SND_DEVICE_ID = ConstantUtils.Server_Num;
+					loginRes.RES_RELULT = 1;
+					loginRes.UAV_LOGIN = 1;
+					loginRes.MSG_TIME = 0;
+					loginRes.VAL_TIME = 0;
+					loginRes.CHECKSUM = 0;
+					MAVLinkPacket pack = loginRes.pack();
+					pack.sysid = uavId;
+					byte[] encodePacket = pack.encodePacket();
+					session.write(IoBuffer.wrap(encodePacket) );
 				}
-				//反馈消息给无人机登录成功
-				msg_new_login_res loginRes = new msg_new_login_res();
-				loginRes.HEAD[0]= 0x54;
-				loginRes.HEAD[1]=0x45;
-				loginRes.HEAD[2]=0x4C;
-				loginRes.HEAD[3]=0x55;
-				loginRes.HEAD[4]=0x41;
-				loginRes.HEAD[5]=0x56;
-				loginRes.MSG_TYPE=5;
-				loginRes.MSG_LEN =33;
-				loginRes.REV_DEVICE_ID = packet.SND_DEVICE_ID;
-				loginRes.SND_DEVICE_ID = ConstantUtils.Server_Num;
-				loginRes.RES_RELULT = 1;
-				loginRes.UAV_LOGIN = 1;
-				loginRes.MSG_TIME = 0;
-				loginRes.VAL_TIME = 0;
-				loginRes.CHECKSUM = 0;
-				MAVLinkPacket pack = loginRes.pack();
-				pack.sysid = uavId;
-				byte[] encodePacket = pack.encodePacket();
-				session.write(IoBuffer.wrap(encodePacket) );
 			}
 			
 		}
