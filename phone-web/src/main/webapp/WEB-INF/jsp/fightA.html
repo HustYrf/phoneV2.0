@@ -78,9 +78,10 @@
 	                    position: planePath.pathdata[pointlen],
 	                    icon: new AMap.Icon({
 	                        size: new AMap.Size(32, 32), //图标大小
-	                        image: "images/warn-32.png",
+	                        image: "images/uav-32.png",
 	                        offset: new AMap.Pixel(0, -40) ,// 相对于基点的偏移位置
 	                    }),
+	                    //angle:GPS_HDG,  偏向角改变飞机旋转状态
 	                });
 		    	    map.add(planeMarker);  
 		    	   
@@ -119,8 +120,8 @@
 			<div class="content-block" style="margin-top: 25px">
 				<p class="buttons-row">
 					<a onclick="checkself(${task.id!})" class="button">自检完成</a><span class="desp"></span>
-					<a onclick="applyTaskoff(${task.id!})" class="button">申请起飞</a>
-					<a onclick="cancel(${task.id!})" class="button">撤销起飞</a> <span class="desp"></span>
+					<a onclick="applyTaskoff(${task.id!})" class="button">申请起飞</a><span class="desp"></span>
+					<a onclick="cancel(${task.id!})" class="button">撤销起飞</a>
 				</p>
 				<p class="buttons-row">
 					<a onclick="reportNotconnet(${task.id!})" class="button">飞机失联</a><span class="desp"></span>

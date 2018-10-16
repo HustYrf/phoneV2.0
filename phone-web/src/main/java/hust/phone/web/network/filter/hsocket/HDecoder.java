@@ -56,10 +56,10 @@ public class HDecoder extends CumulativeProtocolDecoder{
 			 {
 				 out.write(packet);
 			 }
-			if (in.remaining() > 0) {
-				// 如果读取内容后还粘了包，进行下一次解析
-					return true;
-			}
+//			if (in.remaining() > 0) {
+//				// 如果读取内容后还粘了包，进行下一次解析
+//					return true;
+//			}
 		}
 		else {
 			//智能鸟的解析
@@ -70,7 +70,7 @@ public class HDecoder extends CumulativeProtocolDecoder{
 			byte [] encoding = new byte[len];
 			in.get(encoding, 0, len);
 			//得到数据包的解析，判别数据的类型
-			
+			System.out.println(Arrays.toString(encoding));
 			 Parser parser = new Parser();
 				//先读出包的长度
 			 int plen = encoding[1] & 0x00FF;
@@ -92,10 +92,10 @@ public class HDecoder extends CumulativeProtocolDecoder{
 					 out.write(packet);
 				 }
 			 }
-			if (in.remaining() > 0) {
-				// 如果读取内容后还粘了包，进行下一次解析
-					return true;
-			}
+//			if (in.remaining() > 0) {
+//				// 如果读取内容后还粘了包，进行下一次解析
+//					return true;
+//			}
 		}
 		//处理下一个包
 		return false;
