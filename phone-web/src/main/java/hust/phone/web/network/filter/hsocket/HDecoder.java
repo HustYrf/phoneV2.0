@@ -127,7 +127,7 @@ public class HDecoder extends CumulativeProtocolDecoder{
 			int b = in.get() &0xff;
 			if(b!=0xfe)
 			{
-				 System.out.println("进入思罗普解析");
+				 System.out.println("进入思洛普解析");
 				 int head =5;
 				 for(int i=0;i<head;i++)
 				 {
@@ -156,10 +156,10 @@ public class HDecoder extends CumulativeProtocolDecoder{
 				 }
 
 
-				if (in.remaining() > 0) {
-					// 如果读取内容后还粘了包，进行下一次解析
-						return true;
-				}
+//				if (in.remaining() > 0) {
+//					// 如果读取内容后还粘了包，进行下一次解析
+//						return true;
+//				}
 				 
 			}
 			else {
@@ -193,10 +193,9 @@ public class HDecoder extends CumulativeProtocolDecoder{
 						 out.write(packet);
 					 }
 				 }
-				if (in.remaining() > 0) {
-					// 如果读取内容后还粘了包，进行下一次解析
-						return true;
-				}
+//				if (in.remaining() > 0) {
+//					// 如果读取内容后还粘了包，进行下一次解析
+//						return true;
 			 }
 			//处理下一个包
 		return false;

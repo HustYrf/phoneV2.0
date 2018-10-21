@@ -56,6 +56,11 @@ public class MinaServerHandler extends IoHandlerAdapter {
 	@Override
 	public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
 		System.out.println("连接空闲");
+		if(IOSessionManager.mapSessionPlane.containsValue(session))
+		{
+			IOSessionManager.removeSession(session);
+		}
+		
 	}
 
 	@Override
@@ -209,6 +214,12 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		          {
 		        	  sessionPlane.write(IoBuffer.wrap(encodePacket1));
 		        	  i--;
+//		        	  try {
+//						Thread.sleep(200);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
 		          }
 
 			}
@@ -243,8 +254,8 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		}else if(type[0]==3)
 		{
 			//智能鸟的起飞指令
-			IoSession sessionPlane = IOSessionManager.getSessionPlane(Long.parseLong(s));
-			if(sessionPlane!=null)
+			IoSession sessionPlane1 = IOSessionManager.getSessionPlane(Long.parseLong(s));
+			if(sessionPlane1!=null)
 			{
 				  int uavId = (type[2] &0xff)*16+(type[3] &0xff);
 				  msg_command_long msg3 =new msg_command_long();
@@ -264,15 +275,21 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		          int i = 3;
 		          while(i>0)
 		          {
-			          sessionPlane.write(IoBuffer.wrap(encodePacket3));
+			          sessionPlane1.write(IoBuffer.wrap(encodePacket3));
 			          try {
 
-							Thread.sleep(500);
+							Thread.sleep(200);
 						} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-			          sessionPlane.write(IoBuffer.wrap(encodePacket));
+			          sessionPlane1.write(IoBuffer.wrap(encodePacket));
+//			          try {
+//						Thread.sleep(200);
+//					} catch (InterruptedException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
 			          i--;
 		          }
 			}
@@ -349,8 +366,12 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		default:
 			break;
 		}
+		if(unpack.GPS_HDG<0)
+		{
+			unpack.GPS_HDG = -unpack.GPS_HDG +180;
+		}
 		content = content+":"+unpack.GPS_HDG;
-		String content2 = content+":"+unpack.AR_SPD+":"+unpack.GR_SPD+":"+lon+":"+lat+":"+unpack.GPS_ELV+":"+unpack.GPS_HDG+":"
+		String content2 = content+":"+unpack.AR_SPD+":"+unpack.GR_SPD+":"+lon+":"+lat+":"+unpack.GPS_ELV+":"+
 				+unpack.HORI_AGL+":"+unpack.VERT_AGL;
 		//将数据推送给手机web客户端,并保存在数据库中
 		processResTOResult(content,packet,content2);
@@ -457,7 +478,6 @@ public class MinaServerHandler extends IoHandlerAdapter {
 				//登录消息
 				//将无人机端的登录保存
 
-				
 				if((IOSessionManager.getSessionPlane(packet.SND_DEVICE_ID)==null))
 				{
 					System.out.println("将无人机账号保存在session中");
@@ -486,7 +506,21 @@ public class MinaServerHandler extends IoHandlerAdapter {
 					MAVLinkPacket pack = loginRes.pack();
 					pack.sysid = uavId;
 					byte[] encodePacket = pack.encodePacket();
-					session.write(IoBuffer.wrap(encodePacket) );
+					int j=3;
+					while(j>0)
+					{
+						session.write(IoBuffer.wrap(encodePacket) );
+						j--;
+//						try {
+//							Thread.sleep(200);
+//						} catch (InterruptedException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+					}
+					System.out.println("发送登陆应答指令");
+					
+
 				}
 			}
 			

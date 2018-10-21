@@ -12,7 +12,7 @@ public class IOSessionManager {
 	/*
 	 * 获取所有用户的session，分为无人机端和手机端的session
 	 */
-	private static Map<Long,IoSession> mapSessionPlane = new HashMap<Long,IoSession>();
+	public static Map<Long,IoSession> mapSessionPlane = new HashMap<Long,IoSession>();
 	private static Map<String,IoSession> mapSessionMobile = new HashMap<String,IoSession>();
 	
 	//添加
@@ -79,9 +79,11 @@ public class IOSessionManager {
 	{
 		if(isSessionMobile(session))
 		{
+			System.out.println("移除session");
 			mapSessionMobile.remove(getUserNoFromIoSessionToString(session));
 		}else
 		{
+			System.out.println("移除session");
 			mapSessionPlane.remove(getPlaneNoFromIoSessionToLong(session));
 		}
 	}
