@@ -13,4 +13,5 @@ public interface UavMapper {
 	Uav getPlaneByPlane(Uav uav);
 	int updateByPlane(Uav uav);
 	void updatePositionByPlane(Uav uav);
+	Uav getUavByDeviceId(String deviceId);
 }

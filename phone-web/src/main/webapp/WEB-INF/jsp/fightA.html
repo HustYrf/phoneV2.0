@@ -117,7 +117,7 @@
 
 		<!-- 操作按钮 start -->
 		<div class="optionArea">
-			<div class="content-block" style="margin-top: 25px">
+			<div class="content-block" id="btns" style="margin-top:25px;pointer-events:none">
 				<p class="buttons-row">
 					<a onclick="checkself(${task.id!})" class="button">自检完成</a><span class="desp"></span>
 					<a onclick="applyTaskoff(${task.id!})" class="button">申请起飞</a><span class="desp"></span>
@@ -125,9 +125,7 @@
 				</p>
 				<p class="buttons-row">
 					<a onclick="reportNotconnet(${task.id!})" class="button">飞机失联</a><span class="desp"></span>
-					<!-- 发无人机降落指令 -->
-					<a onclick="emergencyback(${task.id!})" class="button">紧急返航</a><span class="desp"></span>
-					<!-- 发无人机起飞指令 -->
+					<a onclick="emergencyback(${task.id!})" class="button">紧急返航</a><span class="desp"></span>				
 					<a onclick="takeoff(${task.id!})" class="button">一键起飞</a>
 				</p>
 				<input id="option" type="hidden" value="" />

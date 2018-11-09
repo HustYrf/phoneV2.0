@@ -11,7 +11,7 @@
     <result column="Uav_id" property="uavId" jdbcType="INTEGER" />
     <result column="CreateTime" property="createtime" jdbcType="TIMESTAMP" />
     <result column="PlanStartTime" property="planstarttime" jdbcType="TIMESTAMP" />
-    <result column="phonendTime" property="phonendtime" jdbcType="TIMESTAMP" />
+    <result column="Planendtime" property="planendtime" jdbcType="TIMESTAMP" />
     <result column="ExecuteStartTime" property="executestarttime" jdbcType="TIMESTAMP" />
     <result column="ExecuteEndTime" property="executeendtime" jdbcType="TIMESTAMP" />
     <result column="Status" property="status" jdbcType="INTEGER" />
@@ -115,13 +115,13 @@
     insert into K_Task (id, Name, UserCreator, 
       User_A, User_Z, FlyingPath_id, 
       Uav_id, CreateTime, PlanStartTime, 
-      phonendTime, ExecuteStartTime, ExecuteEndTime, 
+      Planendtime, ExecuteStartTime, ExecuteEndTime, 
       Status, FinishStatus, ImgFolder, 
       ReportUrl)
     values (#{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{usercreator,jdbcType=INTEGER}, 
       #{userA,jdbcType=INTEGER}, #{userZ,jdbcType=INTEGER}, #{flyingpathId,jdbcType=INTEGER}, 
-      #{uavId,jdbcType=INTEGER}, #{CreateTime,jdbcType=TIMESTAMP}, #{planstarttime,jdbcType=TIMESTAMP}, 
-      #{phonendtime,jdbcType=TIMESTAMP}, #{executestarttime,jdbcType=TIMESTAMP}, #{executeendtime,jdbcType=TIMESTAMP}, 
+      #{uavId,jdbcType=INTEGER}, #{createtime,jdbcType=TIMESTAMP}, #{planstarttime,jdbcType=TIMESTAMP}, 
+      #{planendtime,jdbcType=TIMESTAMP}, #{executestarttime,jdbcType=TIMESTAMP}, #{executeendtime,jdbcType=TIMESTAMP}, 
       #{status,jdbcType=INTEGER}, #{finishstatus,jdbcType=INTEGER}, #{imgfolder,jdbcType=VARCHAR}, 
       #{reporturl,jdbcType=VARCHAR})
   </insert>
@@ -155,8 +155,8 @@
       <if test="planstarttime != null" >
         PlanStartTime,
       </if>
-      <if test="phonendtime != null" >
-        phonendTime,
+      <if test="planendtime != null" >
+        Planendtime,
       </if>
       <if test="executestarttime != null" >
         ExecuteStartTime,
@@ -200,13 +200,13 @@
         #{uavId,jdbcType=INTEGER},
       </if>
       <if test="createtime != null" >
-        #{CreateTime,jdbcType=TIMESTAMP},
+        #{createtime,jdbcType=TIMESTAMP},
       </if>
       <if test="planstarttime != null" >
         #{planstarttime,jdbcType=TIMESTAMP},
       </if>
-      <if test="phonendtime != null" >
-        #{phonendtime,jdbcType=TIMESTAMP},
+      <if test="planendtime != null" >
+        #{planendtime,jdbcType=TIMESTAMP},
       </if>
       <if test="executestarttime != null" >
         #{executestarttime,jdbcType=TIMESTAMP},
@@ -258,14 +258,14 @@
       <if test="record.uavId != null" >
         Uav_id = #{record.uavId,jdbcType=INTEGER},
       </if>
-      <if test="record.CreateTime != null" >
-        CreateTime = #{record.CreateTime,jdbcType=TIMESTAMP},
+      <if test="record.createtime != null" >
+        CreateTime = #{record.createtime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.planstarttime != null" >
         PlanStartTime = #{record.planstarttime,jdbcType=TIMESTAMP},
       </if>
-      <if test="record.phonendtime != null" >
-        phonendTime = #{record.phonendtime,jdbcType=TIMESTAMP},
+      <if test="record.planendtime != null" >
+        Planendtime = #{record.planendtime,jdbcType=TIMESTAMP},
       </if>
       <if test="record.executestarttime != null" >
         ExecuteStartTime = #{record.executestarttime,jdbcType=TIMESTAMP},
@@ -299,9 +299,9 @@
       User_Z = #{record.userZ,jdbcType=INTEGER},
       FlyingPath_id = #{record.flyingpathId,jdbcType=INTEGER},
       Uav_id = #{record.uavId,jdbcType=INTEGER},
-      CreateTime = #{record.CreateTime,jdbcType=TIMESTAMP},
+      CreateTime = #{record.createtime,jdbcType=TIMESTAMP},
       PlanStartTime = #{record.planstarttime,jdbcType=TIMESTAMP},
-      phonendTime = #{record.phonendtime,jdbcType=TIMESTAMP},
+      Planendtime = #{record.planendtime,jdbcType=TIMESTAMP},
       ExecuteStartTime = #{record.executestarttime,jdbcType=TIMESTAMP},
       ExecuteEndTime = #{record.executeendtime,jdbcType=TIMESTAMP},
       Status = #{record.status,jdbcType=INTEGER},
@@ -333,14 +333,14 @@
       <if test="uavId != null" >
         Uav_id = #{uavId,jdbcType=INTEGER},
       </if>
-      <if test="CreateTime != null" >
-        CreateTime = #{CreateTime,jdbcType=TIMESTAMP},
+      <if test="createtime != null" >
+        CreateTime = #{createtime,jdbcType=TIMESTAMP},
       </if>
       <if test="planstarttime != null" >
         PlanStartTime = #{planstarttime,jdbcType=TIMESTAMP},
       </if>
-      <if test="phonendtime != null" >
-        phonendTime = #{phonendtime,jdbcType=TIMESTAMP},
+      <if test="planendtime != null" >
+        Planendtime = #{planendtime,jdbcType=TIMESTAMP},
       </if>
       <if test="executestarttime != null" >
         ExecuteStartTime = #{executestarttime,jdbcType=TIMESTAMP},
@@ -371,9 +371,9 @@
       User_Z = #{userZ,jdbcType=INTEGER},
       FlyingPath_id = #{flyingpathId,jdbcType=INTEGER},
       Uav_id = #{uavId,jdbcType=INTEGER},
-      CreateTime = #{CreateTime,jdbcType=TIMESTAMP},
+      CreateTime = #{createtime,jdbcType=TIMESTAMP},
       PlanStartTime = #{planstarttime,jdbcType=TIMESTAMP},
-      phonendTime = #{phonendtime,jdbcType=TIMESTAMP},
+      Planendtime = #{planendtime,jdbcType=TIMESTAMP},
       ExecuteStartTime = #{executestarttime,jdbcType=TIMESTAMP},
       ExecuteEndTime = #{executeendtime,jdbcType=TIMESTAMP},
       Status = #{status,jdbcType=INTEGER},

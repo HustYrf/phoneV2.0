@@ -22,8 +22,8 @@ var WebSocketUtil = {
 	isActive : true,
 	connect : function() {
 		
-		WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:7020");
-		//WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
+		//WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:7020");
+		WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
 		WebSocketUtil.webSocket.onmessage = WebSocketUtil.onMessage;
 		WebSocketUtil.webSocket.onclose = WebSocketUtil.onClose;
@@ -41,6 +41,9 @@ var WebSocketUtil = {
 		{
 			var content = plane.value+WebTypeUtil.LANDUSERLOGIN;
 		}
+		
+		//让按钮可点击
+		$("#btns").css("pointer-events","auto");
 		
 		WebSocketUtil.webSocket.send(content);
 	},
@@ -98,7 +101,8 @@ var WebSocketUtil = {
 		 
 	},
 	disConnection : function() {
-		
+		//如果断开连接的话
+		$("#btns").css("pointer-events","none");
 	},
 	print: function (text) {
          log.innerHTML = (new Date).getTime() + ": " + text + log.innerHTML;

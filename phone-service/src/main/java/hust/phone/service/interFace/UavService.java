@@ -16,5 +16,6 @@ public interface UavService {
 
 	void updatePositionByUav(Uav uav);
 
-	
+	Uav getUavByDeviceId(String deviceId);
+
 }

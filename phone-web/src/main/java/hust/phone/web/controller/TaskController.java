@@ -129,6 +129,26 @@ public class TaskController {
 		return JsonView.render(1, "当前状态无法申请起飞！");
 
 	}
+	@RequestMapping(value = "/editTaskUav", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String editTaskUav(Task task,@RequestParam("deviceId")String deviceId) {
+		
+		Uav uav = uavServiceImpl.getUavByDeviceId(deviceId);
+		if(uav == null || uav.getId()==0) {
+			return JsonView.render(1, "该设备号的无人机不存在，修改失败！");
+		}
+		
+		Task task1 = taskServiceImpl.getTaskByTask(task);
+		task1.setUavId(uav.getId());
+		
+		if(taskServiceImpl.updateTaskByTask(task1)==true)
+		
+		    return JsonView.render(1, "无人机修改成功！");
+		
+		return JsonView.render(1, "修改失败！");
+	}
+	
+	
 
 	// 撤销起飞
 	@RequestMapping(value = "/cancelTaskoff", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -359,6 +379,9 @@ public class TaskController {
 
 	}
 
+	
+	
+	
 	// 紧急返航检查
 	@RequestMapping(value = "/emergencybackCheck", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody

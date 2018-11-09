@@ -78,6 +78,14 @@ public class TaskServiceImpl implements TaskService {
 		return taskMapper.getTaskStatus(task);
 	}
 
+	@Override
+	public boolean updateTaskByTask(Task task1) {
+		
+		if(taskMapper.updateByPrimaryKey(task1)==1)
+			return true;
+		return false;
+	}
+
 	
 
 	/*

@@ -248,6 +248,13 @@ public class UavServiceImpl implements UavService {
 	public void updatePositionByUav(Uav uav) {
 		uavMapper.updatePositionByPlane(uav);
 	}
+	@Override
+	public Uav getUavByDeviceId(String deviceId) {
+		
+		Uav uav = null;
+		uav = uavMapper.getUavByDeviceId(deviceId);
+		return uav;
+	}
 	
 
 }

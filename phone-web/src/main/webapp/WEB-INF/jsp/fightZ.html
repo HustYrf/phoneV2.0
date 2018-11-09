@@ -127,13 +127,13 @@
 
 		<!-- 操作按钮 start -->
 		<div class="optionArea">
-	        <div class="content-block" style="margin-top:25px">
+	        <div class="content-block" style="margin-top:25px;">
 	            <p class="buttons-row">
 	                <a onclick="reportFinish(${task.id!})" class="button">任务完成</a><span class="desp"></span>
 	                <a onclick="reportNotconnet(${task.id!})" class="button">飞机失联</a>
 	            </p>
 	            <p class="buttons-row">
-	                <a onclick="emergencyback(${task.id!})" class="button">紧急返航</a>
+	                <a onclick="emergencyback(${task.id!})" id="btns" class="button" style="pointer-events:none">紧急返航</a>
 	            </p>
 			</div>
 			

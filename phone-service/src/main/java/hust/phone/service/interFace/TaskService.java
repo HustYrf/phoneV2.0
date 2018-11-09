@@ -17,6 +17,7 @@ public interface TaskService {
 	Task selectOneExeTask(Task task);
 	
 	int getTaskStatus(Task task);
-	
 
+	boolean updateTaskByTask(Task task1);
+	
 }

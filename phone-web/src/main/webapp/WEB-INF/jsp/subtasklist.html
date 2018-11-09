@@ -34,7 +34,12 @@
                 <div class="card-content-inner">
                                                         放飞员：${taskpojo.userAName!}
                     <br> 接机员：${taskpojo.userZName!}
-                    <br> 无人机编号：${taskpojo.deviceid!}
+                    <br> 
+                    	<#if taskpojo.task.status == 2>
+                    	     <a class="editUav" onclick="editUav(${taskpojo.task.id!})">无人机编号：${taskpojo.deviceid!}</a>
+                    	<#else>
+                    	              无人机编号：${taskpojo.deviceid!}
+                    	</#if>                              
                     <br>无人机名称：${taskpojo.uavname!}
                     <br> 飞行路径名称：${taskpojo.pathname!}
                     <br> 计划开始时间：${taskpojo.task.planstarttime?datetime!}
@@ -49,7 +54,7 @@
             	            <div><a class="button button-fill" 
             	                onclick="rollbackTask(${taskpojo.task.id!})">退回任务</a></div>
             	            <div style="white-spacing:nowrap;"><a class="button button-fill"  
-            	                onclick="ensureTask(${taskpojo.task.id!})">放飞员 > 确认</a></div>
+            	                onclick="flyEnsureTask(${taskpojo.task.id!})">放飞员 > 确认</a></div>
 						<#elseif taskpojo.task.status == 4 >
 						    <div><a class="button button-fill" 
             	                onclick="rollbackTask(${taskpojo.task.id!})">退回任务</a></div>
@@ -73,14 +78,13 @@
             	                 onclick="rollbackTask(${taskpojo.task.id!})">退回任务</a></div>
 						<#elseif taskpojo.task.status==3 >
 						    <div style="white-spacing:nowrap;"><a class="button button-fill"  
-						         onclick="ensureTask(${taskpojo.task.id!})">接机员  > 确认</a></div>
+						         onclick="revEnsureTask(${taskpojo.task.id!})">接机员  > 确认</a></div>
 						<#elseif taskpojo.task.status == 5 || taskpojo.task.status == 6 || taskpojo.task.status == 7 || taskpojo.task.status == 8 || taskpojo.task.status == 9>
 						   <div><a  class="button button-fill  external" 
 						    href='${s.base}/toPlane.action?id=${taskpojo.task.id!}'>跳转无人机操纵</a> </div>
 					    <#else>
 					        <div><a class="button button-fill disabled button-success" >暂不需要操作</a></div>	
-					    </#if>
-						<!--<a onclick="getTaskDetail(${taskpojo.task.taskid!})">任务详情&nbsp;&nbsp;<span class="icon icon-right"></span></a>  -->
+					    </#if>			
 				    </#if> 
             	</#if>
             	</#if>
