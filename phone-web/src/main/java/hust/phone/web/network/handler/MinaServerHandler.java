@@ -306,6 +306,8 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		String lat = unpack.GPS_LAT/(10000000.0)+"";
 		short mode =unpack.BASEMODE;
 		long uavId = packet.SND_DEVICE_ID;
+		float GPS_HDG =unpack.GPS_HDG;
+		byte type[]= SlpPacket.IntToByte((int)packet.SND_DEVICE_ID);
 		String content = ConstantUtils.MSG_TANS_STATUS+":"+lon+","+lat;
 		switch (mode) {
 		case 0:
@@ -368,9 +370,17 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		}
 		if(unpack.GPS_HDG<0)
 		{
-			unpack.GPS_HDG = -unpack.GPS_HDG +180;
+			GPS_HDG = unpack.GPS_HDG +360;
 		}
-		content = content+":"+unpack.GPS_HDG;
+		if(type[0]==2)
+		{
+			//思洛普
+			GPS_HDG = unpack.GPS_HDG/100;
+			unpack.GPS_ELV = unpack.GPS_ELV/1000;
+			unpack.AR_SPD = unpack.AR_SPD*1000;
+			
+		}
+		content = content+":"+GPS_HDG;
 		String content2 = content+":"+unpack.AR_SPD+":"+unpack.GR_SPD+":"+lon+":"+lat+":"+unpack.GPS_ELV+":"+
 				+unpack.HORI_AGL+":"+unpack.VERT_AGL;
 		//将数据推送给手机web客户端,并保存在数据库中
