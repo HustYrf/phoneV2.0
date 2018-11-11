@@ -15,6 +15,14 @@
 
 <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
 <script	src="http://webapi.amap.com/maps?v=1.4.6&key=82f9e75505b649be9ab81a45ae34aa14"></script>
+<style type="text/css">
+.linebtn{
+    pointer-events:none !important;
+    color:#A1A1A1 !important;
+    border-color:#A1A1A1 !important;
+}
+
+</style>
 </head>
 <body>
 <input type="hidden" id="base" value="${s.base}"><br/>
@@ -64,7 +72,7 @@
                         path: planePath.pathdata, //设置线覆盖物路径
                         strokeColor: "#FF0000", //线颜色
                         strokeOpacity: 1, //线透明度
-                        strokeWeight: 5, //线宽
+                        strokeWeight: 2, //线宽
                         strokeStyle: "solid", //线样式
                         strokeDasharray: [10, 5]
                         //补充线样式
@@ -83,20 +91,6 @@
 		    	   
                 });
             
-        		         	
-    		   /* map.remove(planeMarker);
-	    	   planeMarker = new AMap.Marker({
-                    //map: map,
-                    position: data,
-                    icon: new AMap.Icon({
-                        size: new AMap.Size(32, 32), //图标大小
-                        image: "images/warn-32.png",
-                        offset: new AMap.Pixel(-32,32) ,// 相对于基点的偏移位置
-                    }),
-                });
-	    	   map.setCenter(data); 
-	    	   map.add(planeMarker); */	    	                      		                        	
-    		           
            </script>
 		</div>
 
@@ -132,8 +126,8 @@
 	                <a onclick="reportFinish(${task.id!})" class="button">任务完成</a><span class="desp"></span>
 	                <a onclick="reportNotconnet(${task.id!})" class="button">飞机失联</a>
 	            </p>
-	            <p class="buttons-row">
-	                <a onclick="emergencyback(${task.id!})" id="btns" class="button" style="pointer-events:none">紧急返航</a>
+	            <p class="buttons-row">	              
+	                <a onclick="emergencyback(${task.id!})" id="btns" class="button linebtn" style="border-radius:.25rem">紧急返航</a>	              
 	            </p>
 			</div>
 			

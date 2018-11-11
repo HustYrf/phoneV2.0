@@ -23,7 +23,7 @@ var WebSocketUtil = {
 	connect : function() {
 		
 		//WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:7020");
-		WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
+		WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:7020");
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
 		WebSocketUtil.webSocket.onmessage = WebSocketUtil.onMessage;
 		WebSocketUtil.webSocket.onclose = WebSocketUtil.onClose;
@@ -42,8 +42,6 @@ var WebSocketUtil = {
 			var content = plane.value+WebTypeUtil.LANDUSERLOGIN;
 		}
 		
-		//让按钮可点击
-		$("#btns").css("pointer-events","auto");
 		
 		WebSocketUtil.webSocket.send(content);
 	},
@@ -102,7 +100,7 @@ var WebSocketUtil = {
 	},
 	disConnection : function() {
 		//如果断开连接的话
-		$("#btns").css("pointer-events","none");
+		$(".buttons-row .button").addClass("linebtn");
 	},
 	print: function (text) {
          log.innerHTML = (new Date).getTime() + ": " + text + log.innerHTML;
@@ -143,9 +141,9 @@ var PlaneHandleServiceUtil ={
                 //map: map,
                 position:  data,
                 icon: new AMap.Icon({
-                size: new AMap.Size(30, 30), //图标大小
+                size: new AMap.Size(32, 32), //图标大小
                 image: "images/uav-32.png",
-                offset: new AMap.Pixel(-15,-15) ,// 相对于基点的偏移位置
+                offset: new AMap.Pixel(-16,-16) ,// 相对于基点的偏移位置
                 }),
                 angle:GPS_HDG,
             });
@@ -241,10 +239,11 @@ var PlaneHandleServiceUtil ={
 		},
 		handleLogin:function(){
 			$.toast("无人机登录");
+			//让按钮可点击
+			$(".buttons-row .button").removeClass("linebtn");
+				
 		}
-		
-		
-		
+			
 }
 var HomeChatOperateUtil = {
 	ready : function(){

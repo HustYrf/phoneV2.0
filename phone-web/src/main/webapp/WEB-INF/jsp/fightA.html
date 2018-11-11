@@ -11,12 +11,20 @@
 <link rel="stylesheet" href="${s.base}/res/light7/css/sm.min.css">
 <link rel="stylesheet" href="${s.base}/res/css/phone.css">
 <link rel="stylesheet" href="${s.base}/res/css/main1119.css" />
-<link rel="stylesheet"
-	href="${s.base}/res/light7/css/light7-swiper.min.css">
+<link rel="stylesheet" href="${s.base}/res/light7/css/light7-swiper.min.css">
 
 <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
 <script	src="http://webapi.amap.com/maps?v=1.4.6&key=82f9e75505b649be9ab81a45ae34aa14"></script>
 <!-- 这是放飞员界面 -->
+<script	src="http://webapi.amap.com/maps?v=1.4.6&key=82f9e75505b649be9ab81a45ae34aa14"></script>
+<style type="text/css">
+.linebtn{
+    pointer-events:none !important;
+    color:#A1A1A1 !important;
+    border-color:#A1A1A1 !important;
+}
+
+</style>
 </head>
 
 <body>
@@ -68,7 +76,7 @@
                         path: planePath.pathdata, //设置线覆盖物路径
                         strokeColor: "#FF0000", //线颜色
                         strokeOpacity: 1, //线透明度
-                        strokeWeight: 3, //线宽
+                        strokeWeight: 2, //线宽
                         strokeStyle: "solid", //线样式
                         strokeDasharray: [10, 5]
                         //补充线样式
@@ -117,16 +125,16 @@
 
 		<!-- 操作按钮 start -->
 		<div class="optionArea">
-			<div class="content-block" id="btns" style="margin-top:25px;pointer-events:none">
+			<div class="content-block" id="btns" style="margin-top:25px;">
 				<p class="buttons-row">
-					<a onclick="checkself(${task.id!})" class="button">自检完成</a><span class="desp"></span>
-					<a onclick="applyTaskoff(${task.id!})" class="button">申请起飞</a><span class="desp"></span>
-					<a onclick="cancel(${task.id!})" class="button">撤销起飞</a>
+					<a onclick="checkself(${task.id!})" class="button linebtn">自检完成</a><span class="desp"></span>
+					<a onclick="applyTaskoff(${task.id!})" class="button linebtn">申请起飞</a><span class="desp"></span>
+					<a onclick="cancel(${task.id!})" class="button linebtn">撤销起飞</a>
 				</p>
 				<p class="buttons-row">
 					<a onclick="reportNotconnet(${task.id!})" class="button">飞机失联</a><span class="desp"></span>
-					<a onclick="emergencyback(${task.id!})" class="button">紧急返航</a><span class="desp"></span>				
-					<a onclick="takeoff(${task.id!})" class="button">一键起飞</a>
+					<a onclick="emergencyback(${task.id!})" class="button linebtn">紧急返航</a><span class="desp"></span>				
+					<a onclick="takeoff(${task.id!})" class="button linebtn">一键起飞</a>
 				</p>
 				<input id="option" type="hidden" value="" />
 			</div>
