@@ -35,7 +35,7 @@
                                                         放飞员：${taskpojo.userAName!}
                     <br> 接机员：${taskpojo.userZName!}
                     <br> 
-                    	<#if taskpojo.task.status == 2>
+                    	<#if taskpojo.task.status == 2 && taskpojo.role == 1>
                     	     <a class="editUav" onclick="editUav(${taskpojo.task.id!})">无人机编号：${taskpojo.deviceid!}</a>
                     	<#else>
                     	              无人机编号：${taskpojo.deviceid!}

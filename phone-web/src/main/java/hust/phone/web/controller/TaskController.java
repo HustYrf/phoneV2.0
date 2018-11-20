@@ -91,26 +91,31 @@ public class TaskController {
 		int userid = user.getId();
 		Task task2 = taskServiceImpl.getTaskByTask(task);
 
-		String reString = "";
-		if (task2.getUserA() == userid) { // 如果是用户在该任务是放飞者
+		
+		String result="";
+		
+		if (task2.getUserA() == userid) { // 如果是用户在该任务是放飞员
 
-			if (taskServiceImpl.setStatusTaskByTask(task, 3) == true) {
-				reString = "放飞员确认任务成功!";
-			} else {
-				reString = "放飞员确认任务失败!";
+			if(task2.getUavId()==null || task2.getUavId()==0) {
+				result =  JsonView.render(0, "无人机不可为空");
+			}else {
+				if (taskServiceImpl.setStatusTaskByTask(task, 3) == true) {
+					result = JsonView.render(1,"放飞员确认任务成功!");
+				} else {
+					result = JsonView.render(1,"放飞员确认任务失败!");				
+				}
 			}
-
 		}
-		if (task2.getUserZ() == userid) { // 如果是用户在该任务是接收者
+		if (task2.getUserZ() == userid) { // 如果是用户在该任务是接机员
 
 			if (taskServiceImpl.setStatusTaskByTask(task, 4) == true) {
-				reString = "接收员确认任务成功!";
-			} else {
-				reString = "接收员确认任务失败！";
+				result = JsonView.render(1,"接收员确认任务成功!");
+			} else {			
+				result = JsonView.render(1,"接收员确认任务失败！");
 			}
 
 		}
-		return JsonView.render(1, reString);
+		return result;
 	}
 
 	// 申请起飞
@@ -564,6 +569,15 @@ public class TaskController {
 		} else {
 			return JsonView.render(0, "无人机未起飞，不可放飞！");
 		}
+	}
+	
+	@RequestMapping(value = "/queryTaskStatus", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String queryTaskStatus(Task task) {
+		
+		Task task2 = taskServiceImpl.getTaskByTask(task);
+			
+		return ""+task2.getStatus();
 	}
 
 	// 报告完成

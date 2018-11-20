@@ -22,8 +22,8 @@ var WebSocketUtil = {
 	isActive : true,
 	connect : function() {
 		
-		//WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:7020");
-		WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:7020");
+		WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
+		//WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:7020");
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
 		WebSocketUtil.webSocket.onmessage = WebSocketUtil.onMessage;
 		WebSocketUtil.webSocket.onclose = WebSocketUtil.onClose;
@@ -100,7 +100,7 @@ var WebSocketUtil = {
 	},
 	disConnection : function() {
 		//如果断开连接的话
-		$(".buttons-row .button").addClass("linebtn");
+		//$(".buttons-row .button").addClass("linebtn");
 	},
 	print: function (text) {
          log.innerHTML = (new Date).getTime() + ": " + text + log.innerHTML;
@@ -110,6 +110,7 @@ var WebSocketUtil = {
 var PlaneHandleServiceUtil ={
 		handleStatus:function(message,status,GPS_HDG)
 		{
+			
 			if(status =="有异常" )
 			{
 				$.ajax({
@@ -127,6 +128,11 @@ var PlaneHandleServiceUtil ={
 		            }
 		        });
 			}
+			
+//			if(status=="暂无"){
+//				$(".buttons-row .button").addClass("linebtn");
+//			}
+			
 			//显示无人机的状态信息
 			planeStatus.innerHTML = status;
 			var mes = message.split(",");
@@ -240,7 +246,7 @@ var PlaneHandleServiceUtil ={
 		handleLogin:function(){
 			$.toast("无人机登录");
 			//让按钮可点击
-			$(".buttons-row .button").removeClass("linebtn");
+			//$(".buttons-row .button").removeClass("linebtn");
 				
 		}
 			
