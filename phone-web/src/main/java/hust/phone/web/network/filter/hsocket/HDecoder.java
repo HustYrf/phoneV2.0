@@ -201,32 +201,75 @@ public class HDecoder extends CumulativeProtocolDecoder{
 //		return false;
 		
 
-		 in.mark();//标记当前的position,以便后继的reset操作能够恢复position位置
-		 int head =6;
-		 for(int i=0;i<head;i++)
-		 {
-			 in.get();
-		 }
-		 byte revlen []=new byte[4];
-		 in.get(revlen);
-		 byte sndlen[] =new byte[4];
-		 sndlen[3]=revlen[0];
-		 sndlen[2]=revlen[1];
-		 sndlen[1]=revlen[2];
-		 sndlen[0]=revlen[3];
-		 
-		 //获取长度
-		 long len = (SlpPacket.Byte2Int(sndlen)&0x0FFFFFFFFl)+8;
-		 in.reset();
-		//重置到position位置
-		 byte [] encoding = new byte[(int) len];
-		 in.get(encoding, 0, (int)(len));
-		 SlpPacket packet = SlpPacket.parse(encoding);
-		
-		 if(packet!=null)
-		 {
-			 out.write(packet);
-		 }
-		 return false;
+		if(in.remaining()>0)
+		{
+			in.mark();//标记当前的position,以便后继的reset操作能够恢复position位置
+			
+				 
+			 int head =6;
+			 for(int i=0;i<head;i++)
+			 {
+				 in.get();
+			 }
+			 byte revlen []=new byte[4];
+			 in.get(revlen);
+			 byte sndlen[] =new byte[4];
+			 sndlen[3]=revlen[0];
+			 sndlen[2]=revlen[1];
+			 sndlen[1]=revlen[2];
+			 sndlen[0]=revlen[3];
+			 
+			 //获取长度
+			 long len = (SlpPacket.Byte2Int(sndlen)&0x0FFFFFFFFl)+8;
+			 in.reset();
+			//重置到position位置
+			 if(len>in.remaining())
+			 {
+				//消息内容不够，则继续读
+				 return false;
+			 }
+			 else
+			 {
+				 byte [] encoding = new byte[(int) len];
+				 in.get(encoding, 0, (int)(len));
+				 SlpPacket packet = SlpPacket.parse(encoding);
+				 if(packet!=null)
+				 {
+					 out.write(packet);
+				 }
+				if (in.remaining() > 0) {
+					// 如果读取内容后还粘了包，进行下一次解析
+						return true;
+				}
+		}
+	}
+		return false;
+//		 in.mark();//标记当前的position,以便后继的reset操作能够恢复position位置
+//		 int head =6;
+//		 for(int i=0;i<head;i++)
+//		 {
+//			 in.get();
+//		 }
+//		 byte revlen []=new byte[4];
+//		 in.get(revlen);
+//		 byte sndlen[] =new byte[4];
+//		 sndlen[3]=revlen[0];
+//		 sndlen[2]=revlen[1];
+//		 sndlen[1]=revlen[2];
+//		 sndlen[0]=revlen[3];
+//		 
+//		 //获取长度
+//		 long len = (SlpPacket.Byte2Int(sndlen)&0x0FFFFFFFFl)+8;
+//		 in.reset();
+//		//重置到position位置
+//		 byte [] encoding = new byte[(int) len];
+//		 in.get(encoding, 0, (int)(len));
+//		 SlpPacket packet = SlpPacket.parse(encoding);
+//		
+//		 if(packet!=null)
+//		 {
+//			 out.write(packet);
+//		 }
+//		 return false;
 	}
 }

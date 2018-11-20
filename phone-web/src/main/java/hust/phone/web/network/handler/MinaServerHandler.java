@@ -300,14 +300,24 @@ public class MinaServerHandler extends IoHandlerAdapter {
 	private void processMessageStatus(IoSession session, SlpPacket packet) {
 		
 		//获取飞行状态
-		System.out.println("获取飞行");
+		byte type[]= SlpPacket.IntToByte((int)packet.SND_DEVICE_ID);
+		if(type[0]==3)
+		{
+			//智能鸟解析
+			System.out.println("智能鸟获取飞行");
+			
+		}else if(type[0]==2){
+			//思洛普解析
+			System.out.println("思洛普获取飞行");
+		}
+		
 		SlpMsgStatus unpack = (SlpMsgStatus) packet.unpack();
 		String lon = unpack.GPS_LON/(10000000.0)+"";
 		String lat = unpack.GPS_LAT/(10000000.0)+"";
 		short mode =unpack.BASEMODE;
 		long uavId = packet.SND_DEVICE_ID;
 		float GPS_HDG =unpack.GPS_HDG;
-		//byte type[]= SlpPacket.IntToByte((int)packet.SND_DEVICE_ID);
+		
 		String content = ConstantUtils.MSG_TANS_STATUS+":"+lon+","+lat;
 		switch (mode) {
 		case 0:

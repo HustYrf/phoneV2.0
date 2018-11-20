@@ -78,5 +78,6 @@
 		<property name="receiveBufferSize" value="1048576"/>
 		<property name="bothIdleTime" value="20"/> 
 		<property name="keepAlive" value="true"/>
+		<property name="tcpNoDelay" value="true"/>
 	</bean>
 </beans>
