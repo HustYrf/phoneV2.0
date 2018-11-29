@@ -6,10 +6,11 @@ import hust.phone.web.network.SLP.SlpPayload;
 
 public class SlpMsgStatus implements SlpAbstractMessage {
 	
-	public static final int MSG_LENGTH = 33;
+	public static final int MSG_LENGTH = 37;
 	public static final short MSG_TYPE = 1;
 	public short BASEMODE;
 	public long CUSTMODE;
+	public long MISSION_ID;
 	public short SYS_STATUS;
 	public short BATT_REMN = 255;
 	public float AR_SPD = -1.0f;
@@ -32,6 +33,7 @@ public class SlpMsgStatus implements SlpAbstractMessage {
 		payload.resetIndex();
 		this.BASEMODE = payload.getUnsignedByte();
 		this.CUSTMODE = payload.getUnsignedInt();
+		this.MISSION_ID = payload.getUnsignedInt();
 		this.SYS_STATUS = payload.getUnsignedByte();
 		this.BATT_REMN = payload.getUnsignedByte();
 		this.AR_SPD = payload.getFloat();
@@ -50,6 +52,7 @@ public class SlpMsgStatus implements SlpAbstractMessage {
 		packet.MSG_TYPE = MSG_TYPE;
 		packet.payload.putUnsignedByte(BASEMODE);
 		packet.payload.putUnsignedInt(CUSTMODE);
+		packet.payload.putUnsignedInt(MISSION_ID);
 		packet.payload.putUnsignedByte(SYS_STATUS);
 		packet.payload.putUnsignedByte(BATT_REMN);
 		packet.payload.putFloat(AR_SPD);

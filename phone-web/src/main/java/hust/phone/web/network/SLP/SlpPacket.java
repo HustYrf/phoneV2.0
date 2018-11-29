@@ -8,6 +8,10 @@ import hust.phone.web.network.SLP.message.SlpMsgHandle;
 import hust.phone.web.network.SLP.message.SlpMsgHandleRes;
 import hust.phone.web.network.SLP.message.SlpMsgLogin;
 import hust.phone.web.network.SLP.message.SlpMsgLoginRes;
+import hust.phone.web.network.SLP.message.SlpMsgPutLines;
+import hust.phone.web.network.SLP.message.SlpMsgPutTaskNum;
+import hust.phone.web.network.SLP.message.SlpMsgSearchLines;
+import hust.phone.web.network.SLP.message.SlpMsgSearchLinesDetail;
 import hust.phone.web.network.SLP.message.SlpMsgStatus;
 import hust.phone.web.network.common.ConstantUtils;
 
@@ -17,8 +21,11 @@ public class SlpPacket implements Serializable{
 	
 	// @Fields serialVersionUID : TODO
 	private static final long serialVersionUID = 9111313676930333810L;
+	private static final short MSG_VER_VALUE = 0x01;
 	//消息前导字6
 	public short HEAD[] = new short[6];
+	//消息接口版本号 1
+	public short MSG_VER ;
 	//消息长度4
 	public long MSG_LEN;
 	//消息序列号2
@@ -47,7 +54,8 @@ public class SlpPacket implements Serializable{
 		HEAD[3] = 0x55;
 		HEAD[4] = 0x41;
 		HEAD[5] = 0x56;
-		this.MSG_LEN = payloadLength+31;
+		this.MSG_LEN = payloadLength+32;
+		this.MSG_VER = MSG_VER_VALUE;
 		payload = new SlpPayload(payloadLength);
 	
 	}
@@ -59,6 +67,9 @@ public class SlpPacket implements Serializable{
 		for (int k = 0; k < HEAD.length; k++) {
 			buffer[i++] = (byte) HEAD[k];
 		}
+		//添加版本号
+		buffer[i++] = (byte) MSG_VER;
+		
 		byte msg_len[] = IntToByte((int) MSG_LEN);
 		for(int k = msg_len.length-1; k >=0; k--)
 		{
@@ -94,14 +105,7 @@ public class SlpPacket implements Serializable{
 		for(int k = valtime.length-1; k >=0; k--)
 		{
 			buffer[i++] = valtime[k];
-		}
-//		byte check = 0;
-//		// 生成校验位
-//		for (int h = 0; h < i; h++) {
-//			check += buffer[h];
-//		}
-		//byte data []= new byte[buffer.length-8];
-		
+		}		
 		byte data[]=Arrays.copyOfRange(buffer, 6, i);
 		byte[] check=Uni16ToByte(SLpCRC.calculateCrc(data));
 		buffer[i++] = check[1];
@@ -114,33 +118,35 @@ public class SlpPacket implements Serializable{
 			if((encoding[0]&0x00ff)==0x54 &&(encoding[1]&0x00ff)==0x45 && (encoding[2]&0x00ff)==0x4c
 					&&(encoding[3]&0x00ff)==0x55&&(encoding[4]&0x00ff)==0x41&&(encoding[5]&0x00ff)==0x56 )
 			{
+				//消息版本号
+				
 				byte len []=new byte[4];
-				len[3]=encoding[6];
-				len[2]=encoding[7];
-				len[1]=encoding[8];
-				len[0]=encoding[9];
+				len[3]=encoding[7];
+				len[2]=encoding[8];
+				len[1]=encoding[9];
+				len[0]=encoding[10];
 				long c=Byte2Int(len)&0x0FFFFFFFFl;
 				//生成packet
-				SlpPacket slp = new SlpPacket((int)(c-31));
+				SlpPacket slp = new SlpPacket((int)(c-32));
 				byte seq[] =  new byte[2];
-				seq[1]=encoding[10];
-				seq[0]=encoding[11];
+				seq[1]=encoding[11];
+				seq[0]=encoding[12];
 				slp.MSG_SEQ=Byte2Uni16(seq)&0xFFFF;
 				byte rev []=new byte[4];
-				rev[3]=encoding[12];
-				rev[2]=encoding[13];
-				rev[1]=encoding[14];
-				rev[0]=encoding[15];
+				rev[3]=encoding[13];
+				rev[2]=encoding[14];
+				rev[1]=encoding[15];
+				rev[0]=encoding[16];
 				slp.REV_DEVICE_ID=Byte2Int(rev)&0x0FFFFFFFFl;
 				byte snd []=new byte[4];
-				snd[3]=encoding[16];
-				snd[2]=encoding[17];
-				snd[1]=encoding[18];
-				snd[0]=encoding[19];
+				snd[3]=encoding[17];
+				snd[2]=encoding[18];
+				snd[1]=encoding[19];
+				snd[0]=encoding[20];
 				slp.SND_DEVICE_ID=Byte2Int(snd)&0x0FFFFFFFFl;
-				slp.MSG_TYPE =(short) (encoding[20]&0xff);
+				slp.MSG_TYPE =(short) (encoding[21]&0xff);
 				
-				for(int i=21;i<encoding.length-18;i++)
+				for(int i=22;i<encoding.length-18;i++)
 				{
 					slp.payload.add(encoding[i]);
 				}
@@ -171,16 +177,16 @@ public class SlpPacket implements Serializable{
 				check[0]=encoding[encoding.length-1];
 				slp.CHECKSUM = Byte2Uni16(check)&0xFFFF;
 				
-//				byte data[]=Arrays.copyOfRange(encoding, 6, encoding.length-2);
-//				byte[] check1=Uni16ToByte(SLpCRC.calculateCrc(data));
-//				if(check[0]==check1[0]&& check[1]==check1[1])
-//				{
-//					return slp;
-//				}else
-//				{
-//					return null;
-//				}
-				return slp;
+				byte data[]=Arrays.copyOfRange(encoding, 6, encoding.length-2);
+				byte[] check1=Uni16ToByte(SLpCRC.calculateCrc(data));
+				if(check[0]==check1[0]&& check[1]==check1[1])
+				{
+					return slp;
+				}else
+				{
+					return null;
+				}
+				//return slp;
 			}
 			else {
 				return null;
@@ -200,6 +206,14 @@ public class SlpPacket implements Serializable{
 			return new SlpMsgLoginRes(this);
 		case ConstantUtils.MSG_HANDLERES:
 			return new SlpMsgHandleRes(this);
+		case ConstantUtils.MSG_PUTLINES:
+			return new SlpMsgPutLines(this);
+		case ConstantUtils.MSG_PUTTASKNUM:
+			return new SlpMsgPutTaskNum(this);
+		case ConstantUtils.MSG_SEARCHLINES:
+			return new SlpMsgSearchLines(this);
+		case ConstantUtils.MSG_SEARCHLINES_DETAIL:
+			return new SlpMsgSearchLinesDetail(this);
 		default:
 			return null;
 		}

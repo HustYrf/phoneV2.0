@@ -5,6 +5,10 @@ var WebTypeUtil=
 		SENDUSERFLYING:"send@flying",
 		SENDUSERRETURN:"send@return",
 		LANDUSERRETURN:"land@return",
+		MESSAGEPUTLINES:"send@putLines@",
+		MESSAGEPUTTASKNUM:"send@putTaskNum@",
+		MESSAGESEARCHLINES:"send@searchLines",
+		MESSAGESEARCHLINESDETAIL:"send@searchLinesDetail",
 		MESSAGETYPEFLYINGEXCUTE:"flyingExcute",
 		MESSAGETYPEFLYINGFAILURE:"flyingFailure",
 		MESSAGETYPEFLYINGWAIT:"flyingWait",
@@ -12,7 +16,9 @@ var WebTypeUtil=
 		MESSAGETYPEFRETURNFAILURE:"returnFailure",
 		MESSAGETYPEFRETURNWAIT:"returnWait",
 		MESSAGETYPESTATUS:"status",
-		MESSAGEPLANELOGIN:"planeLogin"
+		MESSAGEPLANELOGIN:"planeLogin",
+		MESSAGEPLANESEARCHRESULT:"planeLine"
+		
 		
 }
 
@@ -22,8 +28,8 @@ var WebSocketUtil = {
 	isActive : true,
 	connect : function() {
 		
-		WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
-		//WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
+		//WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
+		WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
 		WebSocketUtil.webSocket.onmessage = WebSocketUtil.onMessage;
 		WebSocketUtil.webSocket.onclose = WebSocketUtil.onClose;
@@ -79,6 +85,10 @@ var WebSocketUtil = {
 			break;	
 		case WebTypeUtil.MESSAGEPLANELOGIN:
 			PlaneHandleServiceUtil.handleLogin();
+			break;
+		case WebTypeUtil.MESSAGEPLANESEARCHRESULT:
+			//处理查询航线的结果
+			PlaneHandleServiceUtil.handleSearchLine(messageType[1],messageType[2],messageType[3]);
 			break;
 		}
 		
@@ -239,6 +249,10 @@ var PlaneHandleServiceUtil ={
 		},
 		handleLogin:function(){
 			$.toast("无人机登录");
+		},
+		handleSearchLine:function(ROUTE_ID,ROUTE_COUNT,ROUTE_STOCK_COUNT)
+		{
+			
 		}
 		
 		

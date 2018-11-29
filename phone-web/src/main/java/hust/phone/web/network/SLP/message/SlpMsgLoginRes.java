@@ -6,10 +6,11 @@ import hust.phone.web.network.SLP.SlpPayload;
 
 public class SlpMsgLoginRes implements SlpAbstractMessage {
 
-	public static final int MSG_LENGTH = 2;
+	public static final int MSG_LENGTH = 4;
 	public static final short MSG_TYPE = 5;
 	
 	public short UAV_LOGIN;
+	public int FLIGHT_ID = 0 ;
 	public short RES_RELULT;
 	
 	public SlpMsgLoginRes(SlpPacket slpPacket) {
@@ -22,6 +23,7 @@ public class SlpMsgLoginRes implements SlpAbstractMessage {
 	public SlpPacket pack() {
 		SlpPacket packet = new SlpPacket(MSG_LENGTH);
 		packet.payload.putUnsignedByte(UAV_LOGIN);
+		packet.payload.putUnsignedShort(FLIGHT_ID);
 		packet.payload.putUnsignedByte(RES_RELULT);
 		packet.MSG_TYPE = MSG_TYPE;
 		return packet;
@@ -30,6 +32,7 @@ public class SlpMsgLoginRes implements SlpAbstractMessage {
 	public void unpack(SlpPayload payload) {
 		payload.resetIndex();
 		this.UAV_LOGIN = payload.getUnsignedByte();
+		this.FLIGHT_ID = payload.getUnsignedShort();
 		this.RES_RELULT = payload.getUnsignedByte();
 	}
 	@Override
