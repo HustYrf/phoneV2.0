@@ -14,6 +14,11 @@
 <script type='text/javascript' src='${s.base}/js/jquery-3.3.1.min.js'></script>
 <script type='text/javascript' src='${s.base}/light7/js/light7.js' charset='utf-8'></script>
 <script type='text/javascript' src='${s.base}/light7/js/light7-swiper.js'	charset='utf-8'></script>
+<style type="text/css">
+ .modal-text-input{
+    text-align:center;
+ }
+</style>
 </head>
 <body >
 	<div class="page-group">
@@ -76,8 +81,61 @@
 		 exData(2);
 	}
 	
-	//ajax请求确认任务，若成功则刷新当前页面
-	function ensureTask(TaskId){
+    function editUav(TaskId){
+    	 $.prompt('请输入新无人机设备编号', function (value) {
+	         
+    		 $.ajax({
+		            type: "post",
+		            url: "${s.base}/editTaskUav.action",		       
+		            data: {
+		            	'id':TaskId,
+		            	'deviceId':value
+		             },		         
+		            success: function (result) {
+		            if(result.errcode=='1')	{
+			            	$.toast(result.message);
+			            	setTimeout(function(){
+			            		exData(0);
+			            		//window.location.reload();
+			            	}, 1500);
+			            }else{
+			            	$.toast(result.message);
+			            }	            			               
+		           }
+		      });
+    		 
+    		 
+	    	  //$.alert(value+"你好"+TaskId);
+	      });	
+    }
+	
+	//放飞员确认任务，若成功则刷新当前页面
+	function flyEnsureTask(TaskId){
+		
+		$.confirm('是否确认任务？', function () {	
+	 	      //给后台发送请求	 	 
+		 	 $.ajax({
+		            type: "post",
+		            url: "${s.base}/ensureTask.action",		       
+		            data: {
+		            	'id':TaskId,
+		             },		         
+		            success: function (result) {
+		            if(result.errcode=='1')	{
+			            	$.toast(result.message);
+			            	setTimeout(function(){
+			            		exData(0);
+			            	}, 1500);
+			            }else{
+			            	$.toast(result.message);
+			            }	            			               
+		           }
+		      });			
+	 	});
+	}
+	
+	//接机员确认任务，若成功则刷新当前页面
+	function revEnsureTask(TaskId){
 		
 		$.confirm('是否确认任务？', function () {	
 	 	      //给后台发送请求	 	 

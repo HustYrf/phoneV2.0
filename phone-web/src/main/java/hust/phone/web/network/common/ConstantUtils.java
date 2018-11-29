@@ -59,10 +59,12 @@ public interface ConstantUtils {
 	String MSG_TANS_STATUS_CLOSED = "关机";
 	String MSG_TANS_STATUS_EXCEPTION ="有异常";
 	String MSG_TANS_STATUS_PARACHATEOPENING = "开伞";
-	String MSG_TANS_STATUS_RETURN ="返航";
-	String MSG_TANS_STATUS_INIT = "暂无";
+	String MSG_TANS_STATUS_RETURN ="返航";;
 	//将无人机查询航线结果推送给送机
 	String MSG_PLANE_SEARCHRESULT = "planeLine";
+
+	String MSG_TANS_STATUS_INIT = "已连接";
+
 	// 判断客户端类型的CODE
 	String ATTR_CLIENT_CODE = "GET";
 	//服务器的设备类型

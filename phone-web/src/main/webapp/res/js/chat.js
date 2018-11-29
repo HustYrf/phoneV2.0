@@ -27,7 +27,6 @@ var WebSocketUtil = {
 	timeOuter : null,
 	isActive : true,
 	connect : function() {
-		
 		//WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
 		WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
@@ -47,6 +46,7 @@ var WebSocketUtil = {
 		{
 			var content = plane.value+WebTypeUtil.LANDUSERLOGIN;
 		}
+		
 		
 		WebSocketUtil.webSocket.send(content);
 	},
@@ -108,7 +108,8 @@ var WebSocketUtil = {
 		 
 	},
 	disConnection : function() {
-		
+		//如果断开连接的话
+		//$(".buttons-row .button").addClass("linebtn");
 	},
 	print: function (text) {
          log.innerHTML = (new Date).getTime() + ": " + text + log.innerHTML;
@@ -118,6 +119,7 @@ var WebSocketUtil = {
 var PlaneHandleServiceUtil ={
 		handleStatus:function(message,status,GPS_HDG)
 		{
+			
 			if(status =="有异常" )
 			{
 				$.ajax({
@@ -135,6 +137,11 @@ var PlaneHandleServiceUtil ={
 		            }
 		        });
 			}
+			
+//			if(status=="暂无"){
+//				$(".buttons-row .button").addClass("linebtn");
+//			}
+			
 			//显示无人机的状态信息
 			planeStatus.innerHTML = status;
 			var mes = message.split(",");
@@ -149,17 +156,15 @@ var PlaneHandleServiceUtil ={
                 //map: map,
                 position:  data,
                 icon: new AMap.Icon({
-                size: new AMap.Size(30, 30), //图标大小
-                image: "/images/warn-32.png",
-                offset: new AMap.Pixel(-15,-15) ,// 相对于基点的偏移位置
+                size: new AMap.Size(32, 32), //图标大小
+                image: "images/uav-32.png",
+                offset: new AMap.Pixel(-16,-16) ,// 相对于基点的偏移位置
                 }),
+                angle:GPS_HDG,
             });
 		    map.setCenter(data); 
 		    map.add(planeMarker);
-			//WebSocketUtil.print("[send] '" + message + "'\n");
-		    
-		    
-		    
+			//WebSocketUtil.print("[send] '" + message + "'\n");	 	   
 		    
 		},
 		handleFlyingExcute:function()
@@ -253,10 +258,11 @@ var PlaneHandleServiceUtil ={
 		handleSearchLine:function(ROUTE_ID,ROUTE_COUNT,ROUTE_STOCK_COUNT)
 		{
 			
+
+			//让按钮可点击
+			//$(".buttons-row .button").removeClass("linebtn");		
 		}
-		
-		
-		
+			
 }
 var HomeChatOperateUtil = {
 	ready : function(){

@@ -395,12 +395,24 @@ public class MinaServerHandler extends IoHandlerAdapter {
 	private void processMessageStatus(IoSession session, SlpPacket packet) {
 		
 		//获取飞行状态
-		System.out.println("获取飞行");
+		byte type[]= SlpPacket.IntToByte((int)packet.SND_DEVICE_ID);
+		if(type[0]==3)
+		{
+			//智能鸟解析
+			System.out.println("智能鸟获取飞行");
+			
+		}else if(type[0]==2){
+			//思洛普解析
+			System.out.println("思洛普获取飞行");
+		}
+		
 		SlpMsgStatus unpack = (SlpMsgStatus) packet.unpack();
 		String lon = unpack.GPS_LON/(10000000.0)+"";
 		String lat = unpack.GPS_LAT/(10000000.0)+"";
 		short mode =unpack.BASEMODE;
 		long uavId = packet.SND_DEVICE_ID;
+		float GPS_HDG =unpack.GPS_HDG;
+		
 		String content = ConstantUtils.MSG_TANS_STATUS+":"+lon+","+lat;
 		switch (mode) {
 		case 0:
@@ -461,8 +473,21 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		default:
 			break;
 		}
-		content = content+":"+unpack.GPS_HDG;
-		String content2 = content+":"+unpack.AR_SPD+":"+unpack.GR_SPD+":"+lon+":"+lat+":"+unpack.GPS_ELV+":"+unpack.HORI_AGL+":"+unpack.VERT_AGL;
+//		if(unpack.GPS_HDG<0)
+//		{
+//			GPS_HDG = unpack.GPS_HDG +360;
+//		}
+//		if(type[0]==2)
+//		{
+			//思洛普
+			GPS_HDG = unpack.GPS_HDG/100;
+			unpack.GPS_ELV = unpack.GPS_ELV/1000;
+			unpack.AR_SPD = unpack.AR_SPD*1000;
+			
+		//}
+		content = content+":"+GPS_HDG;
+		String content2 = content+":"+unpack.AR_SPD+":"+unpack.GR_SPD+":"+lon+":"+lat+":"+unpack.GPS_ELV+":"+
+				+unpack.HORI_AGL+":"+unpack.VERT_AGL;
 		//将数据推送给手机web客户端,并保存在数据库中
 		processResTOResult(content,packet,content2);
 		Uav uav = new Uav();
@@ -595,7 +620,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 //			{
 //				//登录消息
 //				//将无人机端的登录保存
-//				
+//
 //				if((IOSessionManager.getSessionPlane(packet.SND_DEVICE_ID)==null))
 //				{
 //					System.out.println("将无人机账号保存在session中");
@@ -624,13 +649,21 @@ public class MinaServerHandler extends IoHandlerAdapter {
 //					MAVLinkPacket pack = loginRes.pack();
 //					pack.sysid = uavId;
 //					byte[] encodePacket = pack.encodePacket();
-//					int i =1;
-//					while(i>0)
+//					int j=3;
+//					while(j>0)
 //					{
-//					session.write(IoBuffer.wrap(encodePacket) );
-//					System.out.println("发送登录应答");
-//					i--;
+//						session.write(IoBuffer.wrap(encodePacket) );
+//						j--;
+////						try {
+////							Thread.sleep(200);
+////						} catch (InterruptedException e) {
+////							// TODO Auto-generated catch block
+////							e.printStackTrace();
+////						}
 //					}
+//					System.out.println("发送登陆应答指令");
+//					
+//
 //				}
 //			}
 			

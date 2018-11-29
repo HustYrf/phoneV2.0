@@ -76,9 +76,9 @@
 	<!-- 配置SessionConfig -->
 	<bean id="sessionConfig" factory-bean="ioAcceptor" factory-method="getSessionConfig">
 		<property name="receiveBufferSize" value="1048576"/>
-		 <property name="sendBufferSize" value="1048576"/> 
-		<property name="bothIdleTime" value="10"/> 
-		<property name="keepAlive" value="true"/> 
-	    <property name="tcpNoDelay" value="true"/>
+		<property name="bothIdleTime" value="20"/> 
+		<property name="keepAlive" value="true"/>
+		<property name="tcpNoDelay" value="true"/>
+
 	</bean>
 </beans>

@@ -79,9 +79,11 @@ public class IOSessionManager {
 	{
 		if(isSessionMobile(session))
 		{
+			System.out.println("移除session");
 			mapSessionMobile.remove(getUserNoFromIoSessionToString(session));
 		}else
 		{
+			System.out.println("移除session");
 			mapSessionPlane.remove(getPlaneNoFromIoSessionToLong(session));
 		}
 	}

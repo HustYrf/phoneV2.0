@@ -13,14 +13,44 @@
 <link rel="stylesheet" href="${s.base}/res/css/main1119.css" />
 <link rel="stylesheet" href="${s.base}/res/light7/css/light7-swiper.min.css">
 
+<link rel="stylesheet" href="${s.base}/res/assets/hivideo.css" />
+<script type="text/javascript" src="${s.base}/res/assets/hivideo.js"></script>
+
 <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
 <script	src="http://webapi.amap.com/maps?v=1.4.6&key=82f9e75505b649be9ab81a45ae34aa14"></script>
+<style type="text/css">
+.linebtn{
+    pointer-events:none !important;
+    color:#A1A1A1 !important;
+    border-color:#A1A1A1 !important;
+}
+
+.main-wrapVideo{
+    display: none;
+    position:fixed;
+    width: 100%;
+    bottom:17%;
+    z-index: 998;  
+}
+
+.main-wrapVideo video{
+	padding-left:2px;
+	padding-right:2px;
+    width: 100%;
+}
+</style>
 </head>
 <body>
 <input type="hidden" id="base" value="${s.base}"><br/>
 <input type="hidden" id="plane" value="${uav.deviceid!}"><br/>
 <input type="hidden" id="peoplerole" value="${task.role!}"><br/>
 <input type="hidden" id="task" value="${task.id!}"><br/>
+
+<div class="main-wrapVideo" id="videoDiv">
+    <video ishivideo="true" autoplay="false" isrotate="true" autoHide="true">
+        <source src="${s.base}/res/assets/video.mp4" type="video/mp4" id="videosrc">
+    </video>
+</div>
 	<div class="page-group">
 		<header class="bar bar-nav">
 			<a class="button button-link button-nav pull-left extend"
@@ -44,8 +74,7 @@
 			<script>
 			var  planePath =${planepath};
         	var  planeMarker;
-        	var  pointlen = 0;
-        	
+            	
             var map = new AMap.Map('container', {
                 resizeEnable: true,
                 zoom: 16,
@@ -64,38 +93,25 @@
                         path: planePath.pathdata, //设置线覆盖物路径
                         strokeColor: "#FF0000", //线颜色
                         strokeOpacity: 1, //线透明度
-                        strokeWeight: 5, //线宽
+                        strokeWeight: 2, //线宽
                         strokeStyle: "solid", //线样式
                         strokeDasharray: [10, 5]
                         //补充线样式
                     });
                     planeMarker = new AMap.Marker({
 	                    //map: map,
-	                    position: planePath.pathdata[pointlen],
+	                    position: planePath.pathdata[0],
 	                    icon: new AMap.Icon({
 	                        size: new AMap.Size(32, 32), //图标大小
-	                        image: "images/warn-32.png",
+	                        image: "images/uav-32.png",
 	                        offset: new AMap.Pixel(0, -40) ,// 相对于基点的偏移位置
 	                    }),
+	                  //angle:GPS_HDG,  偏向角改变飞机旋转状态
 	                });
 		    	    map.add(planeMarker);  
 		    	   
                 });
             
-        		         	
-    		   /* map.remove(planeMarker);
-	    	   planeMarker = new AMap.Marker({
-                    //map: map,
-                    position: data,
-                    icon: new AMap.Icon({
-                        size: new AMap.Size(32, 32), //图标大小
-                        image: "images/warn-32.png",
-                        offset: new AMap.Pixel(-32,32) ,// 相对于基点的偏移位置
-                    }),
-                });
-	    	   map.setCenter(data); 
-	    	   map.add(planeMarker); */	    	                      		                        	
-    		           
            </script>
 		</div>
 
@@ -126,14 +142,15 @@
 
 		<!-- 操作按钮 start -->
 		<div class="optionArea">
-	        <div class="content-block" style="margin-top:25px">
+	        <div class="content-block" style="margin-top:25px;">
 	            <p class="buttons-row">
-	                <a onclick="reportFinish(${task.id!})" class="button">任务完成</a><span class="desp"></span>
-	                <a onclick="reportNotconnet(${task.id!})" class="button">飞机失联</a>
+	                <a onclick="reportFinish(${task.id!})" id="finishbtn" class="button linebtn">任务完成</a><span class="desp"></span>
+	                <a onclick="reportNotconnet(${task.id!})" id="notconnectbtn" class="button linebtn">飞机失联</a>
 	            </p>
-	            <p class="buttons-row">
-	                <a onclick="emergencyback(${task.id!})" class="button">紧急返航</a>
-	            </p>
+	            <p class="buttons-row">	              
+	                <a onclick="emergencyback(${task.id!})" id="emgbackbtn" class="button linebtn">紧急返航</a><span class="desp"></span>	              
+	            	<a onclick="videoOp(${task.id!})" id="videobtn" class="button linebtn">实时视频</a>
+	            </p>	         
 			</div>
 			
          </div>
@@ -158,6 +175,61 @@
 	    modal.style.display = "none";
 	}
 	
+    function videoOp() {
+
+        if($('#videoDiv').css('display') === 'none'){
+            $("#videoDiv").css('display','block');
+            $("#videobtn").text("关闭视频");
+            //ajax获取后台视频流
+
+        }else{
+            $("#videoDiv").css('display','none');
+            $("#videobtn").text("实时视频");
+            //关闭视频流
+        }
+    }
+    
+    
+    function btnStstus(status){	
+    	//$(".buttons-row .button").addClass("linebtn");
+    	//$(".buttons-row .button").removeClass("linebtn");
+    	
+    	if(status=='5' || status=='6' || status=='7' || status=='8'){
+    		//这几个状态都不能按按钮  
+    		$("#notconnectbtn").attr("class", "button linebtn");
+    		$("#emgbackbtn").attr("class", "button linebtn");
+    		$("#videobtn").attr("class", "button linebtn");
+    		$("#finishbtn").attr("class", "button linebtn");
+    		
+    	}
+    	if(status=='9'){
+    		$("#notconnectbtn").attr("class", "button");
+    		$("#emgbackbtn").attr("class", "button");
+    		$("#videobtn").attr("class", "button");
+    		$("#finishbtn").attr("class", "button");
+    	}
+    }
+    
+    setInterval("push()",3000);
+    
+    function push() {
+    	
+    	  var taskid = $("#task").val();
+	   	  $.ajax({
+	        type: "post",
+	        url: "${s.base}/queryTaskStatus.action", 
+	        timeout:6000,
+	        data:{
+	        	id:taskid
+	        },
+	        success: function (data) {
+	        	//console.log(data);
+	        	btnStstus(data); 	
+	        }
+	    }); 
+	}
+    	
+      
 	 //role=1则为放飞员，role=2则为接机员
     function modalsure(taskId,uavId,role){  
     	  //输入密码确认之后

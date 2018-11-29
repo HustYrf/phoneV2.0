@@ -91,26 +91,31 @@ public class TaskController {
 		int userid = user.getId();
 		Task task2 = taskServiceImpl.getTaskByTask(task);
 
-		String reString = "";
-		if (task2.getUserA() == userid) { // 如果是用户在该任务是放飞者
+		
+		String result="";
+		
+		if (task2.getUserA() == userid) { // 如果是用户在该任务是放飞员
 
-			if (taskServiceImpl.setStatusTaskByTask(task, 3) == true) {
-				reString = "放飞员确认任务成功!";
-			} else {
-				reString = "放飞员确认任务失败!";
+			if(task2.getUavId()==null || task2.getUavId()==0) {
+				result =  JsonView.render(0, "无人机不可为空");
+			}else {
+				if (taskServiceImpl.setStatusTaskByTask(task, 3) == true) {
+					result = JsonView.render(1,"放飞员确认任务成功!");
+				} else {
+					result = JsonView.render(1,"放飞员确认任务失败!");				
+				}
 			}
-
 		}
-		if (task2.getUserZ() == userid) { // 如果是用户在该任务是接收者
+		if (task2.getUserZ() == userid) { // 如果是用户在该任务是接机员
 
 			if (taskServiceImpl.setStatusTaskByTask(task, 4) == true) {
-				reString = "接收员确认任务成功!";
-			} else {
-				reString = "接收员确认任务失败！";
+				result = JsonView.render(1,"接收员确认任务成功!");
+			} else {			
+				result = JsonView.render(1,"接收员确认任务失败！");
 			}
 
 		}
-		return JsonView.render(1, reString);
+		return result;
 	}
 
 	// 申请起飞
@@ -129,6 +134,26 @@ public class TaskController {
 		return JsonView.render(1, "当前状态无法申请起飞！");
 
 	}
+	@RequestMapping(value = "/editTaskUav", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String editTaskUav(Task task,@RequestParam("deviceId")String deviceId) {
+		
+		Uav uav = uavServiceImpl.getUavByDeviceId(deviceId);
+		if(uav == null || uav.getId()==0) {
+			return JsonView.render(1, "该设备号的无人机不存在，修改失败！");
+		}
+		
+		Task task1 = taskServiceImpl.getTaskByTask(task);
+		task1.setUavId(uav.getId());
+		
+		if(taskServiceImpl.updateTaskByTask(task1)==true)
+		
+		    return JsonView.render(1, "无人机修改成功！");
+		
+		return JsonView.render(1, "修改失败！");
+	}
+	
+	
 
 	// 撤销起飞
 	@RequestMapping(value = "/cancelTaskoff", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
@@ -359,6 +384,9 @@ public class TaskController {
 
 	}
 
+	
+	
+	
 	// 紧急返航检查
 	@RequestMapping(value = "/emergencybackCheck", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
@@ -541,6 +569,15 @@ public class TaskController {
 		} else {
 			return JsonView.render(0, "无人机未起飞，不可放飞！");
 		}
+	}
+	
+	@RequestMapping(value = "/queryTaskStatus", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+	@ResponseBody
+	public String queryTaskStatus(Task task) {
+		
+		Task task2 = taskServiceImpl.getTaskByTask(task);
+			
+		return ""+task2.getStatus();
 	}
 
 	// 报告完成
