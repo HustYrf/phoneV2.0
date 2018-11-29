@@ -45,6 +45,12 @@
 		from K_Uav
 		where Status = #{status,jdbcType=INTEGER}
 	</select>
+	<select id="getUavByDeviceId" parameterType="java.lang.String" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from K_Uav
+		where DeviceId = #{deviceId,jdbcType=INTEGER}
+	</select>
 	<select id="getPlaneByPlane" parameterType="hust.phone.mapper.pojo.Uav"	resultMap="BaseResultMap">
 		select 
 		<include refid="Base_Column_List" />
