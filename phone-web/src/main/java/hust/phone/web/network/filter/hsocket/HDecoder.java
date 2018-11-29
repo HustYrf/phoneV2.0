@@ -1,16 +1,14 @@
 package hust.phone.web.network.filter.hsocket;
 
 
+import java.util.Arrays;
+
 //import java.util.Arrays;
 
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.CumulativeProtocolDecoder;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
-
-import com.MAVLink.MAVLinkPacket;
-import com.MAVLink.Parser;
-import com.MAVLink.Messages.MAVLinkPayload;
 
 import hust.phone.web.network.SLP.SlpPacket;
 
@@ -26,7 +24,46 @@ public class HDecoder extends CumulativeProtocolDecoder{
 
 	@Override
 	protected boolean doDecode(IoSession session, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
+		if (in.remaining() > 0) {
+			in.mark();// 标记当前的position,以便后继的reset操作能够恢复position位置
 
+			int head = 6;
+			for (int i = 0; i < head; i++) {
+				in.get();
+			}
+			in.get();
+			byte revlen[] = new byte[4];
+			in.get(revlen);
+			byte sndlen[] = new byte[4];
+			sndlen[3] = revlen[0];
+			sndlen[2] = revlen[1];
+			sndlen[1] = revlen[2];
+			sndlen[0] = revlen[3];
+
+			// 获取长度
+			long len = (SlpPacket.Byte2Int(sndlen) & 0x0FFFFFFFFl) + 8;
+			in.reset();
+			// 重置到position位置
+			if (len > in.remaining()) {
+				// 消息内容不够，则继续读
+				return false;
+			} else {
+				byte[] encoding = new byte[(int) len];
+				in.get(encoding, 0, (int) (len));
+				SlpPacket packet = SlpPacket.parse(encoding);
+				if (packet != null) {
+					out.write(packet);
+				}
+				if (in.remaining() > 0) {
+					// 如果读取内容后还粘了包，进行下一次解析
+					return true;
+				}
+			}
+		}
+		// 处理下一个包
+
+		return false;
+		// 旧版本
 //		if(in.remaining()>0)
 //		{
 //			in.mark();//标记当前的position,以便后继的reset操作能够恢复position位置
@@ -76,7 +113,7 @@ public class HDecoder extends CumulativeProtocolDecoder{
 //			}
 //			else {
 //				//智能鸟的解析
-//				System.out.println("进入智能鸟解析");
+//				//System.out.println("进入智能鸟解析");
 //				short len = (short) (in.getUnsigned()+2+6);
 //				
 //				//System.out.println(len);
@@ -127,7 +164,7 @@ public class HDecoder extends CumulativeProtocolDecoder{
 //			int b = in.get() &0xff;
 //			if(b!=0xfe)
 //			{
-//				 System.out.println("进入思洛普解析");
+//				 System.out.println("进入思罗普解析");
 //				 int head =5;
 //				 for(int i=0;i<head;i++)
 //				 {
@@ -148,14 +185,11 @@ public class HDecoder extends CumulativeProtocolDecoder{
 //				 byte [] encoding = new byte[(int) len];
 //				 in.get(encoding, 0, (int)(len));
 //				 SlpPacket packet = SlpPacket.parse(encoding);
-//
 //				 if(packet!=null)
 //				 {
 //					 //System.out.println(packet.toString());
 //					 out.write(packet);
 //				 }
-//
-//
 ////				if (in.remaining() > 0) {
 ////					// 如果读取内容后还粘了包，进行下一次解析
 ////						return true;
@@ -192,58 +226,17 @@ public class HDecoder extends CumulativeProtocolDecoder{
 //					 {
 //						 out.write(packet);
 //					 }
+//					 
 //				 }
-////				if (in.remaining() > 0) {
-////					// 如果读取内容后还粘了包，进行下一次解析
-////						return true;
+////				 if (in.remaining() > 0) {
+////					 // 如果读取内容后还粘了包，进行下一次解析
+////					 return true;
+////				 }
 //			 }
 //			//处理下一个包
 //		return false;
-		
-
-		if(in.remaining()>0)
-		{
-			in.mark();//标记当前的position,以便后继的reset操作能够恢复position位置
-			
-				 
-			 int head =6;
-			 for(int i=0;i<head;i++)
-			 {
-				 in.get();
-			 }
-			 byte revlen []=new byte[4];
-			 in.get(revlen);
-			 byte sndlen[] =new byte[4];
-			 sndlen[3]=revlen[0];
-			 sndlen[2]=revlen[1];
-			 sndlen[1]=revlen[2];
-			 sndlen[0]=revlen[3];
-			 
-			 //获取长度
-			 long len = (SlpPacket.Byte2Int(sndlen)&0x0FFFFFFFFl)+8;
-			 in.reset();
-			//重置到position位置
-			 if(len>in.remaining())
-			 {
-				//消息内容不够，则继续读
-				 return false;
-			 }
-			 else
-			 {
-				 byte [] encoding = new byte[(int) len];
-				 in.get(encoding, 0, (int)(len));
-				 SlpPacket packet = SlpPacket.parse(encoding);
-				 if(packet!=null)
-				 {
-					 out.write(packet);
-				 }
-				if (in.remaining() > 0) {
-					// 如果读取内容后还粘了包，进行下一次解析
-						return true;
-				}
-		}
-	}
-		return false;
+//	}
+//	return false;
 //		 in.mark();//标记当前的position,以便后继的reset操作能够恢复position位置
 //		 int head =6;
 //		 for(int i=0;i<head;i++)

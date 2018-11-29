@@ -33,6 +33,7 @@ public class UnifyProtocolCodecFilter extends ProtocolCodecFilter {
 
 	private void getClientType(ByteBuffer buf, IoSession session) {
 		//获得字节流里面的登录消息，无人机登录和用户登录
+
 		//short head = (short)(buf.get(0)&0xff);
 		short MSG_TYPE =(short) (buf.get(20)&0xff);
 		String requestInfo  = new String(buf.array(),0,buf.limit(),UTF_8);

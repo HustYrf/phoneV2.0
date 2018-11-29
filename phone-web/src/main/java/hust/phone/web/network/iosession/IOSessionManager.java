@@ -13,7 +13,7 @@ public class IOSessionManager {
 	 * 获取所有用户的session，分为无人机端和手机端的session
 	 */
 	public static Map<Long,IoSession> mapSessionPlane = new HashMap<Long,IoSession>();
-	private static Map<String,IoSession> mapSessionMobile = new HashMap<String,IoSession>();
+	public static Map<String,IoSession> mapSessionMobile = new HashMap<String,IoSession>();
 	
 	//添加
 	public static void addSession(IoSession session)

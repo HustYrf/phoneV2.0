@@ -2,6 +2,7 @@ package hust.phone.web.network.SLP;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -12,8 +13,12 @@ import com.MAVLink.Parser;
 import com.MAVLink.common.msg_new_login_res;
 
 import hust.phone.web.network.SLP.message.SlpMsgLogin;
+import hust.phone.web.network.SLP.message.SlpMsgPutLines;
+import hust.phone.web.network.SLP.message.SlpMsgSearchLines;
 import hust.phone.web.network.SLP.message.SlpMsgStatus;
+import hust.phone.web.network.SLP.message.SlpPoint;
 import hust.phone.web.network.common.ConstantUtils;
+import hust.phone.web.network.common.PointSToWayEncodingUtils;
 
 
 public class test {
@@ -173,7 +178,72 @@ public class test {
 		SlpPacket parse = SlpPacket.parse(b);
 		SlpMsgLogin login = (SlpMsgLogin) parse.unpack();
 		System.out.println(login.toString());
-
+	
+	}
+	@Test
+	public void test6()
+	{
+		SlpMsgSearchLines msg = new SlpMsgSearchLines();
+		msg.ROUTE_ID =111;
+		msg.ROUTE_COUNT = 10001;
+		msg.ROUTE_STOCK_COUNT = 100;
+		msg.RES_RELULT = 1;
+		System.out.println(msg.toString());
+		SlpPacket pack = msg.pack();
+		byte[] encoding = pack.encoding();
+		System.out.println(Arrays.toString(encoding));
+		SlpPacket parse = SlpPacket.parse(encoding);
+		System.out.println(parse.toString());
+		SlpMsgSearchLines msg2 =(SlpMsgSearchLines) parse.unpack();
+		System.out.println(msg2.toString());
+	}
+	@Test
+	public void test7()
+	{
+		SlpPoint point1 = new SlpPoint();
+		point1.WAYPOINT_TYPE = 1;
+		point1.WAYPOINT_NUM = 1;
+		point1.WP_LAT = 1111111l;
+		point1.WP_LNG = 222222222l;
+		point1.WP_ALT = 333333l;
+		
+		SlpPoint point2 = new SlpPoint();
+		point2.WAYPOINT_TYPE = 2;
+		point2.WAYPOINT_NUM = 2;
+		point2.WP_LAT = 111112l;
+		point2.WP_LNG = 22222422l;
+		point2.WP_ALT = 333332l;
+		
+		ArrayList<SlpPoint> list = new ArrayList<SlpPoint>();
+		list.add(point1);
+		list.add(point2);
+		
+		byte[] pointSToWayEncoding = PointSToWayEncodingUtils.PointSToWayEncoding(list);
+		SlpMsgPutLines msg  = new SlpMsgPutLines();
+		msg.Route_ID = 23434;
+		msg.ROUTE_COUNT = 2;
+		msg.ROUTE_MSG_COUNT = 2;
+		msg.POINTS= new short[msg.ROUTE_MSG_COUNT * 15];
+		for(int i= 0;i<pointSToWayEncoding.length;i++)
+		{
+			msg.POINTS[i] = (short) (pointSToWayEncoding[i]&0xff);
+		}
+		SlpPacket pack = msg.pack();
+		pack.REV_DEVICE_ID =2222l;
+		pack.SND_DEVICE_ID = 33333l;
+		byte[] encoding = pack.encoding();
+		System.out.println(Arrays.toString(encoding));
+		
+		SlpPacket parse = SlpPacket.parse(encoding);
+		System.out.println(parse.toString());
+		SlpMsgPutLines unpack = (SlpMsgPutLines) parse.unpack();
+		System.out.println(unpack.toString());
+		
+		ArrayList<SlpPoint> list2 = PointSToWayEncodingUtils.WayToPoints((unpack.POINTS));
+		for(SlpPoint l:list2)
+		{
+			System.out.println(l.toString());
+		}
 		
 	}
 }
