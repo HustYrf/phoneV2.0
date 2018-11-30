@@ -130,45 +130,17 @@ public class test {
 	@Test
 	public void test4()
 	{
-		msg_new_login_res loginRes = new msg_new_login_res();
-		loginRes.HEAD[0]= 0x54;
-		loginRes.HEAD[1]=0x45;
-		loginRes.HEAD[2]=0x4C;
-		loginRes.HEAD[3]=0x55;
-		loginRes.HEAD[4]=0x41;
-		loginRes.HEAD[5]=0x56;
-		loginRes.MSG_TYPE=5;
-		loginRes.MSG_LEN =33;
-		loginRes.REV_DEVICE_ID =0x03010001;
-		loginRes.SND_DEVICE_ID = 0x03010001;
-		loginRes.RES_RELULT = 1;
-		loginRes.UAV_LOGIN = 1;
-		loginRes.MSG_TIME = 0;
-		loginRes.VAL_TIME = 0;
-		loginRes.CHECKSUM = 0;
-		MAVLinkPacket pack = loginRes.pack();
-		pack.sysid = 1;
-		byte[] encodePacket = pack.encodePacket();
-		System.out.println(Arrays.toString(encodePacket));
-		 Parser parser = new Parser();
-		//先读出包的长度
-		 int plen = encodePacket[1] & 0x00FF;
-		 int len = plen +2 +6;
-		// System.out.println(len);
-		 //byte [] lenbuf = new  byte[len];
-		 for(int i=0;i<len-1;i++)
-		 {
-			 int code = encodePacket[i] & 0x00FF;
-			 parser.mavlink_parse_char(code);
-		 }
-		 MAVLinkPacket m = parser.mavlink_parse_char(encodePacket[len-1]  & 0x00FF);
-		 msg_new_login_res login=(msg_new_login_res) m.unpack();
-		 long s =login.SND_DEVICE_ID;
-		 byte type[]= SlpPacket.IntToByte((int)s);
-		 int uavId = (type[2] &0xff)*16+(type[3] &0xff);
-		 
-		System.out.println(login.toString());
-		System.err.println(uavId);
+		SlpMsgStatus msg = new SlpMsgStatus();
+		msg.CUSTMODE= 1;
+		msg.GPS_ELV=1111;
+		msg.GPS_HDG=23;
+		SlpPacket pack = msg.pack();
+		pack.SND_DEVICE_ID = 1;
+		byte[] encoding = pack.encoding();
+		SlpPacket parse = SlpPacket.parse(encoding);
+		System.out.println(parse.toString());
+		SlpMsgStatus msg2=(SlpMsgStatus) parse.unpack();
+		System.out.println(msg2.toString());
 	}
 	
 	@Test
@@ -245,5 +217,18 @@ public class test {
 			System.out.println(l.toString());
 		}
 		
+	}
+	@Test
+	public void test8()
+	{
+		ArrayList<Integer> list = new ArrayList<Integer>();
+		list.add(1);
+		list.add(2);
+		list.add(3);
+		System.out.println(list.size());
+		list.removeAll(list);
+		System.out.println(list.size());
+		list.add(1);
+		System.out.println(list.size());
 	}
 }

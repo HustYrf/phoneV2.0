@@ -30,12 +30,18 @@ public interface ConstantUtils {
 	String Mobile_SEARCHLINES = "searchLines";//查询下发路径
 	String Mobile_SEARCHLINES_DETAIL="searchLinesDetail";//查询下发路径的具体信息
 	
+	//路径信息点的大小
+	short POINT_LENGTH = 15;
+	//路径下路径信息点的最大数目
+	short PATH_CAP_MAX = 50;
+	
 	//用户端类别
 	String Phone_SEND = "send";//放飞者
 	String Phone_LAND = "land";//降落者
 	String WEB_LOGIN = "web";//操作员
 	String WEB_BROWSE_LOGIN = "browse";//浏览者
-	String WEB_ALL_WATCH ="allwatch";//查看所有的无人机 --编码为无人机编号+all+操作员编号++@allwatch
+	String WEB_WATCH ="watch";//所有的界面
+	String WEB_ALL_WATCH ="all";//查看所有的无人机 --编码为无人机编号watch+@all
 	//无人机应答消息类型
 	short RES_FLYINF = 1;
 	short RES_TRANS = 2;

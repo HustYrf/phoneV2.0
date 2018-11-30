@@ -10,8 +10,8 @@ public class TestController {
 	@RequestMapping("/chat2")
 	public String testchatsocket2(Model model)
 	{
-		String planeid = 1+"";
-		model.addAttribute("planeid", planeid);
-		return "chat2";
+//		String planeid = 1+"";
+//		model.addAttribute("planeid", planeid);
+		return "testchat";
 	}
 }

@@ -3,6 +3,9 @@ package hust.phone.utils;
 import java.util.ArrayList;
 import java.util.List;
 
+import hust.phone.utils.pojo.PlanePathVo;
+
+
 public class LineUtil {
 	//转换为ArrayList
 	public static ArrayList<ArrayList<Double>> stringLineToList(String s)
@@ -62,6 +65,7 @@ public class LineUtil {
 	        }
 	        return pathArray;
 	    }
+	    //
 
 	    public static void main(String[] args) {
 	        String s = "LineString(1 1,2 2)";
@@ -69,6 +73,25 @@ public class LineUtil {
 	        String slist[] = sub.split(",");
 	        System.out.println(slist[0].split(" ")[0]);
 	    }
+	    //将飞行路径装换成对象集合
+	    public static List<PlanePathVo> textToList(String path,String s)
+		{
+			ArrayList<ArrayList<Double>> pathList = LineUtil.stringLineToList(path);
+			List<PlanePathVo> pList=new  ArrayList<PlanePathVo>();
+			String sList[] = s.split(",");
+			for(int i=0;i<sList.length;i++)
+			{
+				PlanePathVo vo= new PlanePathVo();
+				double height=Double.parseDouble(sList[i]);
+				double longitude=pathList.get(i).get(0);
+				double latitude=pathList.get(i).get(1);
+				vo.setHeight(height);
+				vo.setLongitude(longitude);
+				vo.setLatitude(latitude);
+				pList.add(vo);
+			}
+			return pList.size()>0?pList:null;
+		}
 
 //	public static void main(String[] args) {
 //		String s="LineString(1 1,2 2)";

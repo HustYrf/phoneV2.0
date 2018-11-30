@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebSocket Chat Client</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <script type="text/javascript">
+			var  content12 ="161watch@"+"all";
+			var  content22 ="162watch@"+"all";
+			//var ws[];
+   		window.onload=function(){
+	   		var ws;
+			  for(var i=0;i<2;i++) 
+				  {
+				  
+				 	//alert(i);
+       				connect(i);
+				  }
+			
+			//}
+		}
+       function connect(i){
+    	   var son=null;
+    	   alert(i)
+    	   if(i==0)
+    		   {
+    		   	son = content12;
+    		   }else
+    			   {
+    			   son = content22;
+    			   } 
+          ws = new WebSocket("ws:///127.0.0.1:17020");
+           ws.onopen = function() {
+              ws.send(son);
+              }
+           ws.onmessage = function(event) {
+        	   var message = event.data;
+        		var messageType = message.split(":");
+        		var uavDecivedId = messageType[4];
+        		console.log("发消息过来了"+uavDecivedId);
+              
+           }
+          ws.onclose = function() {
+           }
+       }
+   		
+   </script>
+</head>
+<body>
+
+</body>
+</html>

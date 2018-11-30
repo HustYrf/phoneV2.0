@@ -9,13 +9,13 @@ public class PointSToWayEncodingUtils {
 	
 	public static byte[] PointSToWayEncoding(ArrayList<SlpPoint> points)
 	{
-		byte coding[] = new byte[points.size()*15];
+		byte coding[] = new byte[points.size()*ConstantUtils.POINT_LENGTH];
 		int k =0;
 		for(int i= 0;i<points.size();i++)
 		{
 			byte[] pointEncoding = SlpPoint.getPointEncoding(points.get(i));
-			k= i*15;
-			for(int j= 0;j<15;j++)
+			k= i*ConstantUtils.POINT_LENGTH;
+			for(int j= 0;j<ConstantUtils.POINT_LENGTH;j++)
 			{
 				coding[k++]=pointEncoding[j];	
 			}
@@ -32,9 +32,9 @@ public class PointSToWayEncodingUtils {
 		}
 		
 		ArrayList<SlpPoint> list = new ArrayList<SlpPoint>();
-		for(int i=0;i<coding.length;i=i+15)
+		for(int i=0;i<coding.length;i=i+ConstantUtils.POINT_LENGTH)
 		{
-			byte[] copyOfRange = Arrays.copyOfRange(codes, i, i+14);
+			byte[] copyOfRange = Arrays.copyOfRange(codes, i, i+ConstantUtils.POINT_LENGTH-1);
 			list.add(SlpPoint.getPoint(copyOfRange));
 		}
 		return list;
