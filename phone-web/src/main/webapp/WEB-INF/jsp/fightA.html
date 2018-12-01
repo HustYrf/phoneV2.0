@@ -105,9 +105,8 @@
 	                    icon: new AMap.Icon({
 	                        size: new AMap.Size(32, 32), //图标大小
 	                        image: "images/uav-32.png",
-	                        offset: new AMap.Pixel(0, -40) ,// 相对于基点的偏移位置
 	                    }),
-	                    //angle:GPS_HDG,  偏向角改变飞机旋转状态
+	                    offset: new AMap.Pixel(-16, -16) // 相对于基点的偏移位置
 	                });
 		    	    map.add(planeMarker);  
 		    	   
@@ -142,18 +141,26 @@
 		<!-- 输入密码模态框  end -->
 
 		<!-- 操作按钮 start -->
-		<div class="optionArea">
+		<div class="optionArea" style="height:24%;">
 			<div class="content-block" id="btns" style="margin-top:25px;">
+			
 				<p class="buttons-row">
 					<a onclick="checkself(${task.id!})" id="checkoverbtn" class="button linebtn">自检完成</a><span class="desp"></span>
-					<a onclick="applyTaskoff(${task.id!})" id="applybtn" class="button linebtn">申请起飞</a><span class="desp"></span>
-					<a onclick="cancel(${task.id!})"  id="cancelbtn" class="button linebtn">撤销起飞</a>
+					<a onclick="viewflyingPath(${task.id!})" id="viewpathbtn" class="button linebtn">查看航线</a><span class="desp"></span>
+					<a onclick="transFlyingPath(${task.id!})" id="transpathbtn" class="button linebtn">下发航线</a><span class="desp"></span>			
+				    <a onclick="checkFlyingPath(${task.id!})" id="checkpathbtn" class="button linebtn">核对航线</a>
 				</p>
+				
+				<p class="buttons-row">
+					<a onclick="cancel(${task.id!})" id="cancelbtn" class="button linebtn">撤销起飞</a><span class="desp"></span>
+					<a onclick="applyTaskoff(${task.id!})" id="applybtn" class="button linebtn">申请起飞</a><span class="desp"></span>
+					<a onclick="takeoff(${task.id!})" id="taskoffbtn" class="button linebtn">一键起飞</a>			
+				</p>
+				
 				<p class="buttons-row">
 					<a onclick="reportNotconnet(${task.id!})" id="notconnectbtn" class="button linebtn">飞机失联</a><span class="desp"></span>
 					<a onclick="videoOp(${task.id!})" id="videobtn" class="button linebtn">实时视频</a><span class="desp"></span>
-					<a onclick="emergencyback(${task.id!})" id="emgbackbtn" class="button linebtn">紧急返航</a><span class="desp"></span>				
-					<a onclick="takeoff(${task.id!})" id="taskoffbtn" class="button linebtn">一键起飞</a>
+					<a onclick="emergencyback(${task.id!})" id="emgbackbtn" class="button linebtn">紧急返航</a>		
 				</p>
 				<input id="option" type="hidden" value="" />
 			</div>
@@ -191,7 +198,7 @@
             //关闭视频流
         }
     }
-    
+   
     function btnStstus(status){	
     	//$(".buttons-row .button").addClass("linebtn");
     	//$(".buttons-row .button").removeClass("linebtn");
@@ -204,6 +211,10 @@
     		$("#videobtn").attr("class", "button linebtn");
     		$("#emgbackbtn").attr("class", "button linebtn");
     		$("#taskoffbtn").attr("class", "button linebtn");
+    		
+    		$("#viewpathbtn").attr("class", "button");
+    		$("#transpathbtn").attr("class", "button"); 
+    		$("#checkpathbtn").attr("class", "button"); 
     	}
     	if(status=='6'){
     		$("#checkoverbtn").attr("class", "button linebtn");
@@ -213,6 +224,10 @@
     		$("#videobtn").attr("class", "button linebtn");
     		$("#emgbackbtn").attr("class", "button linebtn");
     		$("#taskoffbtn").attr("class", "button linebtn");
+    		
+    		$("#viewpathbtn").attr("class", "button");
+    		$("#transpathbtn").attr("class", "button"); 
+    		$("#checkpathbtn").attr("class", "button"); 
     	}
     	if(status=='7'){
     		$("#checkoverbtn").attr("class", "button linebtn");
@@ -222,6 +237,10 @@
     		$("#videobtn").attr("class", "button linebtn");
     		$("#emgbackbtn").attr("class", "button linebtn");
     		$("#taskoffbtn").attr("class", "button linebtn");
+    		
+    		$("#viewpathbtn").attr("class", "button");
+    		$("#transpathbtn").attr("class", "button"); 
+    		$("#checkpathbtn").attr("class", "button"); 
     	}
     	if(status=='8'){
     		$("#checkoverbtn").attr("class", "button linebtn");
@@ -231,6 +250,11 @@
     		$("#videobtn").attr("class", "button linebtn");
     		$("#emgbackbtn").attr("class", "button linebtn");
     		$("#taskoffbtn").attr("class", "button");
+    		
+    		$("#viewpathbtn").attr("class", "button linebtn");    
+    	    $("#transpathbtn").attr("class", "button linebtn"); 
+    	    $("#checkpathbtn").attr("class", "button linebtn");
+    		
     	}
     	if(status=='9'){
     		$("#checkoverbtn").attr("class", "button linebtn");
@@ -240,6 +264,10 @@
     		$("#videobtn").attr("class", "button");
     		$("#emgbackbtn").attr("class", "button");
     		$("#taskoffbtn").attr("class", "button linebtn");
+    		
+    		$("#viewpathbtn").attr("class", "button linebtn");    
+    	    $("#transpathbtn").attr("class", "button linebtn"); 
+    	    $("#checkpathbtn").attr("class", "button linebtn");
     	}
     	 	
     }
@@ -294,7 +322,11 @@
  	                }else if(planeOption=="reportNotconnet.action"){
  	                	//如果是报告失联指令
  	                	ajaxAction("reportNotconnet.action",taskId);
- 	                } 
+ 	                }else if(planeOption = "transFlyingPath.action"){
+ 	                	//如果是下发航向指令。。。
+ 	                	
+ 	                	
+ 	                }
  	                
  	            } else {                       //密码验证失败
  	                $.toast(result.message);
@@ -387,6 +419,15 @@
         });
     }
 
+    
+    function transFlyingPath(taskid){
+   	 $.confirm('是否下发航线给无人机？', function () {
+	             
+         $("#option").attr("value","transFlyingPath.action"); 
+         modal.style.display = "block";                
+      });
+    }
+    
     function takeoff(taskid) {   	
           	
     	 $.confirm('是否起飞无人机？', function () {
