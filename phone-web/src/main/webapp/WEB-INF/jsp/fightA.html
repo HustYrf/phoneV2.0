@@ -153,7 +153,7 @@
 				</div>
 				<footer class="pwdmodal-footer">
 					<button id="cancel" onclick="modalcancel()">取消</button>
-					<button id="sure"	onclick="modalsure(${task.id!},${task.uavId!},${task.role!},${uav.deviceid!})">确定</button>
+					<button id="sure"	onclick="modalsure(${task.id!},${task.uavId!},${task.role!},${uav.deviceid!},${planepath.id!})">确定</button>
 				</footer>
 			</div>
 		</div>
@@ -165,9 +165,9 @@
 			
 				<p class="buttons-row">
 					<a onclick="checkself(${task.id!})" id="checkoverbtn" class="button linebtn">自检完成</a><span class="desp"></span>
-					<a onclick="viewflyingPath(${task.id!})" id="viewpathbtn" class="button linebtn">查看航线</a><span class="desp"></span>
+					<a onclick="viewflyingPath(${uav.deviceid!})" id="viewpathbtn" class="button linebtn">查看航线</a><span class="desp"></span>
 					<a onclick="transFlyingPath(${task.id!})" id="transpathbtn" class="button linebtn">下发航线</a><span class="desp"></span>			
-				    <a onclick="checkFlyingPath(${task.id!})" id="checkpathbtn" class="button linebtn">核对航线</a>
+				    <a onclick="checkFlyingPath(${uav.deviceid!})" id="checkpathbtn" class="button linebtn">核对航线</a>
 				</p>
 				
 				<p class="buttons-row">
@@ -318,7 +318,7 @@
 	}
     
     //role=1则为放飞员，role=2则为接机员
-    function modalsure(taskId,uavId,role,deviceId){  
+    function modalsure(taskId,uavId,role,deviceId,planepathId){  
     	  //输入密码确认之后
     	 modal.style.display = "none";              
     	 var planeOption =$("#option").val(); 
@@ -351,8 +351,8 @@
  	                	ajaxAction("reportNotconnet.action",taskId);
  	                }else if(planeOption = "transFlyingPath.action"){
  	                	//如果是下发航向指令。。。
- 	                	
- 	                	
+ 	                	var scontent = deviceId+WebTypeUtil.MESSAGEPUTLINES+planepathId;
+ 	                	WebSocketUtil.webSocket.send(scontent);
  	                }
  	                
  	            } else {                       //密码验证失败
@@ -363,6 +363,18 @@
          //清空输入值
          $("#option").attr("value",""); 
     	 boxInput.setNullValue();
+    }
+    //查看航线信息
+    function viewflyingPath(deviceId}
+    {
+    	var sconent =deviceId+WebTypeUtil.MESSAGESEARCHLINES;
+    	WebSocketUtil.webSocket.send(scontent);
+    }
+    //核对航线
+    function checkFlyingPath(deviceId)
+    {
+    	var sconent = deviceId+WebTypeUtil.MESSAGESEARCHLINESDETAIL;
+    	WebSocketUtil.webSocket.send(scontent);
     }
     
     //ajax请求，完成对工单的操作

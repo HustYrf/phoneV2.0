@@ -204,7 +204,6 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		
 	}
 	//手机查询航线具体信息
-	
 	private void processMobileMessageSearchLinesDetail(String revId) {
 		// TODO Auto-generated method stub
 		String s = revId.substring(0, revId.length() - 4);
