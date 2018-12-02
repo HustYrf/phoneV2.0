@@ -1,3 +1,4 @@
+var wgs84_to_gcj02 = new WGS84_to_GCJ02();
 var WebTypeUtil=
 {
 		SENDUSERLOGIN:"send@login",
@@ -151,20 +152,27 @@ var PlaneHandleServiceUtil ={
 	        var value2=mes[1]*1;
 	        data[0] = value;
 	        data[1] = value2;
-			map.remove(planeMarker);
-						
-    	   planeMarker = new AMap.Marker({
-                //map: map,
-                position:  data,
-                icon: new AMap.Icon({
-                size: new AMap.Size(32, 32), //图标大小
-                image: "images/uav-32.png",
-                offset: new AMap.Pixel(-16,-16) ,// 相对于基点的偏移位置
-                }),
-                angle:GPS_HDG,
-            });
-		    map.setCenter(data); 
-		    map.add(planeMarker);
+//			map.remove(planeMarker);
+			
+	        //下面为新版的marker移动代码
+		    var realdata = wgs84_to_gcj02.transform(data[0],data[1]);
+		    map.setCenter(realdata); 		   
+		    planeMarker.setPosition(realdata);
+		    planeMarker.setAngle(messageType[3]);
+		    
+		    
+//    	   planeMarker = new AMap.Marker({
+//                //map: map,
+//                position:  data,
+//                icon: new AMap.Icon({
+//                size: new AMap.Size(32, 32), //图标大小
+//                image: "images/uav-32.png",
+//                }),
+//                angle:GPS_HDG,
+//                offset: new AMap.Pixel(-16,-16) // 相对于基点的偏移位置
+//            });
+//		    map.setCenter(realdata); 
+//		    map.add(planeMarker);
 			//WebSocketUtil.print("[send] '" + message + "'\n");	 	   
 		    
 		},
@@ -258,10 +266,10 @@ var PlaneHandleServiceUtil ={
 		},
 		handleSearchLine:function(ROUTE_ID,ROUTE_COUNT,ROUTE_STOCK_COUNT)
 		{
-			
-
-			//让按钮可点击
-			//$(".buttons-row .button").removeClass("linebtn");		
+			//处理航点显示
+			$("#routeId").val(ROUTE_ID);
+			$("#totalFlyingPoint").val(ROUTE_COUNT);	
+			$("#processedFlyingPoint").val(ROUTE_STOCK_COUNT);		
 		}
 			
 }

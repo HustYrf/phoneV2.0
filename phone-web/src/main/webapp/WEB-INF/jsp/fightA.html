@@ -16,10 +16,11 @@
 <link rel="stylesheet" href="${s.base}/res/assets/hivideo.css" />
 <script type="text/javascript" src="${s.base}/res/assets/hivideo.js"></script>
 
+ <script type="text/javascript" src="${s.base}/res/js/WGS84_to_GCJ02.js"></script>
+
 <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
 <script	src="http://webapi.amap.com/maps?v=1.4.6&key=82f9e75505b649be9ab81a45ae34aa14"></script>
 <!-- 这是放飞员界面 -->
-<script	src="http://webapi.amap.com/maps?v=1.4.6&key=82f9e75505b649be9ab81a45ae34aa14"></script>
 <style type="text/css">
 .linebtn{
     pointer-events:none !important;
@@ -37,7 +38,20 @@
 .main-wrapVideo video{
     width: 100%;
 }
+#uavInfoView{
 
+    width:100%;
+    position: absolute;
+    margin-top: 82px;
+    float:right;
+    padding-right: 20px;
+    font-size: .75rem;
+    z-index: 998;
+    text-align:right;	
+    color:#FF0000;
+    /* display:none; */
+    /* border:1px solid #FF0000;  */
+}
 </style>
 </head>
 
@@ -65,7 +79,12 @@
 				<span class="icon icon-refresh">&nbsp;</span>
 			</a>
 		</header>
-		<div class="uavStatus"  style="color:#4169E1;">飞机状态：<span id="fightStatus">暂无</span>
+		<div class="uavStatus"  style="color:#4169E1;">飞机状态：<span id="fightStatus">未连接</span>
+		</div>
+		<div id="uavInfoView">
+		     航线编号：<span id="routeId">12-32-998</span><br>
+		      总航点：<span id="totalFlyingPoint">120</span><br>
+		      已传航点：<span id="processedFlyingPoint">120</span>
 		</div>
 		<div id="content">
 
@@ -141,7 +160,7 @@
 		<!-- 输入密码模态框  end -->
 
 		<!-- 操作按钮 start -->
-		<div class="optionArea" style="height:24%;">
+		<div class="optionArea" style="height:22%;">
 			<div class="content-block" id="btns" style="margin-top:25px;">
 			
 				<p class="buttons-row">
@@ -200,9 +219,9 @@
     }
    
     function btnStstus(status){	
-    	//$(".buttons-row .button").addClass("linebtn");
-    	//$(".buttons-row .button").removeClass("linebtn");
+    	
     	if(status=='5'){
+    		
     		//这几个状态都不能按按钮  
     		$("#checkoverbtn").attr("class", "button");
     		$("#applybtn").attr("class", "button linebtn");
@@ -215,6 +234,8 @@
     		$("#viewpathbtn").attr("class", "button");
     		$("#transpathbtn").attr("class", "button"); 
     		$("#checkpathbtn").attr("class", "button"); 
+    		
+    		$("#uavInfoView").css("display","block"); 
     	}
     	if(status=='6'){
     		$("#checkoverbtn").attr("class", "button linebtn");
@@ -228,6 +249,8 @@
     		$("#viewpathbtn").attr("class", "button");
     		$("#transpathbtn").attr("class", "button"); 
     		$("#checkpathbtn").attr("class", "button"); 
+    		
+    		$("#uavInfoView").css("display","block"); 
     	}
     	if(status=='7'){
     		$("#checkoverbtn").attr("class", "button linebtn");
@@ -241,6 +264,8 @@
     		$("#viewpathbtn").attr("class", "button");
     		$("#transpathbtn").attr("class", "button"); 
     		$("#checkpathbtn").attr("class", "button"); 
+    		
+    		$("#uavInfoView").css("display","block"); 
     	}
     	if(status=='8'){
     		$("#checkoverbtn").attr("class", "button linebtn");
@@ -254,6 +279,8 @@
     		$("#viewpathbtn").attr("class", "button linebtn");    
     	    $("#transpathbtn").attr("class", "button linebtn"); 
     	    $("#checkpathbtn").attr("class", "button linebtn");
+    	    
+    	    $("#uavInfoView").css("display","block"); 
     		
     	}
     	if(status=='9'){
