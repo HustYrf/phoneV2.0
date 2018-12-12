@@ -1,5 +1,10 @@
 package hust.phone.utils;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,9 +47,21 @@ public class PointUtil {
 	    return String.valueOf(pointList.get(0))+","+String.valueOf(pointList.get(1));
 	}
 
-	public static void main(String[] args) {
-		String s="Point(1.9999 1.88888)";
-		Point stringToPoint = PointUtil.StringToPoint(s);
-		System.out.println(stringToPoint.getLatitude());
+	public static void main(String[] args) throws IOException {
+//		String s="Point(1.9999 1.88888)";
+//		Point stringToPoint = PointUtil.StringToPoint(s);
+//		System.out.println(stringToPoint.getLatitude());
+		
+//		String data = " This content will append to the end of the file";
+//		byte[] contentInBytes = data.getBytes();
+//		File file = new File("D:\\test.lck");
+//		if(!file.exists()){
+//		   file.createNewFile();
+//		}
+//		FileOutputStream fop = new FileOutputStream(file);
+//		fop.write(contentInBytes);
+//		fop.flush();
+//		fop.close();
+		
 	}
 }
