@@ -3,7 +3,7 @@ var WebTypeUtil=
 {
 		SENDUSERLOGIN:"send@login",
 		LANDUSERLOGIN:"land@login",
-		SENDUSERFLYING:"send@flying",
+		SENDUSERFLYING:"send@flying@",
 		SENDUSERRETURN:"send@return",
 		LANDUSERRETURN:"land@return",
 		MESSAGEPUTLINES:"send@putLines@",
@@ -18,7 +18,10 @@ var WebTypeUtil=
 		MESSAGETYPEFRETURNWAIT:"returnWait",
 		MESSAGETYPESTATUS:"status",
 		MESSAGEPLANELOGIN:"planeLogin",
-		MESSAGEPLANESEARCHRESULT:"planeLine"
+		MESSAGEPLANESEARCHRESULT:"planeLine",
+		MESSAGECHECKRESULT:"checkResult",
+		MESSAGELINEFINISH:"lineResult",
+		MESSAGEPLANESEARCHCHECK:"lineSearch"
 		
 		
 }
@@ -91,6 +94,18 @@ var WebSocketUtil = {
 		case WebTypeUtil.MESSAGEPLANESEARCHRESULT:
 			//处理查询航线的结果
 			PlaneHandleServiceUtil.handleSearchLine(messageType[1],messageType[2],messageType[3]);
+			break;
+		case WebTypeUtil.MESSAGEPLANESEARCHCHECK:
+			//核对航线的结果
+			PlaneHandleServiceUtil.handleLineCheckResult(messageType[1]);
+			break;
+		case WebTypeUtil.MESSAGECHECKRESULT:
+			//处理自检结果
+			PlaneHandleServiceUtil.handleCheckResult(messageType[1]);
+			break;
+		case WebTypeUtil.MESSAGELINEFINISH:
+			//处理下发航线完成结果
+			PlaneHandleServiceUtil.handleLineResult(messageType[1]);
 			break;
 		}
 		
@@ -270,6 +285,18 @@ var PlaneHandleServiceUtil ={
 			$("#routeId").val(ROUTE_ID);
 			$("#totalFlyingPoint").val(ROUTE_COUNT);	
 			$("#processedFlyingPoint").val(ROUTE_STOCK_COUNT);		
+		},
+		handleCheckResult:function(RES_RELULT)
+		{
+			$.toast(RES_RELULT);
+		},
+		handleLineResult:function(RES_RELULT)
+		{
+			$.toast(RES_RELULT);
+		},
+		handleLineCheckResult:function(RES_RELULT)
+		{
+			$.toast(RES_RELULT);
 		}
 			
 }

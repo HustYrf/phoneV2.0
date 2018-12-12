@@ -26,6 +26,12 @@ public class FlyingPathVO {
 	private String updatetime;
 
 	private ArrayList<Double> heightdata;
+	
+	private ArrayList<Integer> typedata;
+	
+	private ArrayList<Float> paramonedata;
+	
+	private ArrayList<Float> paramtwodata;
 
 	public FlyingPathVO(FlyingPath flyingPath) {
 
@@ -35,6 +41,15 @@ public class FlyingPathVO {
 		}
 		if (flyingPath.getHeightdata() != null) {
 			this.heightdata = LineUtil.stringpointToList(flyingPath.getHeightdata());
+		}
+		if (flyingPath.getPointtype() != null) {
+			this.typedata = LineUtil.stringpointToIntList(flyingPath.getPointtype());
+		}
+		if (flyingPath.getParamone() != null) {
+			this.paramonedata = LineUtil.stringpointToFloatList(flyingPath.getParamone());
+		}
+		if (flyingPath.getParamtwo() != null) {
+			this.paramtwodata = LineUtil.stringpointToFloatList(flyingPath.getParamtwo());
 		}
 		if (flyingPath.getDescription() != null) {
 			this.description = flyingPath.getDescription();
@@ -46,6 +61,30 @@ public class FlyingPathVO {
 			this.updatetime = DateKit.dateFormat(flyingPath.getUpdatetime(), "yyyy/MM/dd HH:mm:ss");
 		}
 
+	}
+
+	public ArrayList<Integer> getTypedata() {
+		return typedata;
+	}
+
+	public void setTypedata(ArrayList<Integer> typedata) {
+		this.typedata = typedata;
+	}
+
+	public ArrayList<Float> getParamonedata() {
+		return paramonedata;
+	}
+
+	public void setParamonedata(ArrayList<Float> paramonedata) {
+		this.paramonedata = paramonedata;
+	}
+
+	public ArrayList<Float> getParamtwodata() {
+		return paramtwodata;
+	}
+
+	public void setParamtwodata(ArrayList<Float> paramtwodata) {
+		this.paramtwodata = paramtwodata;
 	}
 
 	public Integer getId() {

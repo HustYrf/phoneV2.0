@@ -12,6 +12,7 @@ import com.MAVLink.MAVLinkPacket;
 import com.MAVLink.Parser;
 import com.MAVLink.common.msg_new_login_res;
 
+import hust.phone.web.network.SLP.message.SlpCheckFinish;
 import hust.phone.web.network.SLP.message.SlpMsgLogin;
 import hust.phone.web.network.SLP.message.SlpMsgPutLines;
 import hust.phone.web.network.SLP.message.SlpMsgSearchLines;
@@ -26,18 +27,19 @@ public class test {
 	@Test
 	public void test1()
 	{
-		SlpMsgLogin mes=new SlpMsgLogin();
-		mes.UAV_LOGIN=1;
-		mes.RES_RELULT=1;
-		SlpPacket pack = mes.pack();
-		pack.MSG_SEQ=1;
-		pack.MSG_TIME=1111111;
-		pack.SND_DEVICE_ID=1;
-		pack.REV_DEVICE_ID=1;
-		byte[] encoding = pack.encoding();
-		System.out.println(Arrays.toString(encoding));
-		long i = 1l;
-		byte s1[]= new byte[(int)i];
+		SlpMsgStatus mess = new SlpMsgStatus();
+		mess.BASEMODE = 2;
+		mess.GPS_LON =1103045150;
+		mess.GPS_LAT = 250611500;
+		SlpPacket pack1 = mess.pack();
+		pack1.MSG_SEQ=1;
+		pack1.MSG_TIME=1111111;
+		pack1.SND_DEVICE_ID=1;
+		pack1.REV_DEVICE_ID=1;
+		byte[] encoding1 = pack1.encoding();
+		System.out.println(Arrays.toString(encoding1));
+		SlpPacket parse = SlpPacket.parse(encoding1);
+		System.out.println(parse.toString());
 		
 	}
 	public long MSG_LEN;
@@ -146,10 +148,19 @@ public class test {
 	@Test
 	public void test5() throws Exception
 	{
-		byte b[] = {84, 69, 76, 85, 65, 86, 33, 0, 0, 0, 0, 0, 1, 0, 1, 3, 1, 0, 1, 3, 4, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		byte b[] = {84, 69, 76, 85, 65, 86, 1, 74, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1, 1, 6, 8, 0, 0, 0, 2, 0, 2, 0, 16, 1, 0, 102, 102, -90, 63, 51, 51, 19, 64, -128, -106, -104, 0, -128, -106, -104, 0, -51, -52, 76, 64, 16, 2, 0, 102, 102, -90, 63, 51, 51, 19, 64, 0, 45, 49, 1, 0, 45, 49, 1, 51, 51, 83, 64, 0, 0, 0, 0, 0, 0, -12, 36
+
+		};
 		SlpPacket parse = SlpPacket.parse(b);
-		SlpMsgLogin login = (SlpMsgLogin) parse.unpack();
-		System.out.println(login.toString());
+		System.out.println(parse.toString());
+		SlpMsgPutLines unpack = (SlpMsgPutLines) parse.unpack();
+		System.out.println(unpack.toString());
+		
+		ArrayList<SlpPoint> list2 = PointSToWayEncodingUtils.WayToPoints((unpack.POINTS));
+		for(SlpPoint l:list2)
+		{
+			System.out.println(l.toString());
+		}
 	
 	}
 	@Test
@@ -175,27 +186,28 @@ public class test {
 		SlpPoint point1 = new SlpPoint();
 		point1.WAYPOINT_TYPE = 1;
 		point1.WAYPOINT_NUM = 1;
-		point1.WP_LAT = 1111111l;
-		point1.WP_LNG = 222222222l;
-		point1.WP_ALT = 333333l;
+		point1.WP_LAT = 1111111;
+		point1.WP_LNG = 2222222;
+		point1.WP_ALT = 3.0f;
+		point1.WP_PARAM1 = 1.0f;
 		
 		SlpPoint point2 = new SlpPoint();
 		point2.WAYPOINT_TYPE = 2;
 		point2.WAYPOINT_NUM = 2;
-		point2.WP_LAT = 111112l;
-		point2.WP_LNG = 22222422l;
-		point2.WP_ALT = 333332l;
-		
+		point2.WP_LAT = 111112;
+		point2.WP_LNG = 222224;
+		point2.WP_ALT = 3.0f;
+		point2.WP_PARAM1 = 1.0f;
 		ArrayList<SlpPoint> list = new ArrayList<SlpPoint>();
 		list.add(point1);
 		list.add(point2);
 		
 		byte[] pointSToWayEncoding = PointSToWayEncodingUtils.PointSToWayEncoding(list);
 		SlpMsgPutLines msg  = new SlpMsgPutLines();
-		msg.Route_ID = 23434;
+		msg.ROUTE_ID = 23434;
 		msg.ROUTE_COUNT = 2;
 		msg.ROUTE_MSG_COUNT = 2;
-		msg.POINTS= new short[msg.ROUTE_MSG_COUNT * 15];
+		msg.POINTS= new short[msg.ROUTE_MSG_COUNT * 23];
 		for(int i= 0;i<pointSToWayEncoding.length;i++)
 		{
 			msg.POINTS[i] = (short) (pointSToWayEncoding[i]&0xff);
@@ -230,5 +242,33 @@ public class test {
 		System.out.println(list.size());
 		list.add(1);
 		System.out.println(list.size());
+	}
+	@Test
+	public void test9()
+	{
+		SlpCheckFinish msg = new SlpCheckFinish();
+		msg.ERR_CODE =1;
+		msg.RES_RELULT=1;
+		SlpPacket pack = msg.pack();
+		pack.SND_DEVICE_ID =1;
+		byte[] encoding = pack.encoding();
+		SlpPacket parse = SlpPacket.parse(encoding);
+		SlpCheckFinish unpack = (SlpCheckFinish) parse.unpack();
+		System.out.println(unpack.toString());
+				
+	}
+	@Test
+	public void test10()
+	{
+		SlpPoint point1 = new SlpPoint();
+		point1.WAYPOINT_TYPE = 1;
+		point1.WAYPOINT_NUM = 1;
+		point1.WP_LAT = 1111111;
+		point1.WP_LNG = 2222222;
+		point1.WP_ALT = 3.0f;
+		point1.WP_PARAM1 = 1.0f;
+		byte[] pointEncoding = SlpPoint.getPointEncoding(point1);
+		SlpPoint point = SlpPoint.getPoint(pointEncoding);
+		System.out.println(point.toString());
 	}
 }

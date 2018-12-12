@@ -1,6 +1,9 @@
 package hust.phone.web.network.common;
 
 public interface ConstantUtils {
+	//消息基本长度
+	short BASE_LENGTH = 26;
+	String BASE_HEAD="TELUAV";
 	
 	//客户端类型
 	String DEVICE_TYPE = "deviceType";
@@ -20,6 +23,8 @@ public interface ConstantUtils {
 	short MSG_PUTTASKNUM = 7;//下发任务编号
 	short MSG_SEARCHLINES = 0x81;//查询飞行航线信息
 	short MSG_SEARCHLINES_DETAIL = 0x82;//查询飞行航线
+	short MSG_LINES_FINISH = 8;//无人机写入航线完成
+	short MSG_CHECK_FINISH = 9;//无人机自检完成
 	
 	//手机消息类型
 	String Mobile_FlYING ="flying";//起飞
@@ -29,11 +34,26 @@ public interface ConstantUtils {
 	String Mobile_PUT_TASKNUM ="putTaskNum";//下发任务编号
 	String Mobile_SEARCHLINES = "searchLines";//查询下发路径
 	String Mobile_SEARCHLINES_DETAIL="searchLinesDetail";//查询下发路径的具体信息
-	
+	String Mobile_CHECK_START ="checkStart";//指示无人机自检开始
+	//自检结果
+	String Mobile_CHECK_RESULT ="checkResult";
+	short RES_CHECK_FINISH = 1;
+	short RES_CHECK_FAILURE = 0;
+	String Mobile_CHECK_RESULT_FINISH ="飞机自检成功";
+	String Mobile_CHECK_RESULT_FAILURE="飞机自检失败"; 
+	//航线结果
+	String Mobile_Line_RESULT ="lineResult";
+	short RES_Line_FINISH = 1;
+	short RES_Line_FAILURE = 0;
+	String Mobile_Line_RESULT_FINISH ="飞机上传航线成功";
+	String Mobile_Line_RESULT_FAILURE="飞机上传航线失败"; 
+	String Mobile_Line_SEARCH ="lineSearch";
+	String Mobile_SEARCHLine_RESULT_FINISH ="飞机核对航线成功";
+	String Mobile_SEARCHLine_RESULT_FAILURE="飞机核对航线失败"; 
 	//路径信息点的大小
-	short POINT_LENGTH = 15;
+	short POINT_LENGTH = 23;
 	//路径下路径信息点的最大数目
-	short PATH_CAP_MAX = 50;
+	short PATH_CAP_MAX = 9;
 	
 	//用户端类别
 	String Phone_SEND = "send";//放飞者

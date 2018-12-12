@@ -25,6 +25,37 @@ public class FlyingPath {
 	private Date updatetime;
 
 	private String heightdata;
+	
+	private String pointtype;
+	
+	private String paramone;
+	
+	private String paramtwo;
+
+
+	public String getPointtype() {
+		return pointtype;
+	}
+
+	public void setPointtype(String pointtype) {
+		this.pointtype = pointtype;
+	}
+
+	public String getParamone() {
+		return paramone;
+	}
+
+	public void setParamone(String paramone) {
+		this.paramone = paramone;
+	}
+
+	public String getParamtwo() {
+		return paramtwo;
+	}
+
+	public void setParamtwo(String paramtwo) {
+		this.paramtwo = paramtwo;
+	}
 
 	public Integer getId() {
 		return id;
