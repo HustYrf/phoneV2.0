@@ -27,13 +27,31 @@ public class LineUtil {
 	//将高度列表字符串转化为数组
 	public static ArrayList<Double> stringpointToList(String s)
 	{
-		//s="LineString(1,1,2,2)"
 		ArrayList<Double> list= new ArrayList<Double>();
-		String sub=s.substring(11, s.length()-1);
-		String slist[]=sub.split(",");
+		String slist[]=s.split(",");
 		for(int i=0;i<slist.length;i++)
 		{
 			list.add(Double.parseDouble(slist[i]));
+		}
+		return list;
+	}
+	public static ArrayList<Integer> stringpointToIntList(String s)
+	{
+		ArrayList<Integer> list= new ArrayList<Integer>();
+		String slist[]=s.split(",");
+		for(int i=0;i<slist.length;i++)
+		{
+			list.add(Integer.parseInt(slist[i]));
+		}
+		return list;
+	}
+	public static ArrayList<Float> stringpointToFloatList(String s)
+	{
+		ArrayList<Float> list= new ArrayList<Float>();
+		String slist[]=s.split(",");
+		for(int i=0;i<slist.length;i++)
+		{
+			list.add(Float.parseFloat(slist[i]));
 		}
 		return list;
 	}
@@ -74,20 +92,29 @@ public class LineUtil {
 	        System.out.println(slist[0].split(" ")[0]);
 	    }
 	    //将飞行路径装换成对象集合
-	    public static List<PlanePathVo> textToList(String path,String s)
+	    public static List<PlanePathVo> textToList(String path,String s,String type,String one,String two)
 		{
 			ArrayList<ArrayList<Double>> pathList = LineUtil.stringLineToList(path);
 			List<PlanePathVo> pList=new  ArrayList<PlanePathVo>();
 			String sList[] = s.split(",");
+			String tList[] = type.split(",");
+			String oneList[] = one.split(",");
+			String twoList[] = two.split(",");
 			for(int i=0;i<sList.length;i++)
 			{
 				PlanePathVo vo= new PlanePathVo();
 				double height=Double.parseDouble(sList[i]);
 				double longitude=pathList.get(i).get(0);
 				double latitude=pathList.get(i).get(1);
+				int t = Integer.parseInt(tList[i]);
+				float oneValue = Float.parseFloat(oneList[i]);
+				float twoValue = Float.parseFloat(twoList[i]);
 				vo.setHeight(height);
 				vo.setLongitude(longitude);
 				vo.setLatitude(latitude);
+				vo.setType(t);
+				vo.setParamone(oneValue);
+				vo.setParamtwo(twoValue);
 				pList.add(vo);
 			}
 			return pList.size()>0?pList:null;

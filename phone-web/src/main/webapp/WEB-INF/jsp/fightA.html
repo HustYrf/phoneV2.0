@@ -82,9 +82,9 @@
 		<div class="uavStatus"  style="color:#4169E1;">飞机状态：<span id="fightStatus">未连接</span>
 		</div>
 		<div id="uavInfoView">
-		     航线编号：<span id="routeId">12-32-998</span><br>
-		      总航点：<span id="totalFlyingPoint">120</span><br>
-		      已传航点：<span id="processedFlyingPoint">120</span>
+		     航线编号：<span id="routeId"></span><br>
+		      总航点：<span id="totalFlyingPoint"></span><br>
+		      已传航点：<span id="processedFlyingPoint"></span>
 		</div>
 		<div id="content">
 
@@ -153,7 +153,7 @@
 				</div>
 				<footer class="pwdmodal-footer">
 					<button id="cancel" onclick="modalcancel()">取消</button>
-					<button id="sure"	onclick="modalsure(${task.id!},${task.uavId!},${task.role!},${uav.deviceid!},${planepath.id!})">确定</button>
+					<button id="sure"	onclick="modalsure(${task.id!},${task.uavId!},${task.role!},${uav.deviceid!},${task.flyingpathId!})">确定</button>
 				</footer>
 			</div>
 		</div>
@@ -337,7 +337,7 @@
  	                //发起飞或者降落指令等
  	                 if(planeOption == "takeoff.action"){
  	                	//如果是起飞指令
- 	                	var  scontent = deviceId+WebTypeUtil.SENDUSERFLYING;
+ 	                	var  scontent = deviceId+WebTypeUtil.SENDUSERFLYING+taskId;
  	               	    WebSocketUtil.webSocket.send(scontent);
  	               	    //ajaxAction("takeoff.action",taskId);
  	                }else if(planeOption == "emergencyback.action"){
@@ -365,7 +365,7 @@
     	 boxInput.setNullValue();
     }
     //查看航线信息
-    function viewflyingPath(deviceId}
+    function viewflyingPath(deviceId)
     {
     	var sconent =deviceId+WebTypeUtil.MESSAGESEARCHLINES;
     	WebSocketUtil.webSocket.send(scontent);

@@ -34,7 +34,7 @@ public class PointSToWayEncodingUtils {
 		ArrayList<SlpPoint> list = new ArrayList<SlpPoint>();
 		for(int i=0;i<coding.length;i=i+ConstantUtils.POINT_LENGTH)
 		{
-			byte[] copyOfRange = Arrays.copyOfRange(codes, i, i+ConstantUtils.POINT_LENGTH-1);
+			byte[] copyOfRange = Arrays.copyOfRange(codes, i, i+ConstantUtils.POINT_LENGTH);
 			list.add(SlpPoint.getPoint(copyOfRange));
 		}
 		return list;

@@ -49,7 +49,8 @@ public class FlyingPathServiceImpl implements FlyingPathService {
 		FlyingPath flyingPath  = new FlyingPath();
 		flyingPath.setId(pathId);
 		FlyingPath planePathList = flyingPathMapper.selectByFlyingPathId(flyingPath);
-		List<PlanePathVo> plist = LineUtil.textToList(planePathList.getPathdata(), planePathList.getHeightdata());
+		List<PlanePathVo> plist = LineUtil.textToList(planePathList.getPathdata(), planePathList.getHeightdata(),planePathList.getPointtype(),
+				planePathList.getParamone(),planePathList.getParamtwo());
 		return plist;
 	}
 	

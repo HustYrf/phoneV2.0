@@ -15,12 +15,12 @@ public class SlpMsgStatus implements SlpAbstractMessage {
 	public short BATT_REMN = 255;
 	public float AR_SPD = -1.0f;
 	public float GR_SPD = -1.0f;
-	public long GPS_LAT;
-	public long GPS_LON;
+	public int GPS_LAT;
+	public int GPS_LON;
 	public float GPS_ELV;
 	public int GPS_HDG = 0xffff;
-	public int HORI_AGL = 360;
-	public int VERT_AGL = 360;
+	public short HORI_AGL;
+	public short VERT_AGL = -12;
 	
 	public SlpMsgStatus() {
 		// TODO Auto-generated constructor stub
@@ -38,8 +38,8 @@ public class SlpMsgStatus implements SlpAbstractMessage {
 		this.BATT_REMN = payload.getUnsignedByte();
 		this.AR_SPD = payload.getFloat();
 		this.GR_SPD = payload.getFloat();
-		this.GPS_LAT = payload.getUnsignedInt();
-		this.GPS_LON = payload.getUnsignedInt();
+		this.GPS_LAT = payload.getInt();
+		this.GPS_LON = payload.getInt();
 		this.GPS_ELV = payload.getFloat();
 		this.GPS_HDG = payload.getUnsignedShort();
 		this.HORI_AGL = payload.getShort();
@@ -57,12 +57,12 @@ public class SlpMsgStatus implements SlpAbstractMessage {
 		packet.payload.putUnsignedByte(BATT_REMN);
 		packet.payload.putFloat(AR_SPD);
 		packet.payload.putFloat(GR_SPD);
-		packet.payload.putUnsignedInt(GPS_LAT);
-		packet.payload.putUnsignedInt(GPS_LON);
+		packet.payload.putInt(GPS_LAT);
+		packet.payload.putInt(GPS_LON);
 		packet.payload.putFloat(GPS_ELV);
 		packet.payload.putUnsignedShort(GPS_HDG);
-		packet.payload.putShort((short)HORI_AGL);
-		packet.payload.putShort((short)VERT_AGL);
+		packet.payload.putShort(HORI_AGL);
+		packet.payload.putShort(VERT_AGL);
 		return packet;
 	}
 	

@@ -14,11 +14,14 @@
 	<resultMap id="ResultMapWithBLOBs" type="hust.phone.mapper.pojo.FlyingPath"
 		extends="BaseResultMap">
 		<result column="HeightData" property="heightdata" jdbcType="LONGVARCHAR" />
+		<result column="PointType" property="pointtype" jdbcType="LONGVARCHAR" />
+		<result column="ParamOne" property="paramone" jdbcType="LONGVARCHAR" />
+		<result column="ParamTwo" property="paramtwo" jdbcType="LONGVARCHAR" />
 	</resultMap>
 	
-	<sql id="Base_Column_list"> id,Airport_Z,Airport_A,Name,AsText(PathData) as	PathData,Description,CreateTime,UpdateTime
+	<sql id="Base_Column_list"> 
+	id,Airport_Z,Airport_A,Name,AsText(PathData) as	PathData,HeightData,Description,CreateTime,UpdateTime,PointType,ParamOne,ParamTwo
 	</sql>
-	
 	<select id="selectByFlyingPathVO" parameterType="hust.phone.mapper.pojo.FlyingPath"
 		resultMap="BaseResultMap">
 		select

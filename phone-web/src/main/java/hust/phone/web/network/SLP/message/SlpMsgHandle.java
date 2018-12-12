@@ -5,8 +5,9 @@ import hust.phone.web.network.SLP.SlpPacket;
 import hust.phone.web.network.SLP.SlpPayload;
 
 public class SlpMsgHandle implements SlpAbstractMessage {
-	public static final int MSG_LENGTH = 2;
+	
 	public static final short MSG_TYPE = 2;
+	public static final int MSG_LENGTH = 2;
 	
 	public short COM_TYPE;
 	public short RES_RELULT;

@@ -35,14 +35,15 @@ public class UnifyProtocolCodecFilter extends ProtocolCodecFilter {
 		//获得字节流里面的登录消息，无人机登录和用户登录
 
 		//short head = (short)(buf.get(0)&0xff);
-		short MSG_TYPE =(short) (buf.get(21)&0xff);
+		short MSG_TYPE =(short) (buf.get(19)&0xff);
 		String requestInfo  = new String(buf.array(),0,buf.limit(),UTF_8);
+		//System.out.println(requestInfo);
 		if(requestInfo.contains("websocket"))
 		{
 			//手机端设置session
 			System.err.println("手机端设置session");
 			session.setAttribute(ConstantUtils.DEVICE_TYPE,ConstantUtils.DEVICE_Mobile);
-		}else if(MSG_TYPE==4 || MSG_TYPE == 1){
+		}else if(requestInfo.contains(ConstantUtils.BASE_HEAD)){
 			//无人机端设置session
 			session.setAttribute(ConstantUtils.DEVICE_TYPE,ConstantUtils.DEVICE_Plane);
 			System.out.println("无人机设置session");
