@@ -6,6 +6,7 @@ var planeStatus = null;
 var role = null;
 var task = null;
 window.onload=function(){ 
+	
 	base = document.getElementById("base");
 	log=document.getElementById("log");
 	plane =document.getElementById("plane");

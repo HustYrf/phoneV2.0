@@ -4,18 +4,19 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title>无人机操控</title>
+<link href="${s.base}/res/assets/video-js.css" rel="stylesheet">
+<script src="${s.base}/res/assets/videojs-ie8.min.js"></script>
+
 <meta name="viewport" content="initial-scale=1, maximum-scale=1">
 <link rel="shortcut icon" href="${s.base}/res/images/favicon.ico">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black">
+
 <link rel="stylesheet" href="${s.base}/res/light7/css/sm.min.css">
 <link rel="stylesheet" href="${s.base}/res/css/phone.css">
 <link rel="stylesheet" href="${s.base}/res/css/main1119.css" />
 <link rel="stylesheet" href="${s.base}/res/light7/css/light7-swiper.min.css">
 
-<link rel="stylesheet" href="${s.base}/res/assets/hivideo.css" />
-<script type="text/javascript" src="${s.base}/res/assets/hivideo.js"></script>
-
+<script type="text/javascript" src="${s.base}/res/js/WGS84_to_GCJ02.js"></script>
+ 
 <script src="http://cache.amap.com/lbs/static/es5.min.js"></script>
 <script	src="http://webapi.amap.com/maps?v=1.4.6&key=82f9e75505b649be9ab81a45ae34aa14"></script>
 <style type="text/css">
@@ -26,18 +27,15 @@
 }
 
 .main-wrapVideo{
-    display: none;
+    visibility:hidden;
     position:fixed;
-    width: 100%;
+    width:100%;
     bottom:17%;
-    z-index: 998;  
+    z-index: 998;
+    background-color:black;
+    text-align:center;
 }
 
-.main-wrapVideo video{
-	padding-left:2px;
-	padding-right:2px;
-    width: 100%;
-}
 </style>
 </head>
 <body>
@@ -46,11 +44,15 @@
 <input type="hidden" id="peoplerole" value="${task.role!}"><br/>
 <input type="hidden" id="task" value="${task.id!}"><br/>
 
-<div class="main-wrapVideo" id="videoDiv">
-    <video ishivideo="true" autoplay="false" isrotate="true" autoHide="true">
-        <source src="${s.base}/res/assets/video.mp4" type="video/mp4" id="videosrc">
-    </video>
-</div>
+	<div class="main-wrapVideo" id="videoDiv">
+	    <div class="videocontain" id="videoContainer">
+	        <video id="uavVideo" class="video-js vjs-default-skin vjs-big-play-centered" controls preload="auto" 
+	        width="375" height="380" poster="${s.base}/res/assets/video.jpg" data-setup="{}">        
+	            <source src="rtmp://218.65.240.246/live/stream" type="rtmp/flv">
+	        </video>
+	    </div>
+	</div>
+
 	<div class="page-group">
 		<header class="bar bar-nav">
 			<a class="button button-link button-nav pull-left extend"
@@ -68,7 +70,6 @@
 		<div class="uavStatus"  style="color:#4169E1;">飞机状态：<span id="fightStatus">未连接</span>
 		</div>
 		<div id="content">
-
 			<div id="container"></div>
 			<script src="//webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
 			<script>
@@ -164,6 +165,8 @@
 	<script type='text/javascript' src="${s.base}/res/js/four_bit_password_input_box.js"></script>
 	<script type="text/javascript" src="${s.base}/res/js/chat.js"></script>
 	<script type="text/javascript" src="${s.base}/res/js/home.js"></script>
+	<script src="${s.base}/res/assets/video.js"></script>
+	<script>videojs.options.flash.swf = "${s.base}/res/assets/video-js.swf";</script>
 	<script>
 	
 	boxInput.init(function(){});
@@ -175,15 +178,31 @@
 	    modal.style.display = "none";
 	}
 	
+	
+	var options = {};	 
+	var player = videojs('uavVideo', options, function onPlayerReady() {
+	  videojs.log('播放器已经准备好了!');
+	  // In this context, `this` is the player that was created by Video.js.<br>  // 注意，这个地方的上下文， `this` 指向的是Video.js的实例对像player
+	  //this.play();
+	  var sceenWidth = $("#videoDiv").width();
+	  this.width(sceenWidth);
+	});
+	$(window).resize(function() {
+		 var sceenWidth = $("#videoDiv").width();
+		 player.width(sceenWidth);
+		
+	 });
+	
     function videoOp() {
-
-        if($('#videoDiv').css('display') === 'none'){
-            $("#videoDiv").css('display','block');
+   
+        if($('#videoDiv').css('visibility') == 'hidden'){
+            $("#videoDiv").css('visibility','visible');
+            $(".vjs-control-bar").css('visibility','visible');
             $("#videobtn").text("关闭视频");
             //ajax获取后台视频流
-
         }else{
-            $("#videoDiv").css('display','none');
+            $("#videoDiv").css('visibility','hidden');
+            $(".vjs-control-bar").css('visibility','hidden');
             $("#videobtn").text("实时视频");
             //关闭视频流
         }
