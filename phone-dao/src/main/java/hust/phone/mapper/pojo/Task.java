@@ -5,18 +5,12 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 public class Task {
-	
+
 	private int role;
-	
+
 	private Integer id;
-
-	public int getRole() {
-		return role;
-	}
-
-	public void setRole(int role) {
-		this.role = role;
-	}
+	
+	private String missionId;
 
 	private String name;
 
@@ -32,16 +26,16 @@ public class Task {
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createtime;
-	
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date planstarttime;
-	
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date planendtime;
-	
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date executestarttime;
-	
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date executeendtime;
 
@@ -179,6 +173,22 @@ public class Task {
 
 	public void setReporturl(String reporturl) {
 		this.reporturl = reporturl == null ? null : reporturl.trim();
+	}
+
+	public String getMissionId() {
+		return missionId;
+	}
+
+	public void setMissionId(String missionId) {
+		this.missionId = missionId;
+	}
+
+	public int getRole() {
+		return role;
+	}
+
+	public void setRole(int role) {
+		this.role = role;
 	}
 
 }
