@@ -1,5 +1,7 @@
 package hust.phone.web.network.SLP;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,12 +25,32 @@ import hust.phone.web.network.common.PointSToWayEncodingUtils;
 
 
 public class test {
-	
+	/*
+	 * 54 45 4c 55 41 56 01 
+	 * 39 00 
+	 * 00 00 
+	 * 03 01  01 00 
+	 * 03 01 01 00 
+	 * 01 
+	 * 04 
+	 * 00 00 00 01 
+	 * 00 00 00 00   00 00 00 00 4f 00 00 8b c8 01 40 c2 27 e5 3b 21   58 99 0d 51 97 90 40 db f9 9a 42 8e 00 00 00 00   00 00 5e 16 
+	 */
+	/*84, 69, 76, 85, 65, 86 1, 
+	 * 57, 0,
+	 *  1, 0, 
+	 *  1, 0, 0, 0,
+	 *   1, 0, 0, 0,
+	 *   1,
+	 *   2, 
+	 *   1, 0, 0, 0, 0, 0, 0, 0, 0, -1, 0, 0, -128, -65, 0, 0, -128, -65, 44, 7, -16, 14, 30, 34, -65, 65, 0, 0, 0, 0, -1, -1, 0, 0, -12, -1, 71, -12, 16, 0, 0, 0, 120, -112]
+	*/
 	@Test
 	public void test1()
 	{
 		SlpMsgStatus mess = new SlpMsgStatus();
 		mess.BASEMODE = 2;
+		mess.CUSTMODE =1;
 		mess.GPS_LON =1103045150;
 		mess.GPS_LAT = 250611500;
 		SlpPacket pack1 = mess.pack();
@@ -92,21 +114,11 @@ public class test {
 	@Test
 	public void test2()
 	{
-//		 	byte i = (byte) 0xaa;// 二进制表示 01000101
-//         
-//	        // 高四位
-//	        byte high4 = (byte) (i & 240) ; //240的二进制 11110000
-//	        // 低四位
-//	        byte low4 = (byte) (i & 15); // 15的二进制形式 00001111
-//	         
-//	        //System.out.println(high4>>4);
-//	        //System.out.println(low4<<4);
-//	         
-//	        byte j = (byte) ((low4<<4) + (high4>>4));
-//	         
-//	        System.out.println(getbyte(i));// 84的二进制形式 01010100
-		byte i=(byte) 254;
-		System.out.println(i);
+		int s = 1;
+		ByteBuffer b = ByteBuffer.allocate(4);
+		b.order(ByteOrder.LITTLE_ENDIAN);
+		b.putInt(s);
+		System.out.println(Arrays.toString(b.array()));
 	}
 	
 	@Test
@@ -149,8 +161,7 @@ public class test {
 	public void test5() throws Exception
 	{
 		byte b[] = {84, 69, 76, 85, 65, 86, 1, 74, 0, 0, 0, 2, 0, 0, 0, 1, 0, 1, 1, 6, 8, 0, 0, 0, 2, 0, 2, 0, 16, 1, 0, 102, 102, -90, 63, 51, 51, 19, 64, -128, -106, -104, 0, -128, -106, -104, 0, -51, -52, 76, 64, 16, 2, 0, 102, 102, -90, 63, 51, 51, 19, 64, 0, 45, 49, 1, 0, 45, 49, 1, 51, 51, 83, 64, 0, 0, 0, 0, 0, 0, -12, 36
-
-		};
+};
 		SlpPacket parse = SlpPacket.parse(b);
 		System.out.println(parse.toString());
 		SlpMsgPutLines unpack = (SlpMsgPutLines) parse.unpack();

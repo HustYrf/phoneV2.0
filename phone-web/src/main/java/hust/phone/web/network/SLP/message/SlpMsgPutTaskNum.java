@@ -38,5 +38,11 @@ public class SlpMsgPutTaskNum implements SlpAbstractMessage{
 		
 		
 	}
+	@Override
+	public String toString()
+	{
+		return "SlpMsgPutTaskNum "+"MISSION_ID"+":"+MISSION_ID+" "+ "RES_RELULT"+":"+RES_RELULT;
+		
+	}
 
 }

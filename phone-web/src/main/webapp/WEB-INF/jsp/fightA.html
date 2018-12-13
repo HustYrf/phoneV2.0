@@ -155,7 +155,7 @@
 				<footer class="pwdmodal-footer">
 					<button id="cancel" onclick="modalcancel()">取消</button>
 
-					<button id="sure"	onclick="modalsure(${task.id!},${task.uavId!},${task.role!},${uav.deviceid!},${task.flyingpathId!})">确定</button>
+					<button id="sure"	onclick="modalsure(${task.id!},${task.uavId!},${task.role!},${uav.deviceid!},${task.flyingpathId!},${task.missionId!})">确定</button>
 
 				</footer>
 			</div>
@@ -357,7 +357,7 @@
 	}
     
     //role=1则为放飞员，role=2则为接机员
-    function modalsure(taskId,uavId,role,deviceId,planepathId){  
+    function modalsure(taskId,uavId,role,deviceId,planepathId,missionId){  
     	  //输入密码确认之后
     	 modal.style.display = "none";              
     	 var planeOption =$("#option").val(); 
@@ -376,7 +376,7 @@
  	                //发起飞或者降落指令等
  	                 if(planeOption == "takeoff.action"){
  	                	//如果是起飞指令
- 	                	var  scontent = deviceId+WebTypeUtil.SENDUSERFLYING+taskId;
+ 	                	var  scontent = deviceId+WebTypeUtil.SENDUSERFLYING+missionId;
  	               	    WebSocketUtil.webSocket.send(scontent);
  	               	    //ajaxAction("takeoff.action",taskId);
  	                }else if(planeOption == "emergencyback.action"){
