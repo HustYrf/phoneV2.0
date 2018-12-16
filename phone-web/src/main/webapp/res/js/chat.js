@@ -59,6 +59,7 @@ var WebSocketUtil = {
 		//alert("收到消息"+event.data);
 		var message = event.data;
 		var messageType = message.split(":");
+		//console.log(messageType[0]);
 		switch(messageType[0]){
 		case WebTypeUtil.MESSAGETYPESTATUS:
 			//处理接收到的经纬度消息
@@ -281,10 +282,14 @@ var PlaneHandleServiceUtil ={
 		},
 		handleSearchLine:function(ROUTE_ID,ROUTE_COUNT,ROUTE_STOCK_COUNT)
 		{
+			//console.log(ROUTE_ID+" "+ROUTE_COUNT+" "+ROUTE_STOCK_COUNT);
 			//处理航点显示
-			$("#routeId").val(ROUTE_ID);
-			$("#totalFlyingPoint").val(ROUTE_COUNT);	
-			$("#processedFlyingPoint").val(ROUTE_STOCK_COUNT);		
+			//$("#routeId").val(ROUTE_ID);
+//			$("#totalFlyingPoint").val(ROUTE_COUNT);	
+//			$("#processedFlyingPoint").val(ROUTE_STOCK_COUNT);	
+			routeLineId.innerHTML = ROUTE_ID;
+			totalFlyingPoint.innerHTML = ROUTE_COUNT;
+			processedFlyingPoint.innerHTML = ROUTE_STOCK_COUNT;
 		},
 		handleCheckResult:function(RES_RELULT)
 		{
