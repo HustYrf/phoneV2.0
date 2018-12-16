@@ -276,59 +276,68 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		if(flag ==0)
 		{
 			//写入成功
-			length = index+1+ConstantUtils.PATH_CAP_MAX;
+			length = index+1+ConstantUtils.PATH_CAP_MAX-1;
 			start = index+1;
 			finish = index;
 		}
 		else{
 			//写入失败
-			length = index+ConstantUtils.PATH_CAP_MAX;
+			length = index+ConstantUtils.PATH_CAP_MAX-1;
 			start = index;
 			finish = index-1;
 		}
 		//将信息传送给手机
 		String content = ConstantUtils.MSG_PLANE_SEARCHRESULT+":"+pathId+":"+msg.ROUTE_COUNT+":"+finish;
+		
 		MinaBean beanmsg = new MinaBean();
 		beanmsg.setContent(content);
 		//将数据推送给手机客户端,
 		IoSession sessionMobile1 = IOSessionManager.getSessionMobile(send);
 		if(sessionMobile1!=null)
 		{
+			//System.out.println(content);
 			sessionMobile1.write(beanmsg);
 		}
 		//开始下发新的航线
 		int end = (length<size?length:size);
-		ArrayList<SlpPoint> list = new ArrayList<SlpPoint>();
-		SlpMsgPutLines msgLines  = new SlpMsgPutLines();
-		for(int i=start;i<end;i++)
+		if(start<=end)
 		{
-			SlpPoint point = new SlpPoint();
-			point.WAYPOINT_NUM=i;
-			point.WP_LNG = (int)((pathList.get(i-1).getLongitude())*10000000);
-			point.WP_LAT = (int)((pathList.get(i-1).getLatitude())*10000000);
-			point.WP_ALT =(float) pathList.get(i-1).getHeight();
-			point.WAYPOINT_TYPE = (short) pathList.get(i-1).getType();
-			point.WP_PARAM1 = pathList.get(i-1).getParamone();
-			point.WP_PARAM2 = pathList.get(i-1).getParamtwo();
-			list.add(point);
+			//有剩余数据没发，所以继续发送
+			//System.err.println("start :"+start+" "+"end:"+end);
+			ArrayList<SlpPoint> list = new ArrayList<SlpPoint>();
+			SlpMsgPutLines msgLines  = new SlpMsgPutLines();
+			for(int i=start;i<=end;i++)
+			{
+				//System.out.print("point:"+i);
+				SlpPoint point = new SlpPoint();
+				point.WAYPOINT_NUM=i;
+				point.WP_LNG = (int)((pathList.get(i-1).getLongitude())*10000000);
+				point.WP_LAT = (int)((pathList.get(i-1).getLatitude())*10000000);
+				point.WP_ALT =(float) pathList.get(i-1).getHeight();
+				point.WAYPOINT_TYPE = (short) pathList.get(i-1).getType();
+				point.WP_PARAM1 = pathList.get(i-1).getParamone();
+				point.WP_PARAM2 = pathList.get(i-1).getParamtwo();
+				list.add(point);
+			}
+			byte[] pointSToWayEncoding = PointSToWayEncodingUtils.PointSToWayEncoding(list);
+			//System.out.println("路径整合"+Arrays.toString(pointSToWayEncoding));
+			//清空list
+			list.removeAll(list);
+			msgLines.ROUTE_ID = pathId;
+			msgLines.ROUTE_COUNT = size;
+			//System.out.println("num:"+ (end -index+1));
+			msgLines.ROUTE_MSG_COUNT = end -index+1;
+			msgLines.POINTS= new short[msgLines.ROUTE_MSG_COUNT * ConstantUtils.POINT_LENGTH];
+			for(int h= 0;h<pointSToWayEncoding.length;h++)
+			{
+				msgLines.POINTS[h] = (short) (pointSToWayEncoding[h]&0xff);
+			}
+			SlpPacket pack = msgLines.pack();
+			pack.SND_DEVICE_ID = ConstantUtils.Server_Num;
+			pack.REV_DEVICE_ID =packet.SND_DEVICE_ID;
+			byte[] encoding = pack.encoding();
+			session.write(IoBuffer.wrap(encoding));	
 		}
-		byte[] pointSToWayEncoding = PointSToWayEncodingUtils.PointSToWayEncoding(list);
-		//System.out.println("路径整合"+Arrays.toString(pointSToWayEncoding));
-		//清空list
-		list.removeAll(list);
-		msgLines.ROUTE_ID = pathId;
-		msgLines.ROUTE_COUNT = size;
-		msgLines.ROUTE_MSG_COUNT = end -index;
-		msgLines.POINTS= new short[msgLines.ROUTE_MSG_COUNT * ConstantUtils.POINT_LENGTH];
-		for(int h= 0;h<pointSToWayEncoding.length;h++)
-		{
-			msgLines.POINTS[h] = (short) (pointSToWayEncoding[h]&0xff);
-		}
-		SlpPacket pack = msgLines.pack();
-		pack.SND_DEVICE_ID = ConstantUtils.Server_Num;
-		pack.REV_DEVICE_ID =packet.SND_DEVICE_ID;
-		byte[] encoding = pack.encoding();
-		session.write(IoBuffer.wrap(encoding));	
 		
 	}
 	//处理查看无人机所有
