@@ -287,7 +287,7 @@ var PlaneHandleServiceUtil ={
 			//$("#routeId").val(ROUTE_ID);
 //			$("#totalFlyingPoint").val(ROUTE_COUNT);	
 //			$("#processedFlyingPoint").val(ROUTE_STOCK_COUNT);	
-			routeId.innerHTML = ROUTE_ID;
+			routeLineId.innerHTML = ROUTE_ID;
 			totalFlyingPoint.innerHTML = ROUTE_COUNT;
 			processedFlyingPoint.innerHTML = ROUTE_STOCK_COUNT;
 		},

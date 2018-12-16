@@ -5,7 +5,7 @@ var plane=null;
 var planeStatus = null;
 var role = null;
 var task = null;
-var routeId = null;
+var routeLineId = null;
 var totalFlyingPoint = null;
 var processedFlyingPoint = null;
 window.onload=function(){ 
@@ -16,7 +16,7 @@ window.onload=function(){
 	planeStatus =document.getElementById("fightStatus");
 	role =document.getElementById("peoplerole");
 	task =document.getElementById("task");
-	routeId =document.getElementById("routeId");
+	routeLineId =document.getElementById("routeLineId");
 	totalFlyingPoint =document.getElementById("totalFlyingPoint");
 	processedFlyingPoint =document.getElementById("processedFlyingPoint");
 	HomeChatOperateUtil.ready();

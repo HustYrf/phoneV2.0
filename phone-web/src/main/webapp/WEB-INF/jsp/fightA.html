@@ -83,7 +83,7 @@
 		<div class="uavStatus"  style="color:#4169E1;">飞机状态：<span id="fightStatus">未连接</span>
 		</div>
 		<div id="uavInfoView">
-		     航线编号：<span id="routeId"></span><br>
+		     航线编号：<span id="routeLineId"></span><br>
 		      总航点：<span id="totalFlyingPoint"></span><br>
 		      已传航点：<span id="processedFlyingPoint"></span>
 		</div>
@@ -406,13 +406,13 @@
     //查看航线信息
     function viewflyingPath(deviceId)
     {
-    	var sconent =deviceId+WebTypeUtil.MESSAGESEARCHLINES;
+    	var scontent =deviceId+WebTypeUtil.MESSAGESEARCHLINES;
     	WebSocketUtil.webSocket.send(scontent);
     }
     //核对航线
     function checkFlyingPath(deviceId)
     {
-    	var sconent = deviceId+WebTypeUtil.MESSAGESEARCHLINESDETAIL;
+    	var scontent = deviceId+WebTypeUtil.MESSAGESEARCHLINESDETAIL;
     	WebSocketUtil.webSocket.send(scontent);
     }
     
