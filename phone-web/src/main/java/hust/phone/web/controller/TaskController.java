@@ -136,21 +136,24 @@ public class TaskController {
 	}
 	@RequestMapping(value = "/editTaskUav", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
 	@ResponseBody
-	public String editTaskUav(Task task,@RequestParam("deviceId")String deviceId) {
+	public String editTaskUav(@RequestParam("id")Integer id,@RequestParam("deviceId")String deviceId) {
 		
 		Uav uav = uavServiceImpl.getUavByDeviceId(deviceId);
 		if(uav == null || uav.getId()==0) {
-			return JsonView.render(1, "该设备号的无人机不存在，修改失败！");
+			return JsonView.render(0, "该设备号的无人机不存在，修改失败！");
 		}
-		
+		Task task = new Task();
+		task.setId(id);
 		Task task1 = taskServiceImpl.getTaskByTask(task);
 		task1.setUavId(uav.getId());
 		
-		if(taskServiceImpl.updateTaskByTask(task1)==true)
+		if(taskServiceImpl.updateTaskByTask(task1)==true) {
+			 return JsonView.render(1, "无人机修改成功！");
+		}else {
+			return JsonView.render(0, "修改失败！");
+		}
 		
-		    return JsonView.render(1, "无人机修改成功！");
 		
-		return JsonView.render(1, "修改失败！");
 	}
 	
 	
