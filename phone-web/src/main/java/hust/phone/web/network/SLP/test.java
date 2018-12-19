@@ -18,6 +18,7 @@ import hust.phone.web.network.SLP.message.SlpCheckFinish;
 import hust.phone.web.network.SLP.message.SlpMsgLogin;
 import hust.phone.web.network.SLP.message.SlpMsgPutLines;
 import hust.phone.web.network.SLP.message.SlpMsgSearchLines;
+import hust.phone.web.network.SLP.message.SlpMsgSearchLinesDetail;
 import hust.phone.web.network.SLP.message.SlpMsgStatus;
 import hust.phone.web.network.SLP.message.SlpPoint;
 import hust.phone.web.network.common.ConstantUtils;
@@ -144,17 +145,28 @@ public class test {
 	@Test
 	public void test4()
 	{
-		SlpMsgStatus msg = new SlpMsgStatus();
-		msg.CUSTMODE= 1;
-		msg.GPS_ELV=1111;
-		msg.GPS_HDG=23;
-		SlpPacket pack = msg.pack();
-		pack.SND_DEVICE_ID = 1;
-		byte[] encoding = pack.encoding();
-		SlpPacket parse = SlpPacket.parse(encoding);
-		System.out.println(parse.toString());
-		SlpMsgStatus msg2=(SlpMsgStatus) parse.unpack();
-		System.out.println(msg2.toString());
+
+		byte b[] = {84, 69, 76, 85, 65, 86, 1, -38, 0, 59, 0, 0, 0, 0, 0, 
+				2, 0, 1, 2, -126, -1, -1, -1, -1, 9, 0, 9, 0, 9, 0, 16, 1, 0, 0, 0, 
+				0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+				21, 0, 0, 0, 91, 0, 0, 0, 0, 0, 48, 66, 16, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 22, 0, 0, 0, 92, 0, 0, 0, 0, 0, 
+				52, 66, 16, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 23, 0, 0, 0, 93, 0, 0, 0, 0, 0, 56, 66, 16, 5, 0, 0, 
+				0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 94, 0, 0, 0, 0, 0, 60, 66, 16, 6, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+				25, 0, 0, 0, 95, 0, 0, 0, 0, 0, 64, 66, 16, 7, 0, 0, 0, 0, 0, 0, 0, 0, 0, 26, 0, 0, 0, 96, 0, 
+				0, 0, 0, 0, 68, 66, 16, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 27, 0, 0, 0, 97, 0, 0, 0, 0, 0, 72, 66,
+				16, 9, 0, 0, 0, 0, 0, 0, -1, -1, -17, -52};
+		SlpPacket parse = SlpPacket.parse(b);
+		System.out.println(b.length);
+		System.out.println(Arrays.toString(parse.payload.getData().array()));
+		SlpMsgSearchLinesDetail msg =(SlpMsgSearchLinesDetail) parse.unpack();
+		
+		System.out.println(msg.toString());
+		System.out.println(Arrays.toString(msg.POINTS));
+		ArrayList<SlpPoint> list2 = PointSToWayEncodingUtils.WayToPoints((msg.POINTS));
+		for(SlpPoint l:list2)
+		{
+			System.out.println(l.toString());
+		}
 	}
 	
 	@Test
