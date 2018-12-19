@@ -755,7 +755,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			String content = ConstantUtils.Mobile_Line_SEARCH+":";
 			for(int i=start;i<start+countNum;i++)
 			{
-				PlanePathVo planePathVo = flyingList.get(i);
+				PlanePathVo planePathVo = flyingList.get(i-1);
 				float height = (float) planePathVo.getHeight();
 				int latitude = (int) (planePathVo.getLatitude()*10000000);
 				int longitude = (int) (planePathVo.getLongitude()*10000000);
