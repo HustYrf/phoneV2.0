@@ -374,7 +374,7 @@
   <update id="updateByPrimaryKey" parameterType="hust.phone.mapper.pojo.Task" >
     update K_Task
     set Name = #{name,jdbcType=VARCHAR},
-      Mission_id = #{record.missionId,jdbcType=VARCHAR},
+      Mission_id = #{missionId,jdbcType=VARCHAR},
       UserCreator = #{usercreator,jdbcType=INTEGER},
       User_A = #{userA,jdbcType=INTEGER},
       User_Z = #{userZ,jdbcType=INTEGER},

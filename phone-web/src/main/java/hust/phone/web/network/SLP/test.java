@@ -114,10 +114,10 @@ public class test {
 	@Test
 	public void test2()
 	{
-		int s = 1;
+		float s = 34.0f;
 		ByteBuffer b = ByteBuffer.allocate(4);
 		b.order(ByteOrder.LITTLE_ENDIAN);
-		b.putInt(s);
+		b.putFloat(s);
 		System.out.println(Arrays.toString(b.array()));
 	}
 	

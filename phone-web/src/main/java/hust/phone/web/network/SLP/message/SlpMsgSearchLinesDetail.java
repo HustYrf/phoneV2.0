@@ -3,10 +3,11 @@ package hust.phone.web.network.SLP.message;
 import hust.phone.web.network.SLP.SlpAbstractMessage;
 import hust.phone.web.network.SLP.SlpPacket;
 import hust.phone.web.network.SLP.SlpPayload;
+import hust.phone.web.network.common.ConstantUtils;
 
 public class SlpMsgSearchLinesDetail implements SlpAbstractMessage{
 	public static final short MSG_TYPE = 0x82;
-	public static final short POINT_LEN = 15;
+	public static final short POINT_LEN = ConstantUtils.POINT_LENGTH;
 	
     public long ROUTE_ID;
     public int ROUTE_COUNT;
@@ -43,7 +44,7 @@ public class SlpMsgSearchLinesDetail implements SlpAbstractMessage{
 		this.ROUTE_ID = payload.getUnsignedInt();
 		this.ROUTE_COUNT = payload.getUnsignedShort();
 		this.ROUTE_MSG_COUNT = payload.getUnsignedShort();
-		this.POINTS= new short[this.ROUTE_MSG_COUNT * 15];
+		this.POINTS= new short[this.ROUTE_MSG_COUNT * POINT_LEN];
 		for(int i= 0;i<this.ROUTE_COUNT* POINT_LEN ;i++)
 		{
 			this.POINTS[i] = payload.getUnsignedByte();
