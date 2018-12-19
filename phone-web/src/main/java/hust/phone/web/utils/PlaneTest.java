@@ -21,7 +21,7 @@ public class PlaneTest {
 //		FlyingPathServiceImpl fliying =(FlyingPathServiceImpl) SpringBeanFactoryUtils.getBean("flyingPathServiceImpl");
 		ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
 		FlyingPathServiceImpl fliying = (FlyingPathServiceImpl) ac.getBean("flyingPathServiceImpl");
-		List<PlanePathVo> pathList = fliying.getPathToObject(19);
+		List<PlanePathVo> pathList = fliying.getPathToObject(20);
 		ArrayList<SlpPoint> list = new ArrayList<SlpPoint>();
 		int size = pathList.size();
 		System.out.println("数据库中航点的个数:"+size);

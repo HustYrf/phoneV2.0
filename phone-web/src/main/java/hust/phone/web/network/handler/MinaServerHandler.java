@@ -272,21 +272,24 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		List<PlanePathVo> pathList = fliying.getPathToObject(pathId);
 		int size = pathList.size();
 		int length;
-		int start ;
+		int start;
 		int finish;
 		if(flag ==0)
 		{
 			//写入成功
+			System.out.println("写入成功");
 			length = index+1+ConstantUtils.PATH_CAP_MAX-1;
 			start = index+1;
 			finish = index;
 		}
 		else{
 			//写入失败
+			System.out.println("写入失败");
 			length = index+ConstantUtils.PATH_CAP_MAX-1;
 			start = index;
 			finish = index-1;
 		}
+		System.out.println(msg.toString());
 		//将信息传送给手机
 		String content = ConstantUtils.MSG_PLANE_SEARCHRESULT+":"+pathId+":"+msg.ROUTE_COUNT+":"+finish;
 		System.out.println("推送给手机的信息："+content);
@@ -304,7 +307,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		if(start<=end)
 		{
 			//有剩余数据没发，所以继续发送
-			System.err.println("数据库中还有数据没发："+"start :"+start+" "+"end:"+end);
+			System.out.println("数据库中还有数据没发："+"start :"+start+" "+"end:"+end);
 			ArrayList<SlpPoint> list = new ArrayList<SlpPoint>();
 			SlpMsgPutLines msgLines  = new SlpMsgPutLines();
 			for(int i=start;i<=end;i++)
@@ -318,6 +321,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 				point.WAYPOINT_TYPE = (short) pathList.get(i-1).getType();
 				point.WP_PARAM1 = pathList.get(i-1).getParamone();
 				point.WP_PARAM2 = pathList.get(i-1).getParamtwo();
+				System.out.println(point.toString());
 				list.add(point);
 			}
 			byte[] pointSToWayEncoding = PointSToWayEncodingUtils.PointSToWayEncoding(list);
@@ -326,8 +330,8 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			list.removeAll(list);
 			msgLines.ROUTE_ID = pathId;
 			msgLines.ROUTE_COUNT = size;
-			System.out.println("该条消息发送的航点数num:"+ (end -index+1));
-			msgLines.ROUTE_MSG_COUNT = end -index+1;
+			System.out.println("该条消息发送的航点数num:"+ (end -index+flag));
+			msgLines.ROUTE_MSG_COUNT = end -index+flag;
 			msgLines.POINTS= new short[msgLines.ROUTE_MSG_COUNT * ConstantUtils.POINT_LENGTH];
 			for(int h= 0;h<pointSToWayEncoding.length;h++)
 			{
@@ -337,8 +341,9 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			pack.SND_DEVICE_ID = ConstantUtils.Server_Num;
 			pack.REV_DEVICE_ID =packet.SND_DEVICE_ID;
 			byte[] encoding = pack.encoding();
+			System.out.println(Arrays.toString(encoding));
 			session.write(IoBuffer.wrap(encoding));	
-			
+			System.out.println("发送剩余的航点完成");	
 		}
 		
 	}
@@ -851,9 +856,6 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		//反馈给无人机消息成功，写入字节流
 		//写入session中,一定要加IoBuffer.wrap
 		session.write(IoBuffer.wrap(encoding) );
-		
-
-		
 	}
 	//无人机发出的应答消息，显示无人机可以起飞，上传，返航
 	private void processMessageHandleRes(IoSession session, SlpPacket packet) {

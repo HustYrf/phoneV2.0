@@ -45,7 +45,7 @@ public class SlpMsgPutLines implements SlpAbstractMessage{
 		this.ROUTE_COUNT = payload.getUnsignedShort();
 		this.ROUTE_MSG_COUNT = payload.getUnsignedShort();
 		this.POINTS= new short[this.ROUTE_MSG_COUNT *ConstantUtils.POINT_LENGTH];
-		for(int i= 0;i<this.ROUTE_COUNT* POINT_LEN ;i++)
+		for(int i= 0;i<this.ROUTE_MSG_COUNT* POINT_LEN ;i++)
 		{
 			this.POINTS[i] = payload.getUnsignedByte();
 		}
