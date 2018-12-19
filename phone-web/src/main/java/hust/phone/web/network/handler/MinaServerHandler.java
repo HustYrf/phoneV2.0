@@ -256,6 +256,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 	}
 	//处理无人机下发的航线完成
 	private void processMessageLinesFinish(IoSession session, SlpPacket packet) {
+		System.out.println("处理航线信息完成消息");
 		String send = packet.SND_DEVICE_ID+ConstantUtils.Phone_SEND;
 		SlpLinesFinish msg = (SlpLinesFinish) packet.unpack();
 		int index =msg.WAYPOINT_NUM;
@@ -288,7 +289,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		}
 		//将信息传送给手机
 		String content = ConstantUtils.MSG_PLANE_SEARCHRESULT+":"+pathId+":"+msg.ROUTE_COUNT+":"+finish;
-		
+		System.out.println("推送给手机的信息："+content);
 		MinaBean beanmsg = new MinaBean();
 		beanmsg.setContent(content);
 		//将数据推送给手机客户端,
@@ -303,7 +304,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		if(start<=end)
 		{
 			//有剩余数据没发，所以继续发送
-			//System.err.println("start :"+start+" "+"end:"+end);
+			System.err.println("数据库中还有数据没发："+"start :"+start+" "+"end:"+end);
 			ArrayList<SlpPoint> list = new ArrayList<SlpPoint>();
 			SlpMsgPutLines msgLines  = new SlpMsgPutLines();
 			for(int i=start;i<=end;i++)
@@ -325,7 +326,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			list.removeAll(list);
 			msgLines.ROUTE_ID = pathId;
 			msgLines.ROUTE_COUNT = size;
-			//System.out.println("num:"+ (end -index+1));
+			System.out.println("该条消息发送的航点数num:"+ (end -index+1));
 			msgLines.ROUTE_MSG_COUNT = end -index+1;
 			msgLines.POINTS= new short[msgLines.ROUTE_MSG_COUNT * ConstantUtils.POINT_LENGTH];
 			for(int h= 0;h<pointSToWayEncoding.length;h++)
@@ -337,6 +338,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			pack.REV_DEVICE_ID =packet.SND_DEVICE_ID;
 			byte[] encoding = pack.encoding();
 			session.write(IoBuffer.wrap(encoding));	
+			
 		}
 		
 	}
@@ -378,6 +380,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 	//手机查询航线信息
 	private void processMobileMessageSearchLines(String revId) {
 		// TODO Auto-generated method stub
+		System.out.println("手机查询航线信息");
 		String s = revId.substring(0, revId.length() - 4);
 		IoSession sessionPlane = IOSessionManager.getSessionPlane(Long.parseLong(s));
 		if (sessionPlane != null) {
@@ -420,8 +423,9 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		String s = revId.substring(0, revId.length() - 4);
 		IoSession sessionPlane = IOSessionManager.getSessionPlane(Long.parseLong(s));
 		if (sessionPlane != null) {
-			//System.out.println("找到无人机"+LineId);
+			System.out.println("找到无人机要下发的路径编号:"+LineId);
 			int pathId=Integer.parseInt(LineId);
+			System.out.println("解析出的路径编号："+pathId);
 			FlyingPathServiceImpl fliying =(FlyingPathServiceImpl) SpringBeanFactoryUtils.getBean("flyingPathServiceImpl");
 			//根据飞行路线查询
 //			ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
@@ -430,6 +434,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			List<PlanePathVo> pathList = fliying.getPathToObject(pathId);
 			ArrayList<SlpPoint> list = new ArrayList<SlpPoint>();
 			int size = pathList.size();
+			System.out.println("数据库中航点的个数:"+size);
 			SlpMsgPutLines msg  = new SlpMsgPutLines();
 			if(size>=ConstantUtils.PATH_CAP_MAX)
 			{
@@ -443,10 +448,11 @@ public class MinaServerHandler extends IoHandlerAdapter {
 					point.WAYPOINT_TYPE = (short) pathList.get(i-1).getType();
 					point.WP_PARAM1 = pathList.get(i-1).getParamone();
 					point.WP_PARAM2 = pathList.get(i-1).getParamtwo();
+					System.out.println(point.toString());
 					list.add(point);
 				}
 				byte[] pointSToWayEncoding = PointSToWayEncodingUtils.PointSToWayEncoding(list);
-				//System.out.println("路径整合"+Arrays.toString(pointSToWayEncoding));
+				System.out.println("路径整合"+Arrays.toString(pointSToWayEncoding));
 				msg.ROUTE_ID = pathId;
 				msg.ROUTE_COUNT = size;
 				msg.ROUTE_MSG_COUNT =ConstantUtils.PATH_CAP_MAX;
@@ -470,7 +476,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 					list.add(point);
 				}
 				byte[] pointSToWayEncoding = PointSToWayEncodingUtils.PointSToWayEncoding(list);
-				//System.out.println("路径整合"+Arrays.toString(pointSToWayEncoding));
+				System.out.println("路径整合"+Arrays.toString(pointSToWayEncoding));
 				msg.ROUTE_ID = pathId;
 				msg.ROUTE_COUNT = size;
 				msg.ROUTE_MSG_COUNT =size;
@@ -485,16 +491,11 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			pack.SND_DEVICE_ID = ConstantUtils.Server_Num;
 			pack.REV_DEVICE_ID = Long.parseLong(s);
 			byte[] encoding = pack.encoding();
-			//System.out.println("打包路径整合"+Arrays.toString(encoding));
+			System.out.println("打包路径整合"+Arrays.toString(encoding));
 			// 反馈给无人机消息成功，写入字节流
 			// 写入session中,一定要加IoBuffer.wrap
-			
-			SlpPacket parse = SlpPacket.parse(encoding);
-			//System.out.println(parse.toString());
-			SlpMsgPutLines unpack = (SlpMsgPutLines) parse.unpack();
-			//System.out.println(unpack.toString());
-			
 			sessionPlane.write(IoBuffer.wrap(encoding));	
+			System.out.println("完成航线下发");
 			
 			}
 	}
@@ -737,6 +738,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 	}
 	//处理无人机发出的处理查询具体航线的信息
 	private void processMessageSearchLinesDeatil(IoSession session, SlpPacket packet) {
+		System.out.println("核对航线");
 		String send = packet.SND_DEVICE_ID+ConstantUtils.Phone_SEND;
 		IoSession sessionMobile1 = IOSessionManager.getSessionMobile(send);
 		if(sessionMobile1!=null)
@@ -748,6 +750,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			//得到无人机传来的飞行的点
 			ArrayList<SlpPoint> list2 = PointSToWayEncodingUtils.WayToPoints((unpack.POINTS));
 			int start =list2.get(0).WAYPOINT_NUM;
+			System.out.println("航点数:"+countNum+"航线编号:"+routeId);
 			//查询无人机在数据库里面的数据
 			FlyingPathServiceImpl flying =(FlyingPathServiceImpl) SpringBeanFactoryUtils.getBean("flyingPathServiceImpl");
 			List<PlanePathVo> flyingList = flying.getPathToObject((int)routeId);
@@ -769,6 +772,8 @@ public class MinaServerHandler extends IoHandlerAdapter {
 				{
 					//航线不匹配
 					flag =1;
+					System.out.println("第"+i+"个点不匹配:"+point.toString());
+					System.out.println("数据库中:"+"高度："+height+" "+latitude+" "+longitude+" "+"类型"+type+" "+"参数1"+paramone+" "+"参数2"+paramtwo);
 					break;
 					
 				}
