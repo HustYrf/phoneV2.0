@@ -96,10 +96,10 @@ public class LineUtil {
 		{
 			ArrayList<ArrayList<Double>> pathList = LineUtil.stringLineToList(path);
 			List<PlanePathVo> pList=new  ArrayList<PlanePathVo>();
-			String sList[] = s.split(",");
-			String tList[] = type.split(",");
-			String oneList[] = one.split(",");
-			String twoList[] = two.split(",");
+			String sList[] = s.replaceAll(" ", "").split(",");
+			String tList[] = type.replaceAll(" ", "").split(",");
+			String oneList[] = one.replaceAll(" ", "").split(",");
+			String twoList[] = two.replaceAll(" ", "").split(",");
 			for(int i=0;i<sList.length;i++)
 			{
 				PlanePathVo vo= new PlanePathVo();
