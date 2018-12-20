@@ -174,7 +174,7 @@
 				</p>
 				
 				<p class="buttons-row">
-					<a onclick="cancel(${task.id!})" id="cancelbtn" class="button linebtn">撤销起飞</a><span class="desp"></span>
+					<a onclick="cancel(${task.id!},${uav.deviceid!})" id="cancelbtn" class="button linebtn">撤销起飞</a><span class="desp"></span>
 					<a onclick="applyTaskoff(${task.id!})" id="applybtn" class="button linebtn">申请起飞</a><span class="desp"></span>
 					<a onclick="takeoff(${task.id!})" id="taskoffbtn" class="button linebtn">一键起飞</a>			
 				</p>
@@ -406,14 +406,20 @@
     //查看航线信息
     function viewflyingPath(deviceId)
     {
-    	var scontent =deviceId+WebTypeUtil.MESSAGESEARCHLINES;
-    	WebSocketUtil.webSocket.send(scontent);
+    	$.confirm('是否查看航线？', function () {
+    		
+	    	var scontent =deviceId+WebTypeUtil.MESSAGESEARCHLINES;
+	    	WebSocketUtil.webSocket.send(scontent);
+    	});
     }
     //核对航线
     function checkFlyingPath(deviceId)
     {
-    	var scontent = deviceId+WebTypeUtil.MESSAGESEARCHLINESDETAIL;
-    	WebSocketUtil.webSocket.send(scontent);
+    	$.confirm('是否核对航线？', function () {
+    		
+    		var scontent = deviceId+WebTypeUtil.MESSAGESEARCHLINESDETAIL;
+    		WebSocketUtil.webSocket.send(scontent);
+    	});
     }
     
     //ajax请求，完成对工单的操作
@@ -456,9 +462,12 @@
     }
     
     //撤销起飞
-    function cancel(taskid){
+    function cancel(taskid,deviceId){
     	
     	$.confirm('是否撤销起飞？', function () {
+    		//发送加锁命令
+    		var scontent = deviceId+WebTypeUtil.MESSAGELOCK;
+        	WebSocketUtil.webSocket.send(scontent);
             $.ajax({
                 type: "post",
                 url: "${s.base}/cancelTaskoff.action",

@@ -37,6 +37,7 @@ import hust.phone.web.network.SLP.message.SlpMsgLoginRes;
 import hust.phone.web.network.SLP.message.SlpMsgPutLines;
 import hust.phone.web.network.SLP.message.SlpMsgPutTaskNum;
 import hust.phone.web.network.SLP.message.SlpMsgSearchLines;
+import hust.phone.web.network.SLP.message.SlpMsgSearchLinesDetail;
 import hust.phone.web.network.SLP.message.SlpMsgStatus;
 import hust.phone.web.network.SLP.message.SlpPoint;
 import hust.phone.web.network.common.ConstantUtils;
@@ -193,6 +194,10 @@ public class MinaServerHandler extends IoHandlerAdapter {
 					//下发开始自检命令
 					processMobileCheckStart(revId);
 					break;
+				case ConstantUtils.Mobile_LOCK:
+					//下发加锁命令
+					preocessMobileLock(revId);
+					break;
 				default:
 					break;
 				}
@@ -200,9 +205,6 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		}
 	}
 
-	
-
-	
 
 	@Override
 	public void messageSent(IoSession session, Object message) throws Exception {
@@ -213,6 +215,26 @@ public class MinaServerHandler extends IoHandlerAdapter {
 	public void inputClosed(IoSession session) throws Exception {
 		super.inputClosed(session);
 	}
+	
+	//手机下发加锁命令
+	private void preocessMobileLock(String revId) {
+		// TODO Auto-generated method stub
+		System.out.println("下发加锁指令");
+		String s = revId.substring(0,revId.length()-4);
+		IoSession sessionPlane = IOSessionManager.getSessionPlane(Long.parseLong(s));
+		if(sessionPlane!=null)
+		{
+			SlpMsgHandle msgHandle = new SlpMsgHandle();
+			msgHandle.COM_TYPE = 6;
+			msgHandle.RES_RELULT = 0;
+			SlpPacket pack = msgHandle.pack();
+			pack.SND_DEVICE_ID = ConstantUtils.Server_Num;
+			pack.REV_DEVICE_ID = Long.parseLong(s);
+			byte[] encoding = pack.encoding();
+			sessionPlane.write(IoBuffer.wrap(encoding));
+		}
+		
+	}
 	//手机下发自检命令
 	private void processMobileCheckStart(String revId) {
 		System.out.println("下发自检指令");
@@ -221,7 +243,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		if(sessionPlane!=null)
 		{
 			SlpMsgHandle msgHandle = new SlpMsgHandle();
-			msgHandle.COM_TYPE = 8;
+			msgHandle.COM_TYPE = 7;
 			msgHandle.RES_RELULT = 0;
 			SlpPacket pack = msgHandle.pack();
 			pack.SND_DEVICE_ID = ConstantUtils.Server_Num;
@@ -478,6 +500,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 					point.WAYPOINT_TYPE = (short) pathList.get(i-1).getType();
 					point.WP_PARAM1 = pathList.get(i-1).getParamone();
 					point.WP_PARAM2 = pathList.get(i-1).getParamtwo();
+					System.out.println(point.toString());
 					list.add(point);
 				}
 				byte[] pointSToWayEncoding = PointSToWayEncodingUtils.PointSToWayEncoding(list);
@@ -748,7 +771,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		IoSession sessionMobile1 = IOSessionManager.getSessionMobile(send);
 		if(sessionMobile1!=null)
 		{
-			SlpMsgPutLines unpack = (SlpMsgPutLines) packet.unpack();
+			SlpMsgSearchLinesDetail unpack = (SlpMsgSearchLinesDetail) packet.unpack();
 			long routeId =unpack.ROUTE_ID;
 			//航点数
 			int countNum = unpack.ROUTE_MSG_COUNT;

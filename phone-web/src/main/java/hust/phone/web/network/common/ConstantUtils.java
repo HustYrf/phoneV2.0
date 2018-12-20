@@ -35,6 +35,7 @@ public interface ConstantUtils {
 	String Mobile_SEARCHLINES = "searchLines";//查询下发路径
 	String Mobile_SEARCHLINES_DETAIL="searchLinesDetail";//查询下发路径的具体信息
 	String Mobile_CHECK_START ="checkStart";//指示无人机自检开始
+	String Mobile_LOCK = "lock";//给无人机加锁
 	//自检结果
 	String Mobile_CHECK_RESULT ="checkResult";
 	short RES_CHECK_FINISH = 1;

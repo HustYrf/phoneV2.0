@@ -10,6 +10,7 @@ var WebTypeUtil=
 		MESSAGEPUTTASKNUM:"send@putTaskNum@",
 		MESSAGESEARCHLINES:"send@searchLines",
 		MESSAGESEARCHLINESDETAIL:"send@searchLinesDetail",
+		MESSAGELOCK:"send@lock",
 		MESSAGETYPEFLYINGEXCUTE:"flyingExcute",
 		MESSAGETYPEFLYINGFAILURE:"flyingFailure",
 		MESSAGETYPEFLYINGWAIT:"flyingWait",
@@ -32,8 +33,8 @@ var WebSocketUtil = {
 	isActive : true,
 	connect : function() {
 
-		WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
-//		WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
+		//WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
+    	WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
 		WebSocketUtil.webSocket.onmessage = WebSocketUtil.onMessage;
 		WebSocketUtil.webSocket.onclose = WebSocketUtil.onClose;
