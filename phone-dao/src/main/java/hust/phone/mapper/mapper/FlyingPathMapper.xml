@@ -23,7 +23,7 @@
 	id,Airport_Z,Airport_A,Name,AsText(PathData) as	PathData,HeightData,Description,CreateTime,UpdateTime,PointType,ParamOne,ParamTwo
 	</sql>
 	<select id="selectByFlyingPathVO" parameterType="hust.phone.mapper.pojo.FlyingPath"
-		resultMap="BaseResultMap">
+		resultMap="ResultMapWithBLOBs">
 		select
 		<include refid="Base_Column_list" />
 		from K_FlyingPath
@@ -42,7 +42,7 @@
 	</insert>
 
 	<select id="selectByFlyingPathId" parameterType="hust.phone.mapper.pojo.FlyingPath"
-		resultMap="BaseResultMap">
+		resultMap="ResultMapWithBLOBs">
 		select
 		<include refid="Base_Column_list" />
 		from K_FlyingPath
