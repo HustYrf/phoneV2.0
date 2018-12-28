@@ -4,11 +4,14 @@ public interface ConstantUtils {
 	//消息基本长度
 	short BASE_LENGTH = 26;
 	String BASE_HEAD="TELUAV";
-	
+	short OK =1;
 	//客户端类型
 	String DEVICE_TYPE = "deviceType";
 	short DEVICE_Plane =0;
 	short DEVICE_Mobile =1;
+	//会话中应答消息种类
+	String UAV_RES_FLYINF="resflying";
+	String UAV_RES_RETURN ="resreturn";
 	//session 存储用户编号
 	String ATTR_USRENO ="userNo";
 	String ATTR_PLANENO="planeNo";

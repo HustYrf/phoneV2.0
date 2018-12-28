@@ -1,6 +1,8 @@
 package hust.phone.web.network.filter.hsocket;
 
 
+import java.util.Arrays;
+
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoder;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
@@ -18,8 +20,10 @@ public class HEncoder implements ProtocolEncoder {
 	public void encode(IoSession session, Object message, ProtocolEncoderOutput out) throws Exception {
 		System.out.println("socket编码开始");
 		//直接将数据发送出去
-	///	byte [] data = (byte[]) message;
-		
+//		byte [] data = (byte[]) message;
+//		System.err.println("服务器应答的消息：length=" + data.length+"消息类型:"+data[19]);
+//		System.err.println(Arrays.toString(data));
+//		System.err.println("--------------------");
 		out.write(message);
 		out.flush();
 	}

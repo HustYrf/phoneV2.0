@@ -33,7 +33,7 @@ var WebSocketUtil = {
 	isActive : true,
 	connect : function() {
 
-		//WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
+		//WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:7020");
     	WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
 		WebSocketUtil.webSocket.onmessage = WebSocketUtil.onMessage;
@@ -175,7 +175,7 @@ var PlaneHandleServiceUtil ={
 		    var realdata = wgs84_to_gcj02.transform(data[0],data[1]);
 		    map.setCenter(realdata); 		   
 		    planeMarker.setPosition(realdata);
-		    planeMarker.setAngle(messageType[3]);
+		    planeMarker.setAngle(GPS_HDG);
 		    
 		    
 //    	   planeMarker = new AMap.Marker({
