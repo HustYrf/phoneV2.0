@@ -33,8 +33,13 @@ var WebSocketUtil = {
 	isActive : true,
 	connect : function() {
 
+<<<<<<< HEAD
 		WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
 //    	WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
+=======
+		//WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:7020");
+    	WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
+>>>>>>> branch 'master' of https://github.com/HustYrf/phoneV2.0.git
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
 		WebSocketUtil.webSocket.onmessage = WebSocketUtil.onMessage;
 		WebSocketUtil.webSocket.onclose = WebSocketUtil.onClose;
@@ -175,6 +180,24 @@ var PlaneHandleServiceUtil ={
 		    map.setCenter(realdata); 		   
 		    planeMarker.setPosition(realdata);
 		    planeMarker.setAngle(GPS_HDG);
+<<<<<<< HEAD
+=======
+		    
+		    
+//    	   planeMarker = new AMap.Marker({
+//                //map: map,
+//                position:  data,
+//                icon: new AMap.Icon({
+//                size: new AMap.Size(32, 32), //图标大小
+//                image: "images/uav-32.png",
+//                }),
+//                angle:GPS_HDG,
+//                offset: new AMap.Pixel(-16,-16) // 相对于基点的偏移位置
+//            });
+//		    map.setCenter(realdata); 
+//		    map.add(planeMarker);
+			//WebSocketUtil.print("[send] '" + message + "'\n");	 	   
+>>>>>>> branch 'master' of https://github.com/HustYrf/phoneV2.0.git
 		    
 		},
 		handleFlyingExcute:function()

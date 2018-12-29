@@ -585,7 +585,8 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			sessionPlane.write(IoBuffer.wrap(encoding));
 			try {
 				Thread.sleep(1000);
-			}catch (InterruptedException e) {
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			System.out.println("下发起飞指令");
@@ -798,24 +799,61 @@ public class MinaServerHandler extends IoHandlerAdapter {
 				float paramone = planePathVo.getParamone();
 				float paramtwo = planePathVo.getParamtwo();
 				SlpPoint point = list2.get(i-start);
-				//比较两个对象的值
-				if(point.WP_ALT!=height || point.WAYPOINT_TYPE!= type || point.WP_LAT !=latitude || point.WP_LNG !=longitude || point.WP_PARAM1 !=
-						paramone || point.WP_PARAM2 !=paramtwo)
+				if(type==20||type ==208 || type ==189)
 				{
-					//航线不匹配
-					flag =1;
-					System.out.println("第"+i+"个点不匹配:"+point.toString());
-					System.out.println("数据库中:"+"高度："+height+" "+latitude+" "+longitude+" "+"类型"+type+" "+"参数1"+paramone+" "+"参数2"+paramtwo);
-					break;
+					continue;
+				}else if(type ==22)
+				{
+					//比较参数一和高度
+					if(point.WP_PARAM1 !=paramone ||point.WP_ALT!=height )
+					{
+						//航线不匹配
+						flag = 1;
+						System.out.println("第"+i+"个点不匹配:"+point.toString());
+						System.out.println("数据库中:"+"高度："+height+" "+latitude+" "+longitude+" "+"类型"+type+" "+"参数1"+paramone+" "+"参数2"+paramtwo);
+						break;
+					}
 					
 				}
-				
+				else if(type ==21||type == 84||type ==85)
+				{
+					//只需比较只需比较经纬高
+					if(point.WP_ALT!=height ||point.WP_LAT !=latitude|| point.WP_LNG !=longitude)
+					{
+						//航线不匹配
+						flag =1;
+						System.out.println("第"+i+"个点不匹配:"+point.toString());
+						System.out.println("数据库中:"+"高度："+height+" "+latitude+" "+longitude+" "+"类型"+type+" "+"参数1"+paramone+" "+"参数2"+paramtwo);
+						break;
+					}
+					
+				}else if(type ==206||type ==178){
+					//只比较参数一
+					if(point.WP_PARAM1 !=paramone)
+					{
+						//航线不匹配
+						flag = 1;
+						System.out.println("第"+i+"个点不匹配:"+point.toString());
+						System.out.println("数据库中:"+"高度："+height+" "+latitude+" "+longitude+" "+"类型"+type+" "+"参数1"+paramone+" "+"参数2"+paramtwo);
+						break;
+					}
+				}else if(type==16 ||type ==17||type == 31) {
+					if(point.WP_ALT!=height  || point.WP_LAT !=latitude || point.WP_LNG !=longitude || point.WP_PARAM1 !=paramone)
+					{
+						//航线不匹配
+						flag =1;
+						System.out.println("第"+i+"个点不匹配:"+point.toString());
+						System.out.println("数据库中:"+"高度："+height+" "+latitude+" "+longitude+" "+"类型"+type+" "+"参数1"+paramone+" "+"参数2"+paramtwo);
+						break;
+						
+					}
+				}
 			}
 			
 			if(flag ==0)
 			{
 				//核对的航线匹配
-				content = content+ConstantUtils.Mobile_SEARCHLine_RESULT_FINISH;
+				content = content+ConstantUtils.Mobile_SEARCHLine_RESULT_FINISH+countNum+"个";
 			}else
 			{
 				content = content+ConstantUtils.Mobile_SEARCHLine_RESULT_FAILURE;
@@ -832,7 +870,8 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		SlpMsgSearchLines unpack = (SlpMsgSearchLines) packet.unpack();
 		//将查询的结果推送给手机
 		String send = packet.SND_DEVICE_ID+ConstantUtils.Phone_SEND;
-		String content = ConstantUtils.MSG_PLANE_SEARCHRESULT+":"+unpack.ROUTE_ID+":"+unpack.ROUTE_COUNT+":"+unpack.ROUTE_STOCK_COUNT;
+		int pointCount = unpack.ROUTE_STOCK_COUNT-1;
+		String content = ConstantUtils.MSG_PLANE_SEARCHRESULT+":"+unpack.ROUTE_ID+":"+unpack.ROUTE_COUNT+":"+pointCount;
 		MinaBean msg = new MinaBean();
 		msg.setContent(content);
 		//将数据推送给手机客户端,
@@ -886,7 +925,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 	}
 	//无人机发出的应答消息，显示无人机可以起飞，上传，返航
 	private void processMessageHandleRes(IoSession session, SlpPacket packet) {
-		
+		//避免重复接收应答消息
 		//将数据发送给手机，让手机处理
 		SlpMsgHandleRes  res = (SlpMsgHandleRes) packet.unpack();
 		short restype = res.COM_TYPE;
@@ -895,7 +934,10 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		{
 		case ConstantUtils.RES_FLYINF:
 			//应答指示无人机起飞
-			processResFlying(packet,resrelult);
+//			if(session.getAttribute(ConstantUtils.UAV_RES_FLYINF)==null){
+//				session.setAttribute(ConstantUtils.UAV_RES_FLYINF, ConstantUtils.OK);
+				processResFlying(packet,resrelult);
+//			}
 			break;
 //		case ConstantUtils.RES_TRANS:
 //			//应答指示无人机上传
@@ -903,7 +945,10 @@ public class MinaServerHandler extends IoHandlerAdapter {
 //			break;
 		case ConstantUtils.RES_RETURN:
 			//应答指示无人机返航
-			processResReturn(packet,resrelult);
+//			if(session.getAttribute(ConstantUtils.UAV_RES_RETURN)==null){
+//				session.setAttribute(ConstantUtils.UAV_RES_RETURN, ConstantUtils.OK);
+				processResReturn(packet,resrelult);
+//			}
 			break;
 		default:
 				break;
