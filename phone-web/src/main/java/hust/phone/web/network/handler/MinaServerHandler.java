@@ -583,7 +583,11 @@ public class MinaServerHandler extends IoHandlerAdapter {
 			// 反馈给无人机消息成功，写入字节流
 			// 写入session中,一定要加IoBuffer.wrap
 			sessionPlane.write(IoBuffer.wrap(encoding));
-			
+			try {
+				Thread.sleep(1000);
+			}catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 			System.out.println("下发起飞指令");
 			SlpMsgHandle msgHandle = new SlpMsgHandle();
 			msgHandle.COM_TYPE = 1;

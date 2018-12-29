@@ -277,30 +277,30 @@ public class TaskController {
 	}
 
 	// 轮询新的工单数目
-	@RequestMapping(value = "getTaskNumber", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
-	@ResponseBody
-	public String getTaskNumber(HttpServletRequest request) {
-		// 在这里查询最新的工单数目
-		User user = PhoneUtils.getLoginUser(request);
-		int newNum = 0;
-		while (true) {
-
-			newNum = userService.getTaskNumByUser(user);
-			// 数据发生改变 将数据响应客户端
-			if (newNum != Number) {
-				break;
-			} else {
-				// 没有新的数据 保持住连接
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-		}
-		Number = newNum;
-		return newNum + "";
-	}
+//	@RequestMapping(value = "getTaskNumber", method = RequestMethod.POST, produces = "application/json;charset=UTF-8")
+//	@ResponseBody
+//	public String getTaskNumber(HttpServletRequest request) {
+//		// 在这里查询最新的工单数目
+//		User user = PhoneUtils.getLoginUser(request);
+//		int newNum = 0;
+//		while (true) {
+//
+//			newNum = userService.getTaskNumByUser(user);
+//			// 数据发生改变 将数据响应客户端
+//			if (newNum != Number) {
+//				break;
+//			} else {
+//				// 没有新的数据 保持住连接
+//				try {
+//					Thread.sleep(2000);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		}
+//		Number = newNum;
+//		return newNum + "";
+//	}
 
 	// 跳转到无人机操纵界面
 	@RequestMapping("/toPlane")

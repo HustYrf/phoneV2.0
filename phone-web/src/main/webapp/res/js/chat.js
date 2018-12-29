@@ -33,8 +33,8 @@ var WebSocketUtil = {
 	isActive : true,
 	connect : function() {
 
-		//WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
-    	WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
+		WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
+//    	WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
 		WebSocketUtil.webSocket.onmessage = WebSocketUtil.onMessage;
 		WebSocketUtil.webSocket.onclose = WebSocketUtil.onClose;
@@ -166,31 +166,15 @@ var PlaneHandleServiceUtil ={
 			var mes = message.split(",");
 			var data = new Array();
 	        var value = mes[0] *1
-	        var value2=mes[1]*1;
+	        var value2= mes[1]*1;
 	        data[0] = value;
 	        data[1] = value2;
-//			map.remove(planeMarker);
 			
 	        //下面为新版的marker移动代码
 		    var realdata = wgs84_to_gcj02.transform(data[0],data[1]);
 		    map.setCenter(realdata); 		   
 		    planeMarker.setPosition(realdata);
-		    planeMarker.setAngle(messageType[3]);
-		    
-		    
-//    	   planeMarker = new AMap.Marker({
-//                //map: map,
-//                position:  data,
-//                icon: new AMap.Icon({
-//                size: new AMap.Size(32, 32), //图标大小
-//                image: "images/uav-32.png",
-//                }),
-//                angle:GPS_HDG,
-//                offset: new AMap.Pixel(-16,-16) // 相对于基点的偏移位置
-//            });
-//		    map.setCenter(realdata); 
-//		    map.add(planeMarker);
-			//WebSocketUtil.print("[send] '" + message + "'\n");	 	   
+		    planeMarker.setAngle(GPS_HDG);
 		    
 		},
 		handleFlyingExcute:function()
@@ -291,6 +275,11 @@ var PlaneHandleServiceUtil ={
 			routeLineId.innerHTML = ROUTE_ID;
 			totalFlyingPoint.innerHTML = ROUTE_COUNT;
 			processedFlyingPoint.innerHTML = ROUTE_STOCK_COUNT;
+			
+			var realparent = ROUTE_STOCK_COUNT/ROUTE_COUNT * 100;
+			var progress = realparent+"%";
+			$("#progressbar").width(parcent);  //根据已传航点数目更新进度条
+			
 		},
 		handleCheckResult:function(RES_RELULT)
 		{
