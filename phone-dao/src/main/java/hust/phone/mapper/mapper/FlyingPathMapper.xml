@@ -14,9 +14,9 @@
 	<resultMap id="ResultMapWithBLOBs" type="hust.phone.mapper.pojo.FlyingPath"
 		extends="BaseResultMap">
 		<result column="HeightData" property="heightdata" jdbcType="LONGVARCHAR" />
-		<result column="PointType" property="pointtype" jdbcType="LONGVARCHAR" />
-		<result column="ParamOne" property="paramone" jdbcType="LONGVARCHAR" />
-		<result column="ParamTwo" property="paramtwo" jdbcType="LONGVARCHAR" />
+		<result column="PointType" property="pointType" jdbcType="LONGVARCHAR" />
+		<result column="ParamOne" property="paramOne" jdbcType="LONGVARCHAR" />
+		<result column="ParamTwo" property="paramTwo" jdbcType="LONGVARCHAR" />
 	</resultMap>
 	
 	<sql id="Base_Column_list"> 

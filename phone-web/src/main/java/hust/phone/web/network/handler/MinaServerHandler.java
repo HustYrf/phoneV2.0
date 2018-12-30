@@ -870,7 +870,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 		SlpMsgSearchLines unpack = (SlpMsgSearchLines) packet.unpack();
 		//将查询的结果推送给手机
 		String send = packet.SND_DEVICE_ID+ConstantUtils.Phone_SEND;
-		int pointCount = unpack.ROUTE_STOCK_COUNT-1;
+		int pointCount = unpack.ROUTE_STOCK_COUNT;
 		String content = ConstantUtils.MSG_PLANE_SEARCHRESULT+":"+unpack.ROUTE_ID+":"+unpack.ROUTE_COUNT+":"+pointCount;
 		MinaBean msg = new MinaBean();
 		msg.setContent(content);

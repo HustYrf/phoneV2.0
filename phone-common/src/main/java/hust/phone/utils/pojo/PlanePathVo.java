@@ -2,12 +2,30 @@ package hust.phone.utils.pojo;
 
 public class PlanePathVo {
 	
-	private double height; 
+	private float height; 
 	private double longitude;
 	private double Latitude;
 	private int type;
 	private float paramone;
 	private float paramtwo;
+	public float getHeight() {
+		return height;
+	}
+	public void setHeight(float height) {
+		this.height = height;
+	}
+	public double getLongitude() {
+		return longitude;
+	}
+	public void setLongitude(double longitude) {
+		this.longitude = longitude;
+	}
+	public double getLatitude() {
+		return Latitude;
+	}
+	public void setLatitude(double latitude) {
+		Latitude = latitude;
+	}
 	public int getType() {
 		return type;
 	}
@@ -27,24 +45,7 @@ public class PlanePathVo {
 		this.paramtwo = paramtwo;
 	}
 	
-	public double getHeight() {
-		return height;
-	}
-	public void setHeight(double height) {
-		this.height = height;
-	}
-	public double getLongitude() {
-		return longitude;
-	}
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
-	public double getLatitude() {
-		return Latitude;
-	}
-	public void setLatitude(double latitude) {
-		Latitude = latitude;
-	}
+
 	
 
 }

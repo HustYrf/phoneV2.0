@@ -103,7 +103,7 @@ public class LineUtil {
 			for(int i=0;i<sList.length;i++)
 			{
 				PlanePathVo vo= new PlanePathVo();
-				double height=Double.parseDouble(sList[i]);
+				float height=Float.parseFloat(sList[i]);
 				double longitude=pathList.get(i).get(0);
 				double latitude=pathList.get(i).get(1);
 				int t = Integer.parseInt(tList[i]);

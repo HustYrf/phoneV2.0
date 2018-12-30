@@ -22,11 +22,17 @@ public class PlaneTest {
 //		FlyingPathServiceImpl fliying =(FlyingPathServiceImpl) SpringBeanFactoryUtils.getBean("flyingPathServiceImpl");
 		ApplicationContext ac = new ClassPathXmlApplicationContext("applicationContext.xml");
 		FlyingPathServiceImpl fliying = (FlyingPathServiceImpl) ac.getBean("flyingPathServiceImpl");
-		List<PlanePathVo> pathList = fliying.getPathToObject(19);
+		List<PlanePathVo> pathList = fliying.getPathToObject(15);
 		for(PlanePathVo p:pathList)
 		{
 			System.out.println(p.getHeight()+" "+p.getLongitude()+" "+p.getLatitude());
+			float height = p.getHeight();
+			int lon =(int) (p.getLongitude() *10000000);
+			int lat =(int) (p.getLatitude() *10000000);
+			System.err.println(height+" "+lon+" "+lat);
 		}
+		
+		
 		ArrayList<SlpPoint> list = new ArrayList<SlpPoint>();
 		int size = pathList.size();
 		System.out.println("数据库中航点的个数:"+size);
@@ -48,7 +54,7 @@ public class PlaneTest {
 			}
 			byte[] pointSToWayEncoding = PointSToWayEncodingUtils.PointSToWayEncoding(list);
 			System.out.println("路径整合"+Arrays.toString(pointSToWayEncoding));
-			msg.ROUTE_ID = 19;
+			msg.ROUTE_ID = 21;
 			msg.ROUTE_COUNT = size;
 			msg.ROUTE_MSG_COUNT =ConstantUtils.PATH_CAP_MAX;
 			msg.POINTS= new short[msg.ROUTE_MSG_COUNT * ConstantUtils.POINT_LENGTH];
