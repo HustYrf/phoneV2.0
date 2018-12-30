@@ -18,11 +18,11 @@ public class FlyingPath {
 
 	private String description;
 
-	private String paramOne;
+	private String paramone;
 
-	private String paramTwo;
+	private String paramtwo;
 
-	private String pointType;
+	private String pointtype;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createtime;
@@ -92,6 +92,30 @@ public class FlyingPath {
 		return updatetime;
 	}
 
+	public String getParamone() {
+		return paramone;
+	}
+
+	public void setParamone(String paramone) {
+		this.paramone = paramone;
+	}
+
+	public String getParamtwo() {
+		return paramtwo;
+	}
+
+	public void setParamtwo(String paramtwo) {
+		this.paramtwo = paramtwo;
+	}
+
+	public String getPointtype() {
+		return pointtype;
+	}
+
+	public void setPointtype(String pointtype) {
+		this.pointtype = pointtype;
+	}
+
 	public void setUpdatetime(Date updatetime) {
 		this.updatetime = updatetime;
 	}
@@ -104,28 +128,5 @@ public class FlyingPath {
 		this.heightdata = heightdata == null ? null : heightdata.trim();
 	}
 
-	public String getParamOne() {
-		return paramOne;
-	}
 
-	public void setParamOne(String paramOne) {
-		this.paramOne = paramOne == null ? null : paramOne.trim();
-	}
-
-	public String getParamTwo() {
-		return paramTwo;
-	}
-
-	public void setParamTwo(String paramTwo) {
-		this.paramTwo = paramTwo == null ? null : paramTwo.trim();
-	}
-
-	public String getPointType() {
-		return pointType;
-	}
-
-	public void setPointType(String pointType) {
-		this.pointType = pointType == null ? null : pointType.trim();
-
-	}
 }

@@ -35,6 +35,24 @@
     background-color:black;
     text-align:center;
 }
+#progressDiv{
+   width:100%;
+   height:4px;
+   padding:0;
+   margin:0;
+   position: absolute;
+   margin-top: 80px;
+   z-index: 998;
+   background-color:#C6E2FF;
+   visibility:hidden;
+}
+#progressbar{
+   height:4px;
+   float:left;
+   background-color:#FF0000;
+   padding:0;
+   margin:0;
+}
 
 #uavInfoView{
 
@@ -81,6 +99,9 @@
 			</a>
 		</header>
 		<div class="uavStatus"  style="color:#4169E1;">飞机状态：<span id="fightStatus">未连接</span>
+		</div>
+		<div id="progressDiv">
+		 <div id="progressbar"></div>
 		</div>
 		<div id="uavInfoView">
 		     航线编号：<span id="routeLineId"></span><br>
@@ -389,7 +410,8 @@
  	                	//如果是报告失联指令
  	                	ajaxAction("reportNotconnet.action",taskId);
  	                }else if(planeOption = "transFlyingPath.action"){
- 	                	//如果是下发航向指令。。。
+ 	                	//如果是下发航线指令。。。
+ 	                	$("#progressDiv").css("visibility","visible");    //让进度条可见
  	                	var scontent = deviceId+WebTypeUtil.MESSAGEPUTLINES+planepathId;
  	                	WebSocketUtil.webSocket.send(scontent);
  	                }
@@ -406,6 +428,7 @@
     //查看航线信息
     function viewflyingPath(deviceId)
     {
+    		
     	$.confirm('是否查看航线？', function () {
     		
 	    	var scontent =deviceId+WebTypeUtil.MESSAGESEARCHLINES;
@@ -510,8 +533,9 @@
     function transFlyingPath(taskid){
    	 $.confirm('是否下发航线给无人机？', function () {
 	             
-         $("#option").attr("value","transFlyingPath.action"); 
-         modal.style.display = "block";                
+         $("#option").attr("value","transFlyingPath.action");         
+         modal.style.display = "block";
+       
       });
     }
     
