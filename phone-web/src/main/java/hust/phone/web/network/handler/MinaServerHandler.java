@@ -40,6 +40,7 @@ import hust.phone.web.network.SLP.message.SlpMsgSearchLines;
 import hust.phone.web.network.SLP.message.SlpMsgSearchLinesDetail;
 import hust.phone.web.network.SLP.message.SlpMsgStatus;
 import hust.phone.web.network.SLP.message.SlpPoint;
+import hust.phone.web.network.common.CommonUtils;
 import hust.phone.web.network.common.ConstantUtils;
 import hust.phone.web.network.common.PointSToWayEncodingUtils;
 import hust.phone.web.network.common.WebSocketUtil;
@@ -798,7 +799,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 				int type = planePathVo.getType();
 				float paramone = planePathVo.getParamone();
 				float paramtwo = planePathVo.getParamtwo();
-				SlpPoint point = list2.get(i-start);
+				SlpPoint  point= list2.get(i-start);
 				if(type==20||type ==208 || type ==189)
 				{
 					continue;
@@ -818,7 +819,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 				else if(type ==21||type == 84||type ==85)
 				{
 					//只需比较只需比较经纬高
-					if(point.WP_ALT!=height ||point.WP_LAT !=latitude|| point.WP_LNG !=longitude)
+					if(point.WP_ALT!=height ||CommonUtils.compareFloat(point.WP_LAT, latitude) ||CommonUtils.compareFloat(point.WP_LNG, longitude))
 					{
 						//航线不匹配
 						flag =1;
@@ -838,7 +839,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 						break;
 					}
 				}else if(type==16 ||type ==17||type == 31) {
-					if(point.WP_ALT!=height  || point.WP_LAT !=latitude || point.WP_LNG !=longitude || point.WP_PARAM1 !=paramone)
+					if(point.WP_ALT!=height  || CommonUtils.compareFloat(point.WP_LAT, latitude)|| CommonUtils.compareFloat(point.WP_LNG, longitude) || point.WP_PARAM1 !=paramone)
 					{
 						//航线不匹配
 						flag =1;
