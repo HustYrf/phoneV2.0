@@ -34,8 +34,8 @@ var WebSocketUtil = {
 	connect : function() {
 
 
-		//WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:17020");
-		WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
+		WebSocketUtil.webSocket = new WebSocket("ws:///218.65.240.246:7020");
+		//WebSocketUtil.webSocket = new WebSocket("ws:///127.0.0.1:17020");
 		WebSocketUtil.webSocket.onopen = WebSocketUtil.onOpen;
 		WebSocketUtil.webSocket.onmessage = WebSocketUtil.onMessage;
 		WebSocketUtil.webSocket.onclose = WebSocketUtil.onClose;
@@ -158,9 +158,18 @@ var PlaneHandleServiceUtil ={
 		        });
 			}
 			
-//			if(status=="暂无"){
-//				$(".buttons-row .button").addClass("linebtn");
-//			}
+			if(status=="未连接"){
+				$("#checkoverbtn").attr("class", "button");
+	    		$("#applybtn").attr("class", "button");
+	    		$("#cancelbtn").attr("class", "button");
+	    		$("#notconnectbtn").attr("class", "button");
+	    		$("#videobtn").attr("class", "button");
+	    		$("#emgbackbtn").attr("class", "button");
+	    		$("#taskoffbtn").attr("class", "button");	
+	    		$("#viewpathbtn").attr("class", "button");
+	    		$("#transpathbtn").attr("class", "button"); 
+	    		$("#checkpathbtn").attr("class", "button"); 	    	
+			}
 			
 			//显示无人机的状态信息
 			planeStatus.innerHTML = status;
@@ -170,12 +179,25 @@ var PlaneHandleServiceUtil ={
 	        var value2= mes[1]*1;
 	        data[0] = value;
 	        data[1] = value2;
-			
+				     
+            var oldPosition = planeMarker.getPosition();  //旧点
+            	        
 	        //下面为新版的marker移动代码
 		    var realdata = wgs84_to_gcj02.transform(data[0],data[1]);
+		    var linedata = [oldPosition, realdata];
+		    var polyline = new AMap.Polyline({
+                map: map,
+                path: linedata, //设置线覆盖物路径
+                strokeColor: '#436EEE', //线颜色
+                strokeOpacity: 1, //线透明度
+                strokeWeight: 6, //线宽
+                strokeStyle: "solid", //线样式
+                strokeDasharray: [10, 5] //补充线样式
+            });
 		    map.setCenter(realdata); 		   
 		    planeMarker.setPosition(realdata);
-		    planeMarker.setAngle(GPS_HDG);   
+		    planeMarker.setAngle(GPS_HDG); 
+		    
 		},
 		handleFlyingExcute:function()
 		{
@@ -278,7 +300,11 @@ var PlaneHandleServiceUtil ={
 			
 			var realparent = ROUTE_STOCK_COUNT/ROUTE_COUNT * 100;
 			var progress = realparent+"%";
-			$("#progressbar").width(parcent);  //根据已传航点数目更新进度条
+			$("#progressbar").width(progress);  //根据已传航点数目更新进度条
+			
+			if(ROUTE_STOCK_COUNT == ROUTE_COUNT){
+				$.toast("航点下发完毕！");
+			}
 			
 		},
 		handleCheckResult:function(RES_RELULT)

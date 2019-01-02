@@ -1,11 +1,14 @@
 package hust.phone.web.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +24,7 @@ import hust.phone.service.interFace.FlyingPathService;
 import hust.phone.service.interFace.UserService;
 import hust.phone.service.interFace.UavService;
 import hust.phone.service.interFace.TaskService;
+import hust.phone.utils.HttpClientUtil;
 import hust.phone.utils.JsonUtils;
 import hust.phone.utils.pojo.JsonView;
 import hust.phone.utils.pojo.PhoneUtils;
@@ -42,6 +46,10 @@ public class TaskController {
 	@Autowired
 	private UavService uavServiceImpl;
 
+
+    @Value(value = "${DETECT_SERVER}")
+    private String DETECT_SERVER;
+    
 	private int Number = 0; // 未完成工单数目
 
 	// 模拟正在执行的飞行任务
@@ -588,16 +596,28 @@ public class TaskController {
 	@ResponseBody
 	public String reportFinish(Task task) {
 
-		int oldStatus = taskServiceImpl.getTaskStatus(task);
-		if (oldStatus == 9) {
-			if (taskServiceImpl.setStatusTaskByTask(task, 10) == true) {
-				return JsonView.render(1, "飞行任务完成！");
-			} else {
-				return JsonView.render(0, "飞行任务完成报告失败！");
-			}
-		} else {
-			return JsonView.render(0, "无人机未正常飞行，任务无法完成");
-		}
+		//httpclient跨域请求进行识别
+		Task task1 = taskServiceImpl.getTaskByTask(task);
+        String url = DETECT_SERVER + "reportTaskOver.action";
+        Map<String, String> params = new HashMap<String, String>();
+        params.put("missionId", "" + task1.getMissionId());
+        
+        String alarmlistString = HttpClientUtil.doPost(url, params);    //httpclient远程访问
+        if(alarmlistString =="success") {
+        	int oldStatus = task1.getStatus();
+    		if (oldStatus == 9) {
+    			if (taskServiceImpl.setStatusTaskByTask(task, 10) == true) {
+    				return JsonView.render(1, "飞行任务完成！");
+    			} else {
+    				return JsonView.render(0, "任务报告完成失败，请重试！");
+    			}
+    		} else {
+    			return JsonView.render(0, "无人机未正常飞行，任务无法完成");
+    		}
+        }else {
+        	return JsonView.render(0, "任务报告完成失败，请重试！");
+        }
+		
 
 	}
 
