@@ -313,7 +313,7 @@ public class TaskController {
 	// 跳转到无人机操纵界面
 	@RequestMapping("/toPlane")
 	public String toPlane(Task task, HttpServletRequest request, Model model) {
-
+  
 		User user = PhoneUtils.getLoginUser(request);
 		Task task2 = taskServiceImpl.getTaskByTask(task);
 
@@ -603,7 +603,7 @@ public class TaskController {
         params.put("missionId", "" + task1.getMissionId());
         
         String alarmlistString = HttpClientUtil.doPost(url, params);    //httpclient远程访问
-        if(alarmlistString =="success") {
+        if(alarmlistString.equals("success") || alarmlistString.equals("exist")) {
         	int oldStatus = task1.getStatus();
     		if (oldStatus == 9) {
     			if (taskServiceImpl.setStatusTaskByTask(task, 10) == true) {
@@ -618,7 +618,6 @@ public class TaskController {
         	return JsonView.render(0, "任务报告完成失败，请重试！");
         }
 		
-
 	}
 
 }
