@@ -196,7 +196,7 @@ var PlaneHandleServiceUtil ={
             });
 		    map.setCenter(realdata); 		   
 		    planeMarker.setPosition(realdata);
-		    planeMarker.setAngle(GPS_HDG); 
+		    planeMarker.setAngle(parseInt(GPS_HDG)); 
 		    
 		},
 		handleFlyingExcute:function()

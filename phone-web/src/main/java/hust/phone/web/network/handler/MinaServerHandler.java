@@ -626,7 +626,7 @@ public class MinaServerHandler extends IoHandlerAdapter {
 //		String lat = unpack.GPS_LAT+"";
 		short mode =unpack.BASEMODE;
 		long uavDeciveId = packet.SND_DEVICE_ID;
-		float GPS_HDG =unpack.GPS_HDG;
+		int GPS_HDG =unpack.GPS_HDG;
 		
 		String content = ConstantUtils.MSG_TANS_STATUS+":"+lon+","+lat;
 		switch (mode) {
