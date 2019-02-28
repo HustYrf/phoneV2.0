@@ -1,11 +1,11 @@
 package hust.phone.web.controller.vo;
 
 import java.util.ArrayList;
-
+import java.util.Arrays;
 
 import hust.phone.mapper.pojo.FlyingPath;
 import hust.phone.utils.DateKit;
-import hust.phone.utils.LineUtil;
+import hust.phone.utils.PositionUtil;
 
 public class FlyingPathVO {
 
@@ -63,29 +63,31 @@ public class FlyingPathVO {
 
 			this.pathdata = new ArrayList<ArrayList<Double>>();
 			String sub=flyingPath.getPathdata().substring(11, flyingPath.getPathdata().length()-1);
-			String slist[]=sub.split(",");
+			String flyingPointDataList[]=sub.split(",");
 //			String pointType[] = flyingPath.getPointtype().split(",");
-			String flyPathCoordinate[] = flyingPath.getPathdata().split(",");
-			for(int i=0;i<slist.length;i++)
+			for(int i=0;i<flyingPointDataList.length;i++)
 			{
 //              if (pointType[i].equals("22") || pointType[i].equals("20") || pointType[i].equals("178") || pointType[i].equals("206") || pointType[i].equals("189") || pointType[i].equals("208")) {
 //              continue;
 //          }
 //          此处增加22号航点过滤
       	//直接过滤坐标点为00的数据,考虑到系统暂时只会在中国内运行,可以直接这样做
-          if (flyPathCoordinate[i].equals("0 0") || flyPathCoordinate[i].equals("LINESTRING(0 0") || flyPathCoordinate[i].equals("0 0)")) {
-				continue;
-			}
-				ArrayList<Double> point=new ArrayList<Double>();
+				if (flyingPointDataList[i].equals("0 0")) {
+					continue;
+				}
+				ArrayList<Double> point = new ArrayList<Double>();
 				/*
-                 * 还可以根据纬度来判断航线是在哪个区域（南宁，桂林，武汉..），
-                 * 再加或减不同的数值
-                 */
-				
-				//经度纠偏
-                point.add(Double.parseDouble(slist[i].split(" ")[0]) + 0.000637);
-                //纬度纠偏
-                point.add(Double.parseDouble(slist[i].split(" ")[1]) - 0.001596);
+				 * 根据gps84ToGcj02的纠偏算法来纠偏
+				 */
+				Double lon = Double.parseDouble(flyingPointDataList[i].split(" ")[0]);
+				Double lat = Double.parseDouble(flyingPointDataList[i].split(" ")[1]);
+				double[] point1 = PositionUtil.gps84_To_Gcj02(lat, lon);
+				System.out.println("wgs84坐标系的坐标为:"+lat+","+lon);
+				System.out.println("纠偏之后的坐标为:"+Arrays.toString(point1));
+				// 经度纠偏
+				point.add(point1[1]);
+				// 纬度纠偏
+				point.add(point1[0]);
 				this.pathdata.add(point);
 			}
 		}else if(flyingPath.getPathdata() != null && flyingPath.getPointtype()== null){
