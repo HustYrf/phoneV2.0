@@ -68,10 +68,26 @@
     /* display:none; */
     /* border:1px solid #FF0000;  */
 }
+
+#volet_clos {position: fixed;top: 0px; left: 0;width: 100%;}
+#volet {width: 250px;height: 800px;padding: 10px;background: #d0d0d0; color: #000;width: 100%;}
+/* 初始定位 */
+#volet {position: absolute;left: 0px;top: 800px;transition: all .5s ease-in;}
+#volet a.ouvrir,#volet a.fermer {position: absolute;right: -88px;top: 150px;}
+/* 点击过后改变 target  */
+#volet a.fermer {display: none;}
+#volet:target {
+	
+}
+#volet:target a.fermer {display: block;}
+#volet:target a.ouvrir {display: none;}
+#volet_clos:target #volet {left: 0px;top: 800px;}/*回去*/
+#volet a.ouvrir,#volet a.fermer{position: absolute;right: calc(0%);top: 0px;padding: 10px 25px; background: #555; color: #fff; text-decoration: none;text-align: center; width: 120px;}
 </style>
 </head>
 
 <body>
+
 <input type="hidden" id="base" value="${s.base}"><br/>
 <input type="hidden" id="plane" value="${uav.deviceid!}"><br/>
 <input type="hidden" id="peoplerole" value="${task.role!}"><br/>
@@ -122,6 +138,18 @@
                 zoom: 16,
                 center: planePath.pathdata[0],
             });
+            AMap.plugin('AMap.Geolocation', function() {
+                var geolocation = new AMap.Geolocation({
+                    enableHighAccuracy: true,//是否使用高精度定位，默认:true
+                    timeout: 10000,          //超过10秒后停止定位，默认：5s
+                    buttonPosition:'RB',    //定位按钮的停靠位置
+                    buttonOffset: new AMap.Pixel(5, 150),//定位按钮与设置的停靠位置的偏移量，默认：Pixel(10, 20)
+                    zoomToAccuracy: true,   //定位成功后是否自动调整地图视野到定位点
+
+                });
+                map.addControl(geolocation);
+            });
+          
             AMapUI.loadUI(['control/BasicControl'],
                 function (BasicControl) {
                     //缩放控件，显示Zoom值
@@ -184,11 +212,12 @@
 		<!-- 输入密码模态框  end -->
 
 		<!-- 操作按钮 start -->
-		<div class="optionArea" style="height:22%;">
+		<div class="optionArea" style="height:24.5%;">
 			<div class="content-block" id="btns" style="margin-top:25px;">
 			
 				<p class="buttons-row">
-					<a onclick="checkself(${task.id!})" id="checkoverbtn" class="button linebtn">自检完成</a><span class="desp"></span>
+					
+					<a class="button linebtn" href="#volet" id="checkoverbtn" onclick="getHeight()">手动自检</a><span class="desp"></span>
 					<a onclick="viewflyingPath(${uav.deviceid!})" id="viewpathbtn" class="button linebtn">查看航线</a><span class="desp"></span>
 					<a onclick="transFlyingPath(${task.id!})" id="transpathbtn" class="button linebtn">下发航线</a><span class="desp"></span>			
 				    <a onclick="checkFlyingPath(${uav.deviceid!})" id="checkpathbtn" class="button linebtn">核对航线</a>
@@ -211,6 +240,17 @@
 		<!-- 操作按钮 end -->
 
 	</div>
+	<div id="volet_clos">
+        <div id="volet">
+            <input type="checkbox"><a>检查项目1</a><br>
+            <input type="checkbox"><a>检查项目2</a><br>
+            <input type="checkbox"><a>检查项目3</a><br>
+            <input type="checkbox"><a>检查项目4</a><br>
+            <input type="checkbox"><a>检查项目5</a>
+            <a href="#volet_clos" aria-hidden="true" class="fermer" onclick="checkself(${task.id!})">确认</a>
+			
+        </div>
+    </div>
 	<script type='text/javascript' src='${s.base}/js/jquery-3.3.1.min.js'></script>
 	<script type='text/javascript' src='${s.base}/res/light7/js/light7-swiper.min.js' charset='utf-8'></script>
 	<script type='text/javascript' src='${s.base}/light7/js/light7.js'></script>
@@ -222,6 +262,13 @@
 	<script>videojs.options.flash.swf = "${s.base}/res/assets/video-js.swf";</script>
 	<script>
 	
+	/* 适配窗口 */
+	function getHeight() {
+        var body_height = document.documentElement.clientHeight;//document.body.clientHeight中在<!DOCTYPE html>声明下会返回0
+        alert("窗口移动到的高度:"+body_height/4);
+        $("#volet:target").css({"top":body_height/4*3+"px","left": "0px"});
+    }
+    
 	boxInput.init(function(){});
 	var options = {};	 
 	var player = videojs('uavVideo', options, function onPlayerReady() {
@@ -236,7 +283,7 @@
 	$(window).resize(function() {
 		 var sceenWidth = $("#videoDiv").width();
 		 player.width(sceenWidth);
-		
+		 
 	 });
 	
 	var modal = document.getElementById('modal');   
